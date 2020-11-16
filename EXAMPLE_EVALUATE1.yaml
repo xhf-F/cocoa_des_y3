@@ -4,9 +4,9 @@ stop_at_error: True
 
 likelihood:
   des_y3.des_cosmic_shear:
-    path: ./cobaya_modules/data/des_y3
+    path: ./external_modules/data/des_y3
   like_DY3P1: "lambda _theory={'H0': None,'omegabh2': None,}: np.log(0.03 <= _theory.get_param('omegabh2')/((_theory.get_param('H0')/100)**2) <= 0.07)"
-  like_DY3P2: "lambda _theory={'H0': None,'omegach2': None,}: np.log(0.01 <= _theory.get_param('omegach2')/((_theory.get_param('H0')/100)**2) <= 0.9)"   
+  like_DY3P2: "lambda _theory={'H0': None,'omegach2': None,}: np.log(0.01 <= _theory.get_param('omegach2')/((_theory.get_param('H0')/100)**2) <= 0.9)"
 params:
   logA:
     prior:
@@ -61,8 +61,8 @@ params:
       loc: 0.12
       scale: 0.001
     proposal: 0.0005
-    latex: \Omega_\mathrm{c} h^2 
-  mnu: 
+    latex: \Omega_\mathrm{c} h^2
+  mnu:
     value: 0.06
   tau:
     prior:
@@ -73,20 +73,20 @@ params:
       loc: 0.055
       scale: 0.006
     proposal: 0.003
-    latex: \tau_\mathrm{reio}  
+    latex: \tau_\mathrm{reio}
   omegal:
-    latex: \Omega_\Lambda    
+    latex: \Omega_\Lambda
   omegam:
     latex: \Omega_\mathrm{m}
   omegamh2:
     derived: 'lambda omegam, H0: omegam*(H0/100)**2'
-    latex: \Omega_\mathrm{m} h^2    
+    latex: \Omega_\mathrm{m} h^2
   omegab:
     derived: 'lambda omegabh2, H0: omegabh2/((H0/100)**2)'
-    latex: \Omega_\mathrm{b} 
+    latex: \Omega_\mathrm{b}
   omegac:
     derived: 'lambda omegach2, H0: omegach2/((H0/100)**2)'
-    latex: \Omega_\mathrm{c}    
+    latex: \Omega_\mathrm{c}
   sigma8:
     latex: \sigma_8
   s8h5:
@@ -111,7 +111,7 @@ params:
   yheused:
     latex: Y_P^\mathrm{BBN}
   omegan2:
-    latex: \Omega_\mathrm{\\nu} h^2 
+    latex: \Omega_\mathrm{\\nu} h^2
   omegan:
     derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
     latex: \Omega_\mathrm{\\nu}
@@ -123,7 +123,7 @@ theory:
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.0 
+      AccuracyBoost: 1.0
       num_massive_neutrinos: 1
       nnu: 3.046
 

@@ -2,7 +2,7 @@ CC = $(C_COMPILER)
 CXX = $(CXX_COMPILER)
 
 # LINK ARMADILLO LIBRARY
-ARMA := 1 
+ARMA := 1
 
 # LINK GSL LIBRARY
 GSL   := 1
@@ -31,21 +31,21 @@ PYBIND := 1
 # DEFINE TEST CODE
 TEST := 1
 
-CSOURCES = 
-OBJECTC = 
-CFLAGS =  -std=c99 -I ${ROOTDIR}/include/ 
-CXXFLAGS = -std=c++14 -I ${ROOTDIR}/include/ 
+CSOURCES =
+OBJECTC =
+CFLAGS =  -std=c99 -I ${ROOTDIR}/.local/include/ -I ${ROOTDIR}/external_modules/code/
+CXXFLAGS = -std=c++14 -I ${ROOTDIR}/.local/include/ -I ${ROOTDIR}/external_modules/code/
 LDFLAGS = -L ${ROOTDIR}/lib
 
 ifdef COSMOLIKE_DEBUG_MODE
 	COMMON_FLAGS += -O0  -DDEBUG -W -Wall -Wextra -Wcomment -pedantic -g -fmax-errors=1 -Wno-unknown-pragmas
 else
 	ifdef OCELOTE_MAKEFILE_COSMOLIKE_FLAGS
-		COMMON_FLAGS += -foptimize-strlen -finline-functions-called-once -fmerge-all-constants -Wno-unused-result -Wno-format-overflow -fmax-errors=1 -fthread-jumps -fcse-follow-jumps -fsplit-wide-types -fcse-skip-blocks -faggressive-loop-optimizations -fif-conversion -fif-conversion2 -fexpensive-optimizations -free -fschedule-insns -fschedule-insns2 -fsched-spec-load-dangerous -fshrink-wrap -fcaller-saves -fcombine-stack-adjustments -fipa-ra -ftree-reassoc -ftree-partial-pre -ftree-forwprop -ftree-fre -ftree-phiprop -fhoist-adjacent-loads -ftree-copy-prop -fipa-pure-const -fipa-reference -fipa-pta -fipa-profile -fipa-cp -fipa-cp-clone -fipa-icf -ftree-loop-distribution -ftree-loop-if-convert -ftree-loop-distribute-patterns -ftree-scev-cprop -ftree-parallelize-loops=4 -ftree-pta -ftree-sra -ftree-loop-vectorize -fpartial-inlining -fpredictive-commoning -fpeephole2 -fguess-branch-probability -freorder-blocks-algorithm=stc -freorder-blocks-and-partition -freorder-functions -falign-functions -falign-loops -falign-jumps -flto -fcprop-registers -funsafe-math-optimizations -fassociative-math -freciprocal-math -ffinite-math-only -fno-signed-zeros -fvpt -funroll-loops -fschedule-fusion -fpeel-loops -fmove-loop-invariants -fexcess-precision=fast -fgcse-after-reload -ftree-slp-vectorize -foptimize-sibling-calls -ffast-math -fvect-cost-model=dynamic -fvect-cost-model -funswitch-loops -ffp-contract=fast -fivopts -fopenmp
+		COMMON_FLAGS += -foptimize-strlen -finline-functions-called-once -fmerge-all-constants -Wno-unused-result -Wno-format-overflow -fmax-errors=1 -fthread-jumps -fcse-follow-jumps -fsplit-wide-types -fcse-skip-blocks -faggressive-loop-optimizations -fif-conversion -fif-conversion2 -fexpensive-optimizations -free -fschedule-insns -fschedule-insns2 -fsched-spec-load-dangerous -fshrink-wrap -fcaller-saves -fcombine-stack-adjustments -ftree-reassoc -ftree-partial-pre -ftree-forwprop -ftree-fre -ftree-phiprop -fhoist-adjacent-loads -ftree-copy-prop -ftree-loop-if-convert -ftree-loop-distribute-patterns -ftree-scev-cprop -ftree-parallelize-loops=4 -ftree-pta -ftree-sra -ftree-loop-vectorize -fpartial-inlining -fpredictive-commoning -fpeephole2 -fguess-branch-probability -freorder-blocks-algorithm=stc -freorder-blocks-and-partition -freorder-functions -falign-functions -falign-loops -falign-jumps -flto -fcprop-registers -funsafe-math-optimizations -fassociative-math -freciprocal-math -ffinite-math-only -fno-signed-zeros -fvpt -funroll-loops -fschedule-fusion -fpeel-loops -fmove-loop-invariants -fexcess-precision=fast -fgcse-after-reload -ftree-slp-vectorize -foptimize-sibling-calls -ffast-math -fvect-cost-model=dynamic -fvect-cost-model -funswitch-loops -ffp-contract=fast -fivopts -fopenmp
 		CXXFLAGS += -O3 -ffast-math
 	else
-	CFLAGS += -O0
-		COMMON_FLAGS += -foptimize-strlen -finline-functions-called-once -fmerge-all-constants -Wno-unused-result -Wno-format-overflow -fmax-errors=1 -fthread-jumps -fcse-follow-jumps -fsplit-wide-types -fcse-skip-blocks -faggressive-loop-optimizations -fif-conversion -fif-conversion2 -fexpensive-optimizations -free -fschedule-insns -fschedule-insns2 -fsched-spec-load-dangerous -fshrink-wrap -fcaller-saves -fcombine-stack-adjustments -fipa-ra -ftree-reassoc -fcode-hoisting -ftree-partial-pre -ftree-forwprop -ftree-fre -ftree-phiprop -fhoist-adjacent-loads -ftree-copy-prop -fipa-pure-const -fipa-reference -fipa-reference-addressable -fipa-stack-alignment -fipa-pta -fipa-profile -fipa-cp -fipa-cp-clone -fipa-icf -floop-nest-optimize -floop-parallelize-all -ftree-loop-distribution -ftree-loop-if-convert -ftree-loop-distribute-patterns -floop-interchange -ftree-scev-cprop -ftree-parallelize-loops=4 -ftree-pta -ftree-sra -ftree-loop-vectorize -fpartial-inlining -fpredictive-commoning -fpeephole2 -fguess-branch-probability -freorder-blocks-algorithm=stc -freorder-blocks-and-partition -freorder-functions -falign-functions -falign-loops -falign-jumps -flto -fcprop-registers -funsafe-math-optimizations -fassociative-math -freciprocal-math -ffinite-math-only -fno-signed-zeros -fvpt -funroll-loops -fschedule-fusion -fpeel-loops -fmove-loop-invariants -fexcess-precision=fast -fgcse-after-reload -floop-unroll-and-jam -fsplit-loops -ftree-slp-vectorize -foptimize-sibling-calls -ffast-math -fvect-cost-model=dynamic -fvect-cost-model -funswitch-loops -ffp-contract=fast -march=native -fivopts -fopenmp
+	  CFLAGS += -O0
+		COMMON_FLAGS += -foptimize-strlen -finline-functions-called-once -fmerge-all-constants -Wno-unused-result -Wno-format-overflow -fmax-errors=1 -fthread-jumps -fcse-follow-jumps -fsplit-wide-types -fcse-skip-blocks -faggressive-loop-optimizations -fif-conversion -fif-conversion2 -fexpensive-optimizations -free -fschedule-insns -fschedule-insns2 -fsched-spec-load-dangerous -fshrink-wrap -fcaller-saves -fcombine-stack-adjustments -ftree-reassoc -fcode-hoisting -ftree-partial-pre -ftree-forwprop -ftree-fre -ftree-phiprop -fhoist-adjacent-loads -ftree-copy-prop -floop-nest-optimize -floop-parallelize-all -ftree-loop-distribution -ftree-loop-if-convert -ftree-loop-distribute-patterns -floop-interchange -ftree-scev-cprop -ftree-parallelize-loops=4 -ftree-pta -ftree-sra -ftree-loop-vectorize -fpartial-inlining -fpredictive-commoning -fpeephole2 -fguess-branch-probability -freorder-blocks-algorithm=stc -freorder-blocks-and-partition -freorder-functions -falign-functions -falign-loops -falign-jumps -flto -fcprop-registers -funsafe-math-optimizations -fassociative-math -freciprocal-math -ffinite-math-only -fno-signed-zeros -fvpt -funroll-loops -fschedule-fusion -fpeel-loops -fmove-loop-invariants -fexcess-precision=fast -fgcse-after-reload -floop-unroll-and-jam -fsplit-loops -ftree-slp-vectorize -foptimize-sibling-calls -ffast-math -fvect-cost-model=dynamic -fvect-cost-model -funswitch-loops -ffp-contract=fast -march=native -fivopts -fopenmp
 		CXXFLAGS += -O3 -ffast-math
 	endif
 endif
@@ -54,7 +54,7 @@ ifdef IGNORE_CPP_SPDLOG_INSTALLATION
 	COMMON_FLAGS += -I ${GLOBAL_PACKAGES_INCLUDE}
 endif
 
-ifdef ARMA	
+ifdef ARMA
 	CXXFLAGS += -DARMA
 	LDFLAGS += -llapack
 endif
@@ -78,12 +78,12 @@ ifdef FFTW
 		LDFLAGS += -L ${GLOBAL_PACKAGES_LOCATION}/lib
 	endif
 	LDFLAGS += -lfftw3
-endif 
+endif
 
 ifdef NAG
 	COMMON_FLAGS += -I ${NAG_INC} -DNAGLIB
 	LDFLAGS += ${NAG_LIB}/libnagc_mkl.so -lpthread
-endif 
+endif
 
 ifdef TBB
 	COMMON_FLAGS += -DTBB
@@ -92,21 +92,21 @@ endif
 
 ifdef CLOG
 	COMMON_FLAGS += -DLOG_USE_COLOR
-	CSOURCES += ../log.c/src/log.c
-	OBJECTC += log.o
+	CSOURCES += ${ROOTDIR}/external_modules/code/log.c/src/log.c
+	OBJECTC += ./log.o
 endif
 
 ifdef SPDLOG
 	ifndef IGNORE_CPP_SPDLOG_INSTALLATION
-		LDFLAGS += ${ROOTDIR}/lib/libspdlog.a
+		LDFLAGS += ${ROOTDIR}/.local/lib/libspdlog.a
 	endif
 endif
 
 ifdef TEST
-	COMMON_FLAGS += -DTEST 
+	COMMON_FLAGS += -DTEST
 endif
 
-CFLAGS += ${COMMON_FLAGS} 
+CFLAGS += ${COMMON_FLAGS}
 CXXFLAGS += ${COMMON_FLAGS}
 
 ifdef PYBIND
@@ -120,23 +120,22 @@ all:  shared
 shared: interface.so
 
 CSOURCES += \
-		../cfftlog/cfftlog.c \
-		../cfftlog/utils_complex.c \
-		../cfftlog/utils.c \
-		../cfastpt/cfastpt.c \
-		../cfastpt/utils_complex_cfastpt.c \
-		../cfastpt/utils_cfastpt.c \
-		../theory/basics.c \
-		../theory/cosmo3D.c \
-		../theory/cosmo2D_fourier.c \
-		../theory/cosmo2D_exact_fft.c \
-		../theory/cosmo2D_fullsky_TATT.c \
-		../theory/halo.c \
-		../theory/recompute.c \
-		../theory/redshift_spline.c \
-		../theory/structs.c \
-		../theory/HOD.c \
-		../theory/pt_cfastpt.c \
+		${ROOTDIR}/external_modules/code/cfftlog/cfftlog.c \
+		${ROOTDIR}/external_modules/code/cfftlog/utils_complex.c \
+		${ROOTDIR}/external_modules/code/cfftlog/utils.c \
+		${ROOTDIR}/external_modules/code/cfastpt/cfastpt.c \
+		${ROOTDIR}/external_modules/code/cfastpt/utils_complex_cfastpt.c \
+		${ROOTDIR}/external_modules/code/cfastpt/utils_cfastpt.c \
+		${ROOTDIR}/external_modules/code/cosmolike/basics.c \
+		${ROOTDIR}/external_modules/code/cosmolike/cosmo3D.c \
+		${ROOTDIR}/external_modules/code/cosmolike/cosmo2D_fourier.c \
+		${ROOTDIR}/external_modules/code/cosmolike/cosmo2D_exact_fft.c \
+		${ROOTDIR}/external_modules/code/cosmolike/cosmo2D_fullsky_TATT.c \
+		${ROOTDIR}/external_modules/code/cosmolike/halo.c \
+		${ROOTDIR}/external_modules/code/cosmolike/recompute.c \
+		${ROOTDIR}/external_modules/code/cosmolike/redshift_spline.c \
+		${ROOTDIR}/external_modules/code/cosmolike/structs.c \
+		${ROOTDIR}/external_modules/code/cosmolike/pt_cfastpt.c \
 
 OBJECTC += \
 		./cfftlog.o \
@@ -154,17 +153,16 @@ OBJECTC += \
 		./recompute.o \
 		./redshift_spline.o \
 		./structs.o \
-		./HOD.o \
 		./pt_cfastpt.o \
 
-$(OBJECTC): $(CSOURCES) 
-	$(CC) $(CFLAGS) -fPIC -DCOBAYA_SAMPLER -c $(CSOURCES)  
+$(OBJECTC): $(CSOURCES)
+	$(CC) $(CFLAGS) -fPIC -DCOBAYA_SAMPLER -c $(CSOURCES)
 
-interface.so: $(OBJECTC) $(CSOURCES) interface.cpp 
+interface.so: $(OBJECTC) $(CSOURCES) interface.cpp
 	$(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
 	@rm *.o
 
-test: $(OBJECTC) $(CSOURCES) interface.cpp 
+test: $(OBJECTC) $(CSOURCES) interface.cpp
 	$(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
 
 clean:
