@@ -23,8 +23,8 @@ fi
 
 cd $ROOTDIR/projects/des_y3/interface
 
-make -f Makefile clean
+make -f MakefileCosmolike clean
 
-make -j $MAKE_NUM_THREADS -f Makefile all
+make -j $MAKE_NUM_THREADS -f MakefileCosmolike all
 
 cd $ROOTDIR
