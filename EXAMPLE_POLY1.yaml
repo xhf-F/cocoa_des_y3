@@ -2,7 +2,7 @@ stop_at_error: False
 
 likelihood:
   des_y3.des_3x2pt:
-    path: ./cobaya_modules/data/des_y3
+    path: ./external_modules/data/des_y3
 
 params:
   logA:
@@ -58,8 +58,8 @@ params:
       loc: 0.12011
       scale: 0.03
     proposal: 0.03
-    latex: \Omega_\mathrm{c} h^2 
-  mnu: 
+    latex: \Omega_\mathrm{c} h^2
+  mnu:
     value: 0.06
   tau:
     prior:
@@ -70,20 +70,20 @@ params:
       loc: 0.055
       scale: 0.006
     proposal: 0.003
-    latex: \tau_\mathrm{reio} 
+    latex: \tau_\mathrm{reio}
   omegal:
-    latex: \Omega_\Lambda    
+    latex: \Omega_\Lambda
   omegam:
     latex: \Omega_\mathrm{m}
   omegamh2:
     derived: 'lambda omegam, H0: omegam*(H0/100)**2'
-    latex: \Omega_\mathrm{m} h^2    
+    latex: \Omega_\mathrm{m} h^2
   omegab:
     derived: 'lambda omegabh2, H0: omegabh2/((H0/100)**2)'
-    latex: \Omega_\mathrm{b} 
+    latex: \Omega_\mathrm{b}
   omegac:
     derived: 'lambda omegach2, H0: omegach2/((H0/100)**2)'
-    latex: \Omega_\mathrm{c}    
+    latex: \Omega_\mathrm{c}
   sigma8:
     latex: \sigma_8
   s8h5:
@@ -105,24 +105,24 @@ params:
   yheused:
     latex: Y_P^\mathrm{BBN}
   omegan2:
-    latex: \Omega_\mathrm{\\nu} h^2 
+    latex: \Omega_\mathrm{\\nu} h^2
   omegan:
     derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
     latex: \Omega_\mathrm{\\nu}
 
 theory:
   camb:
-    path: ./cobaya_modules/code/CAMB
+    path: ./external_modules/code/CAMB
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.0  
+      AccuracyBoost: 1.0
       num_massive_neutrinos: 1
       nnu: 3.046
 
 sampler:
   polychord:
-    path: ./cobaya_modules/code/PolyChordLite
+    path: ./external_modules/code/PolyChordLite
     nlive: 256
     num_repeats: 3d
     do_clustering: False
@@ -130,16 +130,16 @@ sampler:
     boost_posterior: 10
     feedback: 1
     measure_speeds: False
-    blocking:      
+    blocking:
       - [1, [logA, ns, H0, omegabh2, omegach2, tau]]
-      - [5, 
+      - [5,
             [
               DES_DZ_L1, DES_DZ_L2, DES_DZ_L3, DES_DZ_L4, DES_DZ_L5, DES_B1_1,
-              DES_B1_2, DES_B1_3, DES_B1_4, DES_B1_5, DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, 
+              DES_B1_2, DES_B1_3, DES_B1_4, DES_B1_5, DES_DZ_S1, DES_DZ_S2, DES_DZ_S3,
               DES_DZ_S4, DES_A1_1, DES_A1_2, DES_A2_1, DES_A2_2, DES_BTA_1
             ]
         ]
       - [100, [DES_M1, DES_M2, DES_M3, DES_M4]]
     oversample_power: 0.85
-  
-output: ./chains/EXAMPLE_POLY1
+
+output: ./project/des_y3/chains/EXAMPLE_POLY1

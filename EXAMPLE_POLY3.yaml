@@ -2,11 +2,11 @@ stop_at_error: False
 
 likelihood:
   planck_2018_lowl.TT:
-    path: ./cobaya_modules/
+    path: ./external_modules/
   planck_2018_lowl.EE:
-    path: ./cobaya_modules/
+    path: ./external_modules/
   planck_2018_highl_plik.TTTEEE:
-    path: ./cobaya_modules/
+    path: ./external_modules/
 
 params:
   logA:
@@ -71,8 +71,8 @@ params:
       loc: 0.12011
       scale: 0.03
     proposal: 0.03
-    latex: \Omega_\mathrm{c} h^2 
-  mnu: 
+    latex: \Omega_\mathrm{c} h^2
+  mnu:
     value: 0.06
   tau:
     prior:
@@ -83,20 +83,20 @@ params:
       loc: 0.055
       scale: 0.006
     proposal: 0.003
-    latex: \tau_\mathrm{reio}  
+    latex: \tau_\mathrm{reio}
   omegal:
-    latex: \Omega_\Lambda    
+    latex: \Omega_\Lambda
   omegam:
     latex: \Omega_\mathrm{m}
   omegamh2:
     derived: 'lambda omegam, H0: omegam*(H0/100)**2'
-    latex: \Omega_\mathrm{m} h^2    
+    latex: \Omega_\mathrm{m} h^2
   omegab:
     derived: 'lambda omegabh2, H0: omegabh2/((H0/100)**2)'
-    latex: \Omega_\mathrm{b} 
+    latex: \Omega_\mathrm{b}
   omegac:
     derived: 'lambda omegach2, H0: omegach2/((H0/100)**2)'
-    latex: \Omega_\mathrm{c}    
+    latex: \Omega_\mathrm{c}
   sigma8:
     latex: \sigma_8
   s8h5:
@@ -118,24 +118,24 @@ params:
   yheused:
     latex: Y_P^\mathrm{BBN}
   omegan2:
-    latex: \Omega_\mathrm{\\nu} h^2 
+    latex: \Omega_\mathrm{\\nu} h^2
   omegan:
     derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
     latex: \Omega_\mathrm{\\nu}
 
 theory:
   camb:
-    path: ./cobaya_modules/code/CAMB
+    path: ./external_modules/code/CAMB
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.0  
+      AccuracyBoost: 1.0
       num_massive_neutrinos: 1
       nnu: 3.046
 
 sampler:
   polychord:
-    path: ./cobaya_modules/code/PolyChordLite    
+    path: ./external_modules/code/PolyChordLite
     nlive: 256
     num_repeats: 3d
     do_clustering: False
@@ -143,17 +143,17 @@ sampler:
     boost_posterior: 10
     feedback: 1
     measure_speeds: False
-    blocking:      
+    blocking:
       - [1, [logA, ns, theta_MC_100, omegabh2, omegach2, tau]]
-      - [300, 
+      - [300,
             [
-              A_cib_217, gal545_A_217, calib_217T, galf_TE_A_217, ps_A_100_100, 
-              galf_TE_A_100_143, ps_A_217_217, ksz_norm, A_planck, calib_100T, 
-              ps_A_143_217, ps_A_143_143, gal545_A_100, galf_TE_A_143_217, 
-              gal545_A_143_217, galf_TE_A_100_217, galf_TE_A_143, gal545_A_143, 
+              A_cib_217, gal545_A_217, calib_217T, galf_TE_A_217, ps_A_100_100,
+              galf_TE_A_100_143, ps_A_217_217, ksz_norm, A_planck, calib_100T,
+              ps_A_143_217, ps_A_143_143, gal545_A_100, galf_TE_A_143_217,
+              gal545_A_143_217, galf_TE_A_100_217, galf_TE_A_143, gal545_A_143,
               xi_sz_cib, galf_TE_A_100, A_sz
             ]
         ]
-    oversample_power: 0.85    
+    oversample_power: 0.85
 
-output: ./chains/EXAMPLE_POLY3
+output: ./project/des_y3/chains/EXAMPLE_POLY3

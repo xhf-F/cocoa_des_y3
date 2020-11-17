@@ -4,9 +4,9 @@ stop_at_error: True
 
 likelihood:
   des_y3.des_3x2pt:
-    path: ./cobaya_modules/data/des_y3
+    path: ./external_modules/data/des_y3
     print_intermediate_products: False
-  
+
 params:
   logA:
     prior:
@@ -61,10 +61,10 @@ params:
       loc: 0.12
       scale: 0.001
     proposal: 0.0005
-    latex: \Omega_\mathrm{c} h^2 
+    latex: \Omega_\mathrm{c} h^2
   m_ncdm:
     value: 0.06
-    renames: mnu 
+    renames: mnu
   tau:
     prior:
       min: 0.01
@@ -74,20 +74,20 @@ params:
       loc: 0.055
       scale: 0.006
     proposal: 0.003
-    latex: \tau_\mathrm{reio}       
+    latex: \tau_\mathrm{reio}
   omegal:
-    latex: \Omega_\Lambda    
+    latex: \Omega_\Lambda
   omegam:
     latex: \Omega_\mathrm{m}
   omegamh2:
     derived: 'lambda omegam, H0: omegam*(H0/100)**2'
-    latex: \Omega_\mathrm{m} h^2    
+    latex: \Omega_\mathrm{m} h^2
   omegab:
     derived: 'lambda omegabh2, H0: omegabh2/((H0/100)**2)'
-    latex: \Omega_\mathrm{b} 
+    latex: \Omega_\mathrm{b}
   omegac:
     derived: 'lambda omegach2, H0: omegach2/((H0/100)**2)'
-    latex: \Omega_\mathrm{c}    
+    latex: \Omega_\mathrm{c}
   sigma8:
     latex: \sigma_8
   s8h5:
@@ -110,7 +110,7 @@ params:
   rdrag:
     latex: r_\mathrm{drag}
   yheused:
-    latex: Y_P^\mathrm{BBN}    
+    latex: Y_P^\mathrm{BBN}
   omegan:
     latex: \Omega_\mathrm{\\nu}
   omegan2:
@@ -119,12 +119,12 @@ params:
 
 theory:
   classy:
-    path: ./cobaya_modules/code/class_public
+    path: ./external_modules/code/class_public
     use_renames: True
     extra_args:
       non linear: halofit
       N_ncdm: 1
-      N_ur: 2.0328   
+      N_ur: 2.0328
 
 sampler:
   evaluate:
@@ -160,4 +160,4 @@ sampler:
       DES_DZ_L5: 0.0
 
 
-output: ./chains/EXAMPLE_EVALUATE8
+output: ./project/des_y3/chains/EXAMPLE_EVALUATE4

@@ -2,7 +2,7 @@ stop_at_error: False
 
 likelihood:
   des_y3.des_cosmic_shear:
-    path: ./cobaya_modules/data/des_y3
+    path: ./external_modules/data/des_y3
 params:
   logA:
     prior:
@@ -57,25 +57,25 @@ params:
       loc: 0.12011
       scale: 0.03
     proposal: 0.03
-    latex: \Omega_\mathrm{c} h^2 
-  mnu: 
+    latex: \Omega_\mathrm{c} h^2
+  mnu:
     value: 0.06
   tau:
     value: 0.0543
-    latex: \tau_\mathrm{reio}  
+    latex: \tau_\mathrm{reio}
   omegal:
-    latex: \Omega_\Lambda    
+    latex: \Omega_\Lambda
   omegam:
     latex: \Omega_\mathrm{m}
   omegamh2:
     derived: 'lambda omegam, H0: omegam*(H0/100)**2'
-    latex: \Omega_\mathrm{m} h^2    
+    latex: \Omega_\mathrm{m} h^2
   omegab:
     derived: 'lambda omegabh2, H0: omegabh2/((H0/100)**2)'
-    latex: \Omega_\mathrm{b} 
+    latex: \Omega_\mathrm{b}
   omegac:
     derived: 'lambda omegach2, H0: omegach2/((H0/100)**2)'
-    latex: \Omega_\mathrm{c}    
+    latex: \Omega_\mathrm{c}
   sigma8:
     latex: \sigma_8
   s8h5:
@@ -97,26 +97,26 @@ params:
   yheused:
     latex: Y_P^\mathrm{BBN}
   omegan2:
-    latex: \Omega_\mathrm{\\nu} h^2 
+    latex: \Omega_\mathrm{\\nu} h^2
   omegan:
     derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
     latex: \Omega_\mathrm{\\nu}
 
 theory:
   camb:
-    path: ./cobaya_modules/code/CAMB
+    path: ./external_modules/code/CAMB
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.0 
+      AccuracyBoost: 1.0
       num_massive_neutrinos: 1
       nnu: 3.046
 
 sampler:
-  mcmc:    
-    covmat: auto    
+  mcmc:
+    covmat: auto
     # --------------------------------------
-    # --------------------------------------    
+    # --------------------------------------
     # Proposal covariance matrix learning
     # --------------------------------------
     # --------------------------------------
@@ -139,21 +139,21 @@ sampler:
     # --------------------------------------
     # Exploiting speed hierarchy
     # --------------------------------------
-    # --------------------------------------    
+    # --------------------------------------
     measure_speeds: False
     drag: False
-    blocking:      
+    blocking:
       - [1, [logA, ns, H0, omegabh2, omegach2]]
       - [5, [DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1, DES_A1_2, DES_A2_1, DES_A2_2, DES_BTA_1]]
       - [25, [DES_M1, DES_M2, DES_M3, DES_M4]]
     oversample_power: 0
     oversample_thin: True
     # --------------------------------------
-    # --------------------------------------    
+    # --------------------------------------
     # Avoid chain getting suck forever
     # --------------------------------------
     # --------------------------------------
     max_tries: 10000
     burn_in: 0
-  
-output: ./chains/EXAMPLE_MCMC1
+
+output: ./project/des_y3/chains/EXAMPLE_MCMC1
