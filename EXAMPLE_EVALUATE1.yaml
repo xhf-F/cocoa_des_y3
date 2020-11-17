@@ -150,4 +150,4 @@ sampler:
       DES_A2_2: -2.5
       DES_BTA_1: 1.0
 
-output: ./chains/EXAMPLE_EVALUATE5
+output: ./project/des_y3/chains/EXAMPLE_EVALUATE1

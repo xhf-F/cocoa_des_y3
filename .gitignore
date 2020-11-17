@@ -3,3 +3,4 @@
 *.so
 *.pyo
 *.cfg
+chains/
