@@ -137,23 +137,27 @@ sampler:
   polychord:
     path: ./external_modules/code/PolyChordLite
     nlive: 256
-    num_repeats: 3d
+    num_repeats: 4d
     do_clustering: False
     precision_criterion: 0.05
     boost_posterior: 10
     feedback: 1
     measure_speeds: False
     blocking:
-      - [1, [logA, ns, theta_MC_100, omegabh2, omegach2, tau]]
-      - [300,
-            [
-              A_cib_217, gal545_A_217, calib_217T, galf_TE_A_217, ps_A_100_100,
-              galf_TE_A_100_143, ps_A_217_217, ksz_norm, A_planck, calib_100T,
-              ps_A_143_217, ps_A_143_143, gal545_A_100, galf_TE_A_143_217,
-              gal545_A_143_217, galf_TE_A_100_217, galf_TE_A_143, gal545_A_143,
-              xi_sz_cib, galf_TE_A_100, A_sz
-            ]
+      - [1,
+          [
+            logA, ns, theta_MC_100, omegabh2, omegach2, tau
+          ]
         ]
-    oversample_power: 0.85
+      - [300,
+          [
+            A_cib_217, gal545_A_217, calib_217T, galf_TE_A_217, ps_A_100_100,
+            galf_TE_A_100_143, ps_A_217_217, ksz_norm, A_planck, calib_100T,
+            ps_A_143_217, ps_A_143_143, gal545_A_100, galf_TE_A_143_217,
+            gal545_A_143_217, galf_TE_A_100_217, galf_TE_A_143, gal545_A_143,
+            xi_sz_cib, galf_TE_A_100, A_sz
+          ]
+        ]
+    oversample_power: 0
 
-output: ./project/des_y3/chains/EXAMPLE_POLY3
+output: ./projects/des_y3/chains/EXAMPLE_POLY3

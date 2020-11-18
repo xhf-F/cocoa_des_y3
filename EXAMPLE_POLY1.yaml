@@ -124,22 +124,31 @@ sampler:
   polychord:
     path: ./external_modules/code/PolyChordLite
     nlive: 256
-    num_repeats: 3d
+    num_repeats: 4d
     do_clustering: False
     precision_criterion: 0.05
     boost_posterior: 10
     feedback: 1
     measure_speeds: False
     blocking:
-      - [1, [logA, ns, H0, omegabh2, omegach2, tau]]
-      - [5,
-            [
-              DES_DZ_L1, DES_DZ_L2, DES_DZ_L3, DES_DZ_L4, DES_DZ_L5, DES_B1_1,
-              DES_B1_2, DES_B1_3, DES_B1_4, DES_B1_5, DES_DZ_S1, DES_DZ_S2, DES_DZ_S3,
-              DES_DZ_S4, DES_A1_1, DES_A1_2, DES_A2_1, DES_A2_2, DES_BTA_1
-            ]
+      - [1,
+          [
+            logA, ns, H0, omegabh2, omegach2, tau
+          ]
         ]
-      - [100, [DES_M1, DES_M2, DES_M3, DES_M4]]
-    oversample_power: 0.85
+      - [2,
+          [
+            DES_DZ_L1, DES_DZ_L2, DES_DZ_L3, DES_DZ_L4, DES_DZ_L5, DES_B1_1,
+            DES_B1_2, DES_B1_3, DES_B1_4, DES_B1_5, DES_DZ_S1, DES_DZ_S2,
+            DES_DZ_S3,DES_DZ_S4, DES_A1_1, DES_A1_2, DES_A2_1, DES_A2_2,
+            DES_BTA_1
+          ]
+        ]
+      - [25,
+          [
+            DES_M1, DES_M2, DES_M3, DES_M4
+          ]
+        ]
+    oversample_power: 0
 
-output: ./project/des_y3/chains/EXAMPLE_POLY1
+output: ./projects/des_y3/chains/EXAMPLE_POLY1
