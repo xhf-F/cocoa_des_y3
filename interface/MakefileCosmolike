@@ -35,7 +35,7 @@ CSOURCES =
 OBJECTC =
 CFLAGS =  -std=c99 -I ${ROOTDIR}/.local/include/ -I ${ROOTDIR}/external_modules/code/
 CXXFLAGS = -std=c++14 -I ${ROOTDIR}/.local/include/ -I ${ROOTDIR}/external_modules/code/
-LDFLAGS = -L ${ROOTDIR}/lib
+LDFLAGS = -L ${ROOTDIR}/.local/lib
 
 ifdef COSMOLIKE_DEBUG_MODE
 	COMMON_FLAGS += -O0  -DDEBUG -W -Wall -Wextra -Wcomment -pedantic -g -fmax-errors=1 -Wno-unknown-pragmas

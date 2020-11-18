@@ -118,7 +118,7 @@ params:
 
 theory:
   camb:
-    path: ./cobaya_modules/code/CAMB
+    path: ./external_modules/code/CAMB
     stop_at_error: True
     use_renames: True
     extra_args:
