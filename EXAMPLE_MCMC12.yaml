@@ -196,4 +196,4 @@ sampler:
     max_tries: 10000
     burn_in: 0
 
-output: ./project/des_y3/chains/EXAMPLE_MCMC12
+output: ./projects/des_y3/chains/EXAMPLE_MCMC12
