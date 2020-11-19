@@ -1,11 +1,9 @@
-#data_file = xi_Y3_baseline_no_nu
-data_file = vivian.txt
-cov_file = cov_des_y3_v021.txt
-mask_file = mask_Y1_mcal
-#mask_file = mask_incl_all
-nz_lens_file = nz_y3_redmagic_v0.5.1_wide_gold_2.2.1_combined_hd3_hl2_z_samp.txt
-nz_source_file = source_v0.21_smooth.txt
-lensing_overlap_cut = 0.1
+data_file = Y3_unblinded_11_13_20
+cov_file = cov_unblinded_11_13_20.txt
+mask_file = 3x2pt_baseline
+nz_lens_file = nz_lens_Y3_unblinded_11_13_20.txt
+nz_source_file = nz_source_Y3_unblinded_11_13_20.txt
+lensing_overlap_cut = 0.0015
 nuisance_params = DES.paramnames
 lens_ntomo = 5
 source_ntomo = 4

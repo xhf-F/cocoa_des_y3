@@ -370,36 +370,36 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
   def test_all(self):
-    np.savetxt('./chains/cobaya_chi.txt', ci.print_chi(), fmt='%1.7e')
+    np.savetxt('./projects/des_y3/chains/cobaya_chi.txt', ci.print_chi(), fmt='%1.7e')
 
-    np.savetxt('./chains/cobaya_dchida.txt', ci.print_dchi_da(), fmt='%1.7e')
+    np.savetxt('./projects/des_y3/chains/cobaya_dchida.txt', ci.print_dchi_da(), fmt='%1.7e')
 
-    np.savetxt('./chains/cobaya_growth.txt', ci.print_growth(), fmt='%1.7e')
+    np.savetxt('./projects/des_y3/chains/cobaya_growth.txt', ci.print_growth(), fmt='%1.7e')
 
-    np.savetxt('./chains/cobaya_f_growth.txt', ci.print_fgrowth(),
+    np.savetxt('./projects/des_y3/chains/cobaya_f_growth.txt', ci.print_fgrowth(),
       fmt='%1.7e')
 
-    np.savetxt('./chains/cobaya_hoverh0.txt', ci.print_hoverh0(), fmt='%1.7e')
+    np.savetxt('./projects/des_y3/chains/cobaya_hoverh0.txt', ci.print_hoverh0(), fmt='%1.7e')
 
-    np.savetxt('./chains/cobaya_ps.txt', ci.print_ps(), fmt='%1.7e')
+    np.savetxt('./projects/des_y3/chains/cobaya_ps.txt', ci.print_ps(), fmt='%1.7e')
 
-    np.savetxt('./chains/cobaya_a.txt', ci.print_a(), fmt='%1.7e')
+    np.savetxt('./projects/des_y3/chains/cobaya_a.txt', ci.print_a(), fmt='%1.7e')
 
-    np.savetxt('./chains/cobaya_datavector.txt', ci.print_datavector(),
+    np.savetxt('./projects/des_y3/chains/cobaya_datavector.txt', ci.print_datavector(),
       fmt='%d %1.7e')
 
-    np.savetxt('./chains/cobaya_z1z2.txt', ci.print_z1z2(), fmt='%d')
+    np.savetxt('./projects/des_y3/chains/cobaya_z1z2.txt', ci.print_z1z2(), fmt='%d')
 
-    np.savetxt('./chains/cobaya_ceecbb.txt', ci.print_cee_cbb(),
+    np.savetxt('./projects/des_y3/chains/cobaya_ceecbb.txt', ci.print_cee_cbb(),
       fmt='%d %1.7e %1.7e')
 
-    np.savetxt('./chains/cobaya_c1tabtac2tt.txt', ci.print_c1ta_bta_c2tt(),
+    np.savetxt('./projects/des_y3/chains/cobaya_c1tabtac2tt.txt', ci.print_c1ta_bta_c2tt(),
       fmt='%d %1.7e %1.7e %1.7e %1.7e')
 
-    np.savetxt('./chains/cobaya_wswk.txt', ci.print_ws_wk(),
+    np.savetxt('./projects/des_y3/chains/cobaya_wswk.txt', ci.print_ws_wk(),
       fmt='%d %d %1.7e %1.7e %1.7e %1.7e %1.7e')
 
-    np.savetxt('./chains/cobaya_ia.txt', ci.print_IA(), fmt='%1.7e')
+    np.savetxt('./projects/des_y3/chains/cobaya_ia.txt', ci.print_IA(), fmt='%1.7e')
 
 
   # ------------------------------------------------------------------------

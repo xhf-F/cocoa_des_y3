@@ -1,7 +1,7 @@
 path: null
 data_file: DES_Y3.dataset
 acc: 1
-speed: 2
+speed: 1
 print_intermediate_products: False
 
 params:
@@ -12,50 +12,50 @@ params:
   DES_DZ_S1:
     prior:
       dist: norm
-      loc: -0.001
-      scale: 0.016
+      loc: 0.0
+      scale: 0.018
     ref:
       dist: norm
-      loc: -0.001
-      scale: 0.016
-    proposal: 0.016
+      loc: 0.0
+      scale: 0.036
+    proposal: 0.018
     latex: \Delta z_\mathrm{s,DES}^1
   DES_DZ_S2:
     prior:
       dist: norm
-      loc: -0.019
-      scale: 0.013
+      loc: 0.0
+      scale: 0.015
     ref:
       dist: norm
-      loc: -0.019
-      scale: 0.015
-    proposal: 0.013
+      loc: 0.0
+      scale: 0.03
+    proposal: 0.015
     latex: \Delta z_\mathrm{s,DES}^2
   DES_DZ_S3:
     prior:
       dist: norm
-      loc: 0.009
+      loc: 0.0
       scale: 0.011
     ref:
       dist: norm
-      loc: 0.009
-      scale: 0.011
+      loc: 0.0
+      scale: 0.022
     proposal: 0.011
     latex: \Delta z_\mathrm{s,DES}^3
   DES_DZ_S4:
     prior:
       dist: norm
-      loc: -0.018
-      scale: 0.022
+      loc: 0.0
+      scale: 0.017
     ref:
       dist: norm
-      loc: -0.018
-      scale: 0.022
-    proposal: 0.022
+      loc: 0.0
+      scale: 0.034
+    proposal: 0.017
     latex: \Delta z_\mathrm{s,DES}^4
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------    
+  # ------------------------------------------------------------------------
   # Intrinsic alignment
   DES_A1_1:
     prior:
@@ -65,7 +65,7 @@ params:
       dist: norm
       loc: 0.7
       scale: 0.5
-    proposal: 0.75
+    proposal: 0.5
     latex: A_\mathrm{1-IA,DES}^1
   DES_A1_2:
     prior:
@@ -73,28 +73,28 @@ params:
       max:  5
     ref:
       dist: norm
-      loc: -1.7
+      loc: -1.36
       scale: 0.5
-    proposal: 0.75
+    proposal: 0.5
     latex: A_\mathrm{1-IA,DES}^2
   DES_A1_3:
     value: 0
-    latex: A_\mathrm{1-IA,DES}^3        
+    latex: A_\mathrm{1-IA,DES}^3
   DES_A1_4:
     value: 0
-    latex: A_\mathrm{1-IA,DES}^4  
+    latex: A_\mathrm{1-IA,DES}^4
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
   DES_A2_1:
     prior:
-      min: -15
-      max:  15
+      min: -5
+      max:  5
     ref:
       dist: norm
-      loc: -1.36
-      scale: .5
-    proposal: .75
+      loc: -1.7
+      scale: 0.5
+    proposal: 0.5
     latex: A_\mathrm{2-IA,DES}^1
   DES_A2_2:
     prior:
@@ -104,17 +104,17 @@ params:
       dist: norm
       loc: -2.5
       scale: 0.5
-    proposal: 0.75
+    proposal: 0.5
     latex: A_\mathrm{2-IA,DES}^2
   DES_A2_3:
     value: 0
-    latex: A_\mathrm{2-IA,DES}^3        
+    latex: A_\mathrm{2-IA,DES}^3
   DES_A2_4:
     value: 0
-    latex: A_\mathrm{2-IA,DES}^4 
+    latex: A_\mathrm{2-IA,DES}^4
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------    
+  # ------------------------------------------------------------------------
   DES_BTA_1:
     prior:
       min: 0
@@ -122,75 +122,75 @@ params:
     ref:
       dist: norm
       loc: 1
-      scale: 0.2
-    proposal: 0.2
+      scale: 0.15
+    proposal: 0.1
     latex: A_\mathrm{BTA-IA,DES}^1
   DES_BTA_2:
     value: 0
     latex: A_\mathrm{BTA-IA,DES}^2
   DES_BTA_3:
     value: 0
-    latex: A_\mathrm{BTA-IA,DES}^3        
+    latex: A_\mathrm{BTA-IA,DES}^3
   DES_BTA_4:
     value: 0
     latex: A_\mathrm{BTA-IA,DES}^4
  # ------------------------------------------------------------------------
  # ------------------------------------------------------------------------
- # ------------------------------------------------------------------------ 
+ # ------------------------------------------------------------------------
  # Lensing photo-z errors
   DES_DZ_L1:
     prior:
       dist: norm
-      loc: 0.001
-      scale: 0.008
+      loc: 0.006
+      scale: 0.004
     ref:
       dist: norm
-      loc: 0.001
+      loc: 0.006
       scale: 0.008
-    proposal: 0.008
+    proposal: 0.004
     latex: \Delta z_\mathrm{l,DES}^1
   DES_DZ_L2:
     prior:
       dist: norm
       loc: 0.001
-      scale: 0.007
+      scale: 0.003
     ref:
       dist: norm
       loc: 0.001
-      scale: 0.007
-    proposal: 0.007
+      scale: 0.006
+    proposal: 0.003
     latex: \Delta z_\mathrm{l,DES}^2
   DES_DZ_L3:
     prior:
       dist: norm
-      loc: 0.003
-      scale: 0.007
+      loc: 0.004
+      scale: 0.003
     ref:
       dist: norm
-      loc: 0.003
-      scale: 0.007
-    proposal: 0.007
+      loc: 0.004
+      scale: 0.006
+    proposal: 0.003
     latex: \Delta z_\mathrm{l,DES}^3
   DES_DZ_L4:
     prior:
       dist: norm
-      loc: 0.0
-      scale: 0.01
+      loc: -0.002
+      scale: 0.005
     ref:
       dist: norm
-      loc: 0
+      loc: -0.002
       scale: 0.01
-    proposal: 0.01
+    proposal: 0.005
     latex: \Delta z_\mathrm{l,DES}^4
   DES_DZ_L5:
     prior:
       dist: norm
-      loc: 0.0
-      scale: 0.01 
+      loc: -0.007
+      scale: 0.010
     ref:
       dist: norm
-      loc: 0
-      scale: 0.01
+      loc: -0.007
+      scale: 0.02
     proposal: 0.01
     latex: \Delta z_\mathrm{l,DES}^5
   # ------------------------------------------------------------------------
@@ -203,8 +203,8 @@ params:
       max: 3
     ref:
       dist: norm
-      loc: 1.5
-      scale: 0.1
+      loc: 1.7
+      scale: 0.15
     proposal: 0.1
     latex: b_\mathrm{1-DES}^1
   DES_B1_2:
@@ -213,8 +213,8 @@ params:
       max: 3
     ref:
       dist: norm
-      loc: 1.6
-      scale: 0.1
+      loc: 1.7
+      scale: 0.15
     proposal: 0.1
     latex: b_\mathrm{1-DES}^2
   DES_B1_3:
@@ -224,7 +224,7 @@ params:
     ref:
       dist: norm
       loc: 1.7
-      scale: 0.1
+      scale: 0.15
     proposal: 0.1
     latex: b_\mathrm{1-DES}^3
   DES_B1_4:
@@ -233,8 +233,8 @@ params:
       max: 3
     ref:
       dist: norm
-      loc: 1.8
-      scale: 0.1
+      loc: 2.0
+      scale: 0.15
     proposal: 0.1
     latex: b_\mathrm{1-DES}^4
   DES_B1_5:
@@ -249,7 +249,7 @@ params:
     latex: b_\mathrm{1-DES}^5
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------    
+  # ------------------------------------------------------------------------
   DES_B2_1:
     value: 0.0
     latex: b_\mathrm{2-DES}^1
@@ -267,73 +267,73 @@ params:
     latex: b_\mathrm{2-DES}^5
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------    
+  # ------------------------------------------------------------------------
   DES_BMAG_1:
-    value: 0.0
+    value: 1.31
     latex: b_\mathrm{BMAG-DES}^1
   DES_BMAG_2:
-    value: 0.0
+    value: -0.52
     latex: b_\mathrm{BMAG-DES}^2
   DES_BMAG_3:
-    value: 0.0
+    value: 0.34
     latex: b_\mathrm{BMAG-DES}^3
   DES_BMAG_4:
-    value: 0.0
+    value: 2.25
     latex: b_\mathrm{BMAG-DES}^4
   DES_BMAG_5:
-    value: 0.0
-    latex: b_\mathrm{BMAG-DES}^5 
+    value: 1.97
+    latex: b_\mathrm{BMAG-DES}^5
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------    
+  # ------------------------------------------------------------------------
   # Shear calibration parameters
   DES_M1:
     prior:
       dist: norm
-      loc: 0.012
-      scale: 0.023
+      loc: -0.0063
+      scale: 0.0091
     ref:
       dist: norm
-      loc: 0.0
-      scale: 0.05
-    proposal: 0.03
+      loc: -0.0063
+      scale: 0.0182
+    proposal: 0.0091
     latex: m_\mathrm{DES}^1
   DES_M2:
     prior:
       dist: norm
-      loc: 0.012
-      scale: 0.023
+      loc: -0.0198
+      scale: 0.0078
     ref:
       dist: norm
-      loc: 0.012
-      scale: 0.05
-    proposal: 0.03
+      loc: -0.0198
+      scale: 0.0156
+    proposal: 0.0078
     latex: m_\mathrm{DES}^2
   DES_M3:
     prior:
       dist: norm
-      loc: 0.012
-      scale: 0.023
+      loc: -0.0241
+      scale: 0.0076
     ref:
       dist: norm
-      loc: 0.012
-      scale: 0.05
-    proposal: 0.03
+      loc: -0.0241
+      scale: 0.0156
+    proposal: 0.0076
     latex: m_\mathrm{DES}^3
   DES_M4:
     prior:
       dist: norm
-      loc: 0.012
-      scale: 0.023
+      loc: -0.0369
+      scale: 0.0076
     ref:
       dist: norm
-      loc: 0.0
-      scale: 0.05
-    proposal: 0.03
-    latex: m_\mathrm{DES}^4 
+      loc: -0.0369
+      scale: 0.0152
+    proposal: 0.0076
+    latex: m_\mathrm{DES}^4
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------    
+  # ------------------------------------------------------------------------
   # Point Mass parameters
   DES_PM1:
     value: 0.0
@@ -346,10 +346,10 @@ params:
     latex: PM_\mathrm{DES}^3
   DES_PM4:
     value: 0.0
-    latex: PM_\mathrm{DES}^4 
+    latex: PM_\mathrm{DES}^4
   DES_PM5:
     value: 0.0
-    latex: PM_\mathrm{DES}^5 
+    latex: PM_\mathrm{DES}^5
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------   
+  # ------------------------------------------------------------------------
