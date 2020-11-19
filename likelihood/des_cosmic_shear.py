@@ -1,5 +1,5 @@
 from cobaya.likelihoods.des_y3._cosmolike_prototype_base import _cosmolike_prototype_base
-import cosmolike_interface as ci
+import cosmolike_des_y3_interface as ci
 #import time
 
 class des_cosmic_shear(_cosmolike_prototype_base):
@@ -8,12 +8,12 @@ class des_cosmic_shear(_cosmolike_prototype_base):
   # ------------------------------------------------------------------------
 
   def initialize(self):
-    super(des_cosmic_shear,self).initialize(probe="xi") 
-    
+    super(des_cosmic_shear,self).initialize(probe="xi")
+
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
-  
+
   def logp(self, **params_values):
     #t0 = time.time()
     self.set_cosmo_related()
