@@ -1368,16 +1368,14 @@ arma::Mat<double> cpp_print_IA() {
 }
 
 #ifdef PYBIND11
-PYBIND11_MODULE(cosmolike_interface, m) {
-    m.doc() = "pybind11 example module";
+PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
+    m.doc() = "CosmoLike Interface for DES-Y3 3x2 Module";
 
     m.def("initial_setup", &cpp_initial_setup, "Def Setup");
 
     m.def("init_probes", &cpp_init_probes, "Init Probes", py::arg("possible_probes"));
 
     m.def("init_survey_parameters", &cpp_init_survey, "Init Survey", py::arg("surveyname"), py::arg("area"), py::arg("sigma_e"));
-
-    // m.def("init_survey_parameters_to_DESY3", &cpp_init_survey_parameters_to_DESY3, "Init Survey Parameters to DES-Y3");
 
     m.def("init_cosmo_runmode", &cpp_init_cosmo_runmode,"Init Run Mode", py::arg("is_linear"));
 
