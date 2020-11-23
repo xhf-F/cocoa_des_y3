@@ -8,86 +8,72 @@ likelihood:
     print_intermediate_products: False
 
 params:
-  logA:
+  As_1e9:
     prior:
-      min: 1.61
-      max: 3.91
+      min: 0.5
+      max: 5
     ref:
       dist: norm
-      loc: 3.05
-      scale: 0.001
-    proposal: 0.001
-    latex: \log(10^{10} A_\mathrm{s})
+      loc: 2.1
+      scale: 0.65
+    proposal: 0.4
+    latex: 10^9 A_\mathrm{s})
     drop: true
+    renames: A
   As:
-    value: 'lambda logA: 1e-10*np.exp(logA)'
+    value: 'lambda As_1e9: 1e-9 * As_1e9'
     latex: A_\mathrm{s}
   ns:
     prior:
-      min: 0.8
-      max: 1.2
+      min: 0.87
+      max: 1.07
     ref:
       dist: norm
-      loc: 0.965
-      scale: 0.004
-    proposal: 0.002
+      loc: 0.96605
+      scale: 0.01
+    proposal: 0.01
     latex: n_\mathrm{s}
   H0:
     prior:
-      min: 20
-      max: 100
+      min: 55
+      max: 91
     ref:
       dist: norm
-      loc: 67.00
-      scale: 2
-    proposal: 2
+      loc: 67.32
+      scale: 5
+    proposal: 3
     latex: H_0
-  omegabh2:
+  omegab:
     prior:
-      min: 0.005
-      max: 0.1
+      min: 0.03
+      max: 0.07
     ref:
       dist: norm
-      loc: 0.0224
-      scale: 0.0001
-    proposal: 0.0001
-    latex: \Omega_\mathrm{b} h^2
-  omegach2:
+      loc: 0.0495
+      scale: 0.004
+    proposal: 0.004
+    latex: \Omega_\mathrm{b}
+  omegam:
     prior:
-      min: 0.001
-      max: 0.99
+      min: 0.1
+      max: 0.9
     ref:
       dist: norm
-      loc: 0.12
-      scale: 0.001
-    proposal: 0.0005
-    latex: \Omega_\mathrm{c} h^2
+      loc: 0.316
+      scale: 0.02
+    proposal: 0.02
+    latex: \Omega_\mathrm{m}
   m_ncdm:
     value: 0.06
     renames: mnu
   tau:
-    prior:
-      min: 0.01
-      max: 0.8
-    ref:
-      dist: norm
-      loc: 0.055
-      scale: 0.006
-    proposal: 0.003
+    value: 0.0697186
     latex: \tau_\mathrm{reio}
   omegal:
     latex: \Omega_\Lambda
-  omegam:
-    latex: \Omega_\mathrm{m}
   omegamh2:
     derived: 'lambda omegam, H0: omegam*(H0/100)**2'
     latex: \Omega_\mathrm{m} h^2
-  omegab:
-    derived: 'lambda omegabh2, H0: omegabh2/((H0/100)**2)'
-    latex: \Omega_\mathrm{b}
-  omegac:
-    derived: 'lambda omegach2, H0: omegach2/((H0/100)**2)'
-    latex: \Omega_\mathrm{c}
   sigma8:
     latex: \sigma_8
   s8h5:
@@ -99,12 +85,6 @@ params:
   s8omegamp25:
     derived: 'lambda sigma8, omegam: sigma8*omegam**0.25'
     latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
-  A:
-    derived: 'lambda As: 1e9*As'
-    latex: 10^9 A_\mathrm{s}
-  clamp:
-    derived: 'lambda As, tau: 1e9*As*np.exp(-2*tau)'
-    latex: 10^9 A_\mathrm{s} e^{-2\tau}
   age:
     latex: '{\rm{Age}}/\mathrm{Gyr}'
   rdrag:
@@ -129,12 +109,12 @@ theory:
 sampler:
   evaluate:
     override:
-      logA: 3.0448
+      As_1e9: 2.1
       ns: 0.96605
       H0: 67.32
-      omegabh2: 0.022383
-      omegach2: 0.12011
-      tau: 0.0543
+      omegab: 0.04
+      omegam: 0.3
+      #m_ncdm: 0.06
       DES_DZ_S1: 0.0
       DES_DZ_S2: 0.0
       DES_DZ_S3: 0.0
@@ -158,6 +138,5 @@ sampler:
       DES_DZ_L3: 0.0
       DES_DZ_L4: 0.0
       DES_DZ_L5: 0.0
-
 
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE4
