@@ -19,4 +19,4 @@ source start_cocoa
 
 export OMP_PROC_BIND=close
 export OMP_NUM_THREADS=10
-mpirun -n 4 --bind-to core --rank-by core --map-by numa:pe=10 cobaya-run ./projects/des_y3/EXAMPLE_EVALUATE${SLURM_ARRAY_TASK_ID}.yaml -f
+mpirun -n 4 --bind-to core --rank-by core --map-by numa:pe=10 cobaya-run ./projects/des_y3/EXAMPLE_MCMC${SLURM_ARRAY_TASK_ID}.yaml -f
