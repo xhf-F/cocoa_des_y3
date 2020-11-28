@@ -13,6 +13,7 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=vivianmiranda@email.arizona.edu
 #SBATCH --array=1-4
+#SBATCH --export=none
 
 cd $SLURM_SUBMIT_DIR
 source start_cocoa

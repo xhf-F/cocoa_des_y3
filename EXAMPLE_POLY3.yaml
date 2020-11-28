@@ -1,4 +1,5 @@
 stop_at_error: False
+timing: True
 
 likelihood:
   planck_2018_lowl.TT:
