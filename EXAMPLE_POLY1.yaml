@@ -4,6 +4,8 @@ timing: True
 likelihood:
   des_y3.des_3x2pt:
     path: ./external_modules/data/des_y3
+  like_DY3P1: "lambda _theory={'H0': None,'omegabh2': None,}: np.log(0.03 <= _theory.get_param('omegabh2')/((_theory.get_param('H0')/100)**2) <= 0.07)"
+  like_DY3P2: "lambda _theory={'H0': None,'omegach2': None,}: np.log(0.01 <= _theory.get_param('omegach2')/((_theory.get_param('H0')/100)**2) <= 0.9)"
 
 params:
   logA:
@@ -13,8 +15,8 @@ params:
     ref:
       dist: norm
       loc: 3.0448
-      scale: 0.02
-    proposal: 0.02
+      scale: 0.1
+    proposal: 0.075
     latex: \log(10^{10} A_\mathrm{s})
     drop: true
   As:
@@ -117,7 +119,7 @@ theory:
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.0
+      AccuracyBoost: 1.1
       num_massive_neutrinos: 1
       nnu: 3.046
 

@@ -4,6 +4,7 @@ timing: True
 likelihood:
   des_y3.des_3x2pt:
     path: ./external_modules/data/des_y3
+
 params:
   As_1e9:
     prior:
