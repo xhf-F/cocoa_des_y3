@@ -186,7 +186,7 @@ sampler:
         ]
       - [300,
           [
-            params_calib, params_calib_pol, params_EE
+            params_calib, params_calib_pol, params_EE, A_planck
           ]
         ]
     oversample_power: 0

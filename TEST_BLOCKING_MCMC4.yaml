@@ -62,26 +62,6 @@ params:
       scale: 0.03
     proposal: 0.03
     latex: \Omega_\mathrm{c} h^2
-  w:
-    prior:
-      min: -3
-      max: 1
-    ref:
-      dist: norm
-      loc: -0.99
-      scale: 0.02
-    proposal: 0.02
-    latex: w_{0,\mathrm{DE}}
-  wa:
-    prior:
-      min: -3
-      max: 2
-    ref:
-      dist: norm
-      loc: 0
-      scale: 0.05
-    proposal: 0.05
-    latex: w_{a,\mathrm{DE}}
   mnu:
     value: 0.06
   tau:
@@ -137,19 +117,44 @@ theory:
       nnu: 3.046
 
 sampler:
-  polychord:
-    path: ./external_modules/code/PolyChordLite
-    nlive: 128
-    num_repeats: 2d
-    do_clustering: False
-    precision_criterion: 0.05
-    boost_posterior: 10
-    feedback: 1
+  mcmc:
+    # ---------------------------------------------------------------------
+    # File (w/ path) or matrix defining a covariance matrix for the proposal:
+    # - null (default): will be generated from params info (prior and proposal)
+    # - matrix: remember to set `covmat_params` to the parameters in the matrix
+    covmat:
+    covmat_params:
+    # --------------------------------------
+    # --------------------------------------
+    # Proposal covariance matrix learning
+    # --------------------------------------
+    # --------------------------------------
+    learn_proposal: True
+    # Don't learn if convergence better than...
+    learn_proposal_Rminus1_min: 0.03
+    # --------------------------------------
+    # --------------------------------------
+    # Convergence and stopping
+    # --------------------------------------
+    # --------------------------------------
+    # Maximum number of posterior evaluations
+    max_samples: .inf
+    # Gelman-Rubin R-1 on means
+    Rminus1_stop: 0.02
+    # Gelman-Rubin R-1 on std deviations
+    Rminus1_cl_stop: 0.2
+    Rminus1_cl_level: 0.95
+    # --------------------------------------
+    # --------------------------------------
+    # Exploiting speed hierarchy
+    # --------------------------------------
+    # --------------------------------------
     measure_speeds: False
+    drag: False
     blocking:
       - [1,
           [
-            logA, ns, H0, omegabh2, omegach2, w, wa
+            logA, ns, H0, omegabh2, omegach2
           ]
         ]
       - [2,
@@ -157,14 +162,23 @@ sampler:
             DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1, DES_A1_2,
             DES_A2_1, DES_A2_2, DES_BTA_1, DES_DZ_L1, DES_DZ_L2, DES_DZ_L3,
             DES_DZ_L4, DES_DZ_L5, DES_B1_1,
-            DES_B1_2, DES_B1_3, DES_B1_4, DES_B1_5
-          ]
-        ]
-      - [25,
-          [
-            DES_M1, DES_M2, DES_M3, DES_M4
+            DES_B1_2, DES_B1_3, DES_B1_4, DES_B1_5, DES_M1, DES_M2, DES_M3, DES_M4
           ]
         ]
     oversample_power: 0
+    oversample_thin: True
+    # --------------------------------------
+    # --------------------------------------
+    # Avoid chain getting suck forever
+    # --------------------------------------
+    # --------------------------------------
+    max_tries: 10000
+    burn_in: 0
+    # ---------------------------------------------------------------------
+    # ---------------------------------------------------------------------
+    # When no MPI used, number of fractions of the chain to compare
+    # ---------------------------------------------------------------------
+    # ---------------------------------------------------------------------
+    Rminus1_single_split: 4
 
-output: ./projects/des_y3/chains/EXAMPLE_POLY_MCMC2
+output: ./projects/des_y3/chains/TEST_BLOCKING_MCMC4

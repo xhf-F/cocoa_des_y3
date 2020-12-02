@@ -174,7 +174,7 @@ sampler:
     blocking:
       - [1,
           [
-            logA, ns, H0, omegabh2, omegach2
+            logA, ns, H0, omegabh2, omegach2, w, wa
           ]
         ]
       - [2,
