@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH --job-name=EP_DY3
+#SBATCH --job-name=EPMC_DY3
 #SBATCH --output=emc-%a.out
-#SBATCH --nodes=8
+#SBATCH --nodes=4
 #SBATCH --ntasks-per-node=22
 #SBATCH --ntasks-per-socket=11
 #SBATCH --cpus-per-task=4
@@ -25,4 +25,4 @@ source start_cocoa
 
 export OMP_PROC_BIND=close
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
-mpirun -n ${SLURM_NTASKS} --bind-to core --rank-by core --map-by numa:pe=${OMP_NUM_THREADS} cobaya-run ./projects/des_y3/EXAMPLE_POLY${SLURM_ARRAY_TASK_ID}.yaml -r
+mpirun -n ${SLURM_NTASKS} --bind-to core --rank-by core --map-by numa:pe=${OMP_NUM_THREADS} cobaya-run ./projects/des_y3/EXAMPLE_POLY_MCMC${SLURM_ARRAY_TASK_ID}.yaml -r
