@@ -3,14 +3,22 @@ stop_at_error: False
 likelihood:
   des_y3.des_3x2pt:
     path: ./external_modules/data/des_y3
+  like_DY3P1:
+    external: "lambda _self: np.log(0.03 <= _self.provider.get_param('omegabh2')/((_self.provider.get_param('H0')/100)**2) <= 0.07)"
+    requires:
+      H0: null
+      omegabh2: null
+  like_DY3P2:
+    external: "lambda _self: np.log(0.01 <= _self.provider.get_param('omegach2')/((_self.provider.get_param('H0')/100)**2) <= 0.9)"
+    requires:
+      H0: null
+      omegach2: null
   planck_2018_lowl.TT:
     path: ./external_modules/
   planck_2018_lowl.EE:
     path: ./external_modules/
   planck_2018_highl_plik.EE:
     path: ./external_modules/
-  like_DY3P1: "lambda _theory={'H0': None,'omegabh2': None,}: np.log(0.03 <= _theory.get_param('omegabh2')/((_theory.get_param('H0')/100)**2) <= 0.07)"
-  like_DY3P2: "lambda _theory={'H0': None,'omegach2': None,}: np.log(0.01 <= _theory.get_param('omegach2')/((_theory.get_param('H0')/100)**2) <= 0.9)"
 
 params:
   logA:

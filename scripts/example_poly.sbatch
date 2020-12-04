@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=EP_DY3
-#SBATCH --output=emc-%a.out
+#SBATCH --output=epoly-%a.out
 #SBATCH --nodes=8
 #SBATCH --ntasks-per-node=22
 #SBATCH --ntasks-per-socket=11
