@@ -110,4 +110,4 @@ contour_colors=['royalblue','black','firebrick']
 g.export()
 
 #DELETE TMP FILES
-subprocess.Popen("rm VM_TMP_P1_[0-9].*", shell=True, cwd=".")
+#subprocess.Popen("rm VM_TMP_P1_[0-9].*", shell=True, cwd=".")
