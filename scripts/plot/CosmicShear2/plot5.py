@@ -47,31 +47,6 @@ analysissettings2={'smooth_scale_2D':0.5,
 'range_confidence' : u'0.025'
 }
 
-samples=loadMCSamples('../../../chains/EXAMPLE_MCMC19',settings=analysissettings)
-p = samples.getParams()
-
-samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
-  range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
-
-samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
-
-samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
-
-samples.saveAsText('VM_TMP_P3_0')
-
-samples=loadMCSamples('../../../chains/EXAMPLE_MCMC21',settings=analysissettings)
-p = samples.getParams()
-
-samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
-  range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
-
-samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
-
-samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
-
-samples.saveAsText('VM_TMP_P3_1')
-
-
 samples=loadMCSamples('../../../chains/EXAMPLE_MCMC5',settings=analysissettings)
 p = samples.getParams()
 
@@ -82,25 +57,54 @@ samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
 
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 
-samples.saveAsText('VM_TMP_P3_2')
+samples.saveAsText('VM_TMP_P5_0')
 
-g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=7.5)
+
+samples=loadMCSamples('../../../chains/EXAMPLE_MCMC7',settings=analysissettings)
+p = samples.getParams()
+
+samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
+	range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
+
+samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
+
+samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
+
+samples.saveAsText('VM_TMP_P5_1')
+
+
+samples=loadMCSamples('../../../chains/EXAMPLE_MCMC15',settings=analysissettings)
+p = samples.getParams()
+
+samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
+  range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
+
+samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
+
+samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
+
+samples.saveAsText('VM_TMP_P5_2')
+
+g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=16.5)
 g.settings.lw_contour = 1.2
 g.settings.legend_rect_border = False
 g.settings.figure_legend_frame = False
-g.settings.axes_fontsize = 9.15
+g.settings.axes_fontsize = 6.0
 g.settings.legend_fontsize = 15.5
 g.settings.alpha_filled_add = 0.7
 g.settings.lab_fontsize=14.5
 g.legend_labels=False
 
 roots = [
-'VM_TMP_P3_0',
-'VM_TMP_P3_1',
-'VM_TMP_P3_2'
+'VM_TMP_P5_0',
+'VM_TMP_P5_1',
+'VM_TMP_P5_2'
 ]
-params = ['sigma8','s8omegamp5','omegam',
-'DES_M1','DES_M2','DES_M3','DES_M4','DES_DZ_S1','DES_DZ_S2','DES_DZ_S3','DES_DZ_S4']
+params=[
+'DES_A1_1','DES_A1_2','DES_A2_1','DES_A2_2', 'DES_BTA_1','DES_DZ_S1',
+'DES_DZ_S2','DES_DZ_S3','DES_DZ_S4','chi2__des_y3.des_cosmic_shear',
+'chi2__planck_2018_lowl.TT','chi2__planck_2018_lowl.EE'
+]
 param_3d = None
 g.triangle_plot(roots,params,
 plot_3d_with_param=param_3d,
@@ -113,9 +117,9 @@ line_args=[
 {'lw': 1.5,'ls': 'solid', 'color':'firebrick'}
 ],
 legend_labels=[
-'Cosmic Shear + Planck [low-l TTEE + high-l plik TE]',
-'Cosmic Shear + Planck [low-l TTEE + high-l plik EE]',
-'Cosmic Shear + Planck [low-l TTEE + high-l plik TTTEEE]'
+'Cosmic Shear + Planck [low-l TTEE + high-l plik TTTEEE]',
+'Cosmic Shear + Planck [low-l TTEE + high-l plik lite TTTEEE]',
+'Cosmic Shear + Planck [low-l TTEE + high-l CAMSPEC TTTEEE]'
 ],
 legend_loc=(0.35,0.85),
 contour_ls=['solid','--','-.'],
@@ -126,4 +130,4 @@ contour_colors=['black','royalblue','firebrick']
 g.export()
 
 #DELETE TMP FILES
-subprocess.Popen("rm VM_TMP_P3_[0-9].*", shell=True, cwd=".")
+subprocess.Popen("rm VM_TMP_P5_[0-9].*", shell=True, cwd=".")

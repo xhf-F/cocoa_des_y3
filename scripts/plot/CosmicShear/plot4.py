@@ -57,7 +57,7 @@ samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
 
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 
-samples.saveAsText('VM_TMP_P3_0')
+samples.saveAsText('VM_TMP_P4_0')
 
 samples=loadMCSamples('../../../chains/EXAMPLE_MCMC21',settings=analysissettings)
 p = samples.getParams()
@@ -69,7 +69,7 @@ samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
 
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 
-samples.saveAsText('VM_TMP_P3_1')
+samples.saveAsText('VM_TMP_P4_1')
 
 
 samples=loadMCSamples('../../../chains/EXAMPLE_MCMC5',settings=analysissettings)
@@ -82,25 +82,25 @@ samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
 
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 
-samples.saveAsText('VM_TMP_P3_2')
+samples.saveAsText('VM_TMP_P4_2')
 
-g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=7.5)
+g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=12.5)
 g.settings.lw_contour = 1.2
 g.settings.legend_rect_border = False
 g.settings.figure_legend_frame = False
-g.settings.axes_fontsize = 9.15
+g.settings.axes_fontsize = 6.15
 g.settings.legend_fontsize = 15.5
 g.settings.alpha_filled_add = 0.7
 g.settings.lab_fontsize=14.5
 g.legend_labels=False
 
 roots = [
-'VM_TMP_P3_0',
-'VM_TMP_P3_1',
-'VM_TMP_P3_2'
+'VM_TMP_P4_0',
+'VM_TMP_P4_1',
+'VM_TMP_P4_2'
 ]
-params = ['sigma8','s8omegamp5','omegam',
-'DES_M1','DES_M2','DES_M3','DES_M4','DES_DZ_S1','DES_DZ_S2','DES_DZ_S3','DES_DZ_S4']
+params=['As','ns10', 'H0', 'omegab','omegam','sigma8','s8omegamp5','tau',
+'chi2__des_y3.des_cosmic_shear','chi2__planck_2018_lowl.TT', 'chi2__planck_2018_lowl.EE']
 param_3d = None
 g.triangle_plot(roots,params,
 plot_3d_with_param=param_3d,
@@ -126,4 +126,4 @@ contour_colors=['black','royalblue','firebrick']
 g.export()
 
 #DELETE TMP FILES
-subprocess.Popen("rm VM_TMP_P3_[0-9].*", shell=True, cwd=".")
+subprocess.Popen("rm VM_TMP_P4_[0-9].*", shell=True, cwd=".")

@@ -39,7 +39,7 @@ analysissettings={'smooth_scale_2D':0.5,
 
 analysissettings2={'smooth_scale_2D':0.5,
 'smooth_scale_1D': 0.4,
-'ignore_rows': u'0.3',
+'ignore_rows': u'0.0',
 'fine_bins_2D': u'750',
 'fine_bins': u'750',
 'num_bins_2D': u'450',
@@ -84,7 +84,7 @@ samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 
 samples.saveAsText('VM_TMP_P1_2')
 
-g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=7.25)
+g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=7.5)
 g.settings.lw_contour = 1.2
 g.settings.legend_rect_border = False
 g.settings.figure_legend_frame = False

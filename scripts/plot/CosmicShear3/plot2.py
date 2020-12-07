@@ -39,7 +39,7 @@ analysissettings={'smooth_scale_2D':0.5,
 
 analysissettings2={'smooth_scale_2D':0.5,
 'smooth_scale_1D': 0.4,
-'ignore_rows': u'0.3',
+'ignore_rows': u'0.0',
 'fine_bins_2D': u'750',
 'fine_bins': u'750',
 'num_bins_2D': u'450',

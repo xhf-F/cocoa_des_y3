@@ -39,7 +39,7 @@ analysissettings={'smooth_scale_2D':0.5,
 
 analysissettings2={'smooth_scale_2D':0.5,
 'smooth_scale_1D': 0.4,
-'ignore_rows': u'0.3',
+'ignore_rows': u'0.0',
 'fine_bins_2D': u'750',
 'fine_bins': u'750',
 'num_bins_2D': u'450',
@@ -47,7 +47,7 @@ analysissettings2={'smooth_scale_2D':0.5,
 'range_confidence' : u'0.025'
 }
 
-samples=loadMCSamples('../../../chains/EXAMPLE_MCMC6',settings=analysissettings)
+samples=loadMCSamples('../../../chains/EXAMPLE_MCMC5',settings=analysissettings)
 p = samples.getParams()
 
 samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
@@ -60,7 +60,7 @@ samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 samples.saveAsText('VM_TMP_P4_0')
 
 
-samples=loadMCSamples('../../../chains/EXAMPLE_MCMC8',settings=analysissettings)
+samples=loadMCSamples('../../../chains/EXAMPLE_MCMC7',settings=analysissettings)
 p = samples.getParams()
 
 samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
@@ -73,8 +73,7 @@ samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 samples.saveAsText('VM_TMP_P4_1')
 
 
-samples=loadMCSamples('../../../chains/EXAMPLE_MCMC8',settings=analysissettings)
-#samples=loadMCSamples('../../../chains/EXAMPLE_MCMC25',settings=analysissettings)
+samples=loadMCSamples('../../../chains/EXAMPLE_MCMC15',settings=analysissettings)
 p = samples.getParams()
 
 samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
@@ -86,11 +85,11 @@ samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 
 samples.saveAsText('VM_TMP_P4_2')
 
-g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=7.25)
+g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=15.5)
 g.settings.lw_contour = 1.2
 g.settings.legend_rect_border = False
 g.settings.figure_legend_frame = False
-g.settings.axes_fontsize = 9.15
+g.settings.axes_fontsize = 6.00
 g.settings.legend_fontsize = 15.5
 g.settings.alpha_filled_add = 0.7
 g.settings.lab_fontsize=14.5
@@ -101,7 +100,11 @@ roots = [
 'VM_TMP_P4_1',
 'VM_TMP_P4_2'
 ]
-params = ['As','ns10', 'H0', 'omegab','omegam','sigma8','s8omegamp5','tau']
+params=[
+'As','ns10', 'H0', 'omegab','omegam','sigma8','s8omegamp5','tau',
+'chi2__des_y3.des_cosmic_shear','chi2__planck_2018_lowl.TT',
+'chi2__planck_2018_lowl.EE'
+]
 param_3d = None
 g.triangle_plot(roots,params,
 plot_3d_with_param=param_3d,
@@ -114,9 +117,9 @@ line_args=[
 {'lw': 1.5,'ls': 'solid', 'color':'firebrick'}
 ],
 legend_labels=[
-'Cosmic Shear + Planck [low-l TTEE + LR + high-l plik TTTEEE]',
-'Cosmic Shear + Planck [low-l TTEE + LR + high-l plik lite TTTEEE]',
-'Cosmic Shear + Planck [low-l TTEE + LR + high-l CAMSPEC TTTEEE]'
+'Cosmic Shear + Planck [low-l TTEE + high-l plik TTTEEE]',
+'Cosmic Shear + Planck [low-l TTEE + high-l plik lite TTTEEE]',
+'Cosmic Shear + Planck [low-l TTEE + high-l CAMSPEC TTTEEE]'
 ],
 legend_loc=(0.35,0.85),
 contour_ls=['solid','--','-.'],
