@@ -121,12 +121,16 @@ void cpp_init_probes(std::string possible_probes) {
     like.pos_pos = 1;
     spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes", "possible_probes",
       "3x2pt");
+  } else if (possible_probes.compare("xi_ggl") == 0) {
+    like.shear_shear = 1;
+    like.shear_pos = 1;
+    spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes", "possible_probes",
+      "xi + ggl (2x2pt)");
   } else {
     spdlog::critical("\x1b[90m{}\x1b[0m: {} = {} probe not supported",
       "init_probes", "possible_probes", possible_probes);
     exit(1);
   }
-
   spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_probes");
 }
 
@@ -495,7 +499,6 @@ void cpp_init_data_real(std::string COV, std::string MASK, std::string DATA) {
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 
-// TODO: need to include theta_s
 void cpp_set_cosmological_parameters(const double omega_matter,
 const double hubble, const bool is_cached_cosmology) {
   if(!is_cached_cosmology) {
@@ -619,13 +622,15 @@ void cpp_set_nuisance_nonlinear_bias(std::vector<double> B1, std::vector<double>
 void cpp_set_nuisance_magnification_bias(std::vector<double> B_MAG) {
 #ifdef DEBUG
   if (tomo.clustering_Nbin == 0) {
-    spdlog::critical("\x1b[90m{}\x1b[0m: {} = 0 is invalid", "set_nuisance_magnification_bias",
+    spdlog::critical("\x1b[90m{}\x1b[0m: {} = 0 is invalid", 
+      "set_nuisance_magnification_bias",
       "clustering_Nbin");
     exit(1);
   }
   if (tomo.clustering_Nbin != static_cast<int>(B_MAG.size())) {
-    spdlog::critical("\x1b[90m{}\x1b[0m: incompatible input w/ size = {} (!= {})",
-        "set_nuisance_magnification_bias", B_MAG.size(), tomo.clustering_Nbin);
+    spdlog::critical(
+      "\x1b[90m{}\x1b[0m: incompatible input w/ size = {} (!= {})",
+      "set_nuisance_magnification_bias", B_MAG.size(), tomo.clustering_Nbin);
     exit(1);
   }
 #endif
@@ -653,9 +658,10 @@ void cpp_set_nuisance_ia_mpp(std::vector<double> A1, std::vector<double> A2,
   if (tomo.shear_Nbin != static_cast<int>(A1.size()) ||
       tomo.shear_Nbin != static_cast<int>(A2.size()) ||
   		tomo.shear_Nbin != static_cast<int>(B_TA.size())) {
-    spdlog::critical("\x1b[90m{}\x1b[0m: incompatible input w/ sizes = {}, {} and {} (!= {})",
-        "set_nuisance_ia_mpp", A1.size(), A2.size(), B_TA.size(),
-        tomo.shear_Nbin);
+    spdlog::critical(
+      "\x1b[90m{}\x1b[0m: incompatible input w/ sizes = {}, {} and {} (!= {})",
+      "set_nuisance_ia_mpp", A1.size(), A2.size(), B_TA.size(),
+      tomo.shear_Nbin);
     exit(1);
   }
 #endif
@@ -692,13 +698,11 @@ void cpp_set_nuisance_ia_mpp(std::vector<double> A1, std::vector<double> A2,
   }
 }
 
-
 void cpp_set_pm(std::vector<double> pm) {
   ima::PointMass& instance = ima::PointMass::get_instance();
   instance.set_pm_vector(pm);
   return;
 }
-
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -743,17 +747,20 @@ std::vector<double> cpp_compute_data_vector() {
     exit(1);
   }
   if (!ima::RealData::get_instance().is_mask_set()) {
-    spdlog::critical("\x1b[90m{}\x1b[0m: {} not set prior to this function call",
+    spdlog::critical(
+      "\x1b[90m{}\x1b[0m: {} not set prior to this function call",
       "compute_data_vector", "mask");
     exit(1);
   }
   if (!ima::RealData::get_instance().is_data_set()) {
-    spdlog::critical("\x1b[90m{}\x1b[0m: {} not set prior to this function call",
+    spdlog::critical(
+      "\x1b[90m{}\x1b[0m: {} not set prior to this function call",
       "compute_data_vector", "data_vector");
     exit(1);
   }
   if (!ima::RealData::get_instance().is_inv_cov_set()) {
-    spdlog::critical("\x1b[90m{}\x1b[0m: {} not set prior to this function call",
+    spdlog::critical(
+      "\x1b[90m{}\x1b[0m: {} not set prior to this function call",
       "compute_data_vector", "inv_cov");
     exit(1);
   }

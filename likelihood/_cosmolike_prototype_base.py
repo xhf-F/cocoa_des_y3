@@ -74,8 +74,6 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
   def initialize(self, probe):
 
-
-
     # ------------------------------------------------------------------------
     ini = IniFile(os.path.normpath(os.path.join(self.path, self.data_file)))
 

@@ -33,8 +33,8 @@ params:
     latex: n_\mathrm{s}
   H0:
     prior:
-      min: 20
-      max: 100
+      min: 55
+      max: 91
     ref:
       dist: norm
       loc: 67.32

@@ -28,3 +28,4 @@ make -f MakefileCosmolike clean
 make -j $MAKE_NUM_THREADS -f MakefileCosmolike all
 
 cd $ROOTDIR
+
