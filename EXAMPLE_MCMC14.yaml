@@ -1,4 +1,5 @@
 stop_at_error: False
+timing: True
 
 likelihood:
   des_y3.des_3x2pt:
