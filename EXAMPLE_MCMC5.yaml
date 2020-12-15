@@ -63,8 +63,8 @@ params:
     derived: false
   H0:
     latex: H_0
-      min: 20
-      max: 100
+    min: 20
+    max: 100
   omegabh2:
     prior:
       min: 0.005
