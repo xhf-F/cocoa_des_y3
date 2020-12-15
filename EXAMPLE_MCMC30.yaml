@@ -2,9 +2,8 @@ stop_at_error: False
 timing: True
 
 likelihood:
-  des_y3.des_3x2pt:
+  des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
-    print_intermediate_products: False
 
 params:
   As_1e9:
@@ -14,8 +13,8 @@ params:
     ref:
       dist: norm
       loc: 2.1
-      scale: 0.5
-    proposal: 0.25
+      scale: 0.65
+    proposal: 0.4
     latex: 10^9 A_\mathrm{s})
     drop: true
     renames: A
@@ -70,28 +69,15 @@ params:
   omch2:
     value: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)*(H0/100)**2-(mnu*(3.046/3)**0.75)/94.0708'
     latex: \Omega_\mathrm{c} h^2
-  w:
-    prior:
-      min: -3
-      max: 1
+  mnu:
+     prior:
+      min: 0.06
+      max: 0.8
     ref:
       dist: norm
-      loc: -0.99
+      loc: 0.2
       scale: 0.05
     proposal: 0.05
-    latex: w_{0,\mathrm{DE}}
-  wa:
-    prior:
-      min: -3
-      max: 2
-    ref:
-      dist: norm
-      loc: 0
-      scale: 0.35
-    proposal: 0.2
-    latex: w_{a,\mathrm{DE}}
-  mnu:
-    value: 0.06
   tau:
     value: 0.0543
     latex: \tau_\mathrm{reio}
@@ -174,12 +160,10 @@ sampler:
             As_1e9, ns, H0, omegab, omegam
           ]
         ]
-      - [2,
+      - [3,
           [
-            DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1, DES_A1_2,
-            DES_A2_1, DES_A2_2, DES_BTA_1, DES_DZ_L1, DES_DZ_L2, DES_DZ_L3,
-            DES_DZ_L4, DES_DZ_L5, DES_B1_1,
-            DES_B1_2, DES_B1_3, DES_B1_4, DES_B1_5
+            DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1,
+            DES_A1_2, DES_A2_1, DES_A2_2, DES_BTA_1
           ]
         ]
       - [25,
@@ -203,4 +187,4 @@ sampler:
     # ---------------------------------------------------------------------
     Rminus1_single_split: 4
 
-output: ./projects/des_y3/chains/EXAMPLE_MCMC24
+output: ./projects/des_y3/chains/EXAMPLE_MCMC30
