@@ -49,27 +49,35 @@ analysissettings2={'smooth_scale_2D':0.5,
 
 samples=loadMCSamples('../../../chains/EXAMPLE_MCMC3',settings=analysissettings)
 p = samples.getParams()
-
 samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
-	range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
-
+  range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
 samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
-
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
-
 samples.saveAsText('VM_TMP_P3_0')
+
+samples=loadMCSamples('../../../chains/EXAMPLE_MCMC26',settings=analysissettings)
+p = samples.getParams()
+samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
+  range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
+samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
+samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
+samples.saveAsText('VM_TMP_P3_1')
+
+samples=loadMCSamples('../../../chains/EXAMPLE_MCMC27',settings=analysissettings)
+p = samples.getParams()
+samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
+  range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
+samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
+samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
+samples.saveAsText('VM_TMP_P3_2')
 
 samples=loadMCSamples('../../../chains/EXAMPLE_MCMC4',settings=analysissettings)
 p = samples.getParams()
-
 samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
-	range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
-
+  range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
 samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
-
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
-
-samples.saveAsText('VM_TMP_P3_1')
+samples.saveAsText('VM_TMP_P3_3')
 
 g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=7.25)
 g.settings.lw_contour = 1.2
@@ -83,7 +91,8 @@ g.legend_labels=False
 
 roots = [
 'VM_TMP_P3_0',
-'VM_TMP_P3_1'
+'VM_TMP_P3_1',
+'VM_TMP_P3_3'
 ]
 params = ['sigma8','s8omegamp5','omegam',
 'DES_M1','DES_M2','DES_M3','DES_M4','DES_DZ_S1','DES_DZ_S2','DES_DZ_S3','DES_DZ_S4']
@@ -94,18 +103,19 @@ filled=True,
 shaded=False,
 imax_shaded=0,
 line_args=[
-{'lw': 1.8,'ls': '--', 'color':'royalblue'},
 {'lw': 1.0,'ls': 'solid', 'color':'black'},
-{'lw': 1.2,'ls': 'solid', 'color':'firebrick'}
+{'lw': 2.5,'ls': ':', 'color':'maroon'},
+{'lw': 1.2,'ls': '-.', 'color':'green'}
 ],
 legend_labels=[
 'Cosmic Shear',
-'3x2pt',
+'Galaxy-Galaxy Lensing',
+'3x2pt'
 ],
 legend_loc=(0.50,0.75),
-contour_ls=['--','solid','solid'],
-contour_lws=[2.0,1.0,1.2],
-contour_colors=['royalblue','black','firebrick']
+contour_ls=['solid',':','-.'],
+contour_lws=[1.0,2.5,1.2],
+contour_colors=['black','maroon','green']
 )
 
 g.export()

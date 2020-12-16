@@ -187,7 +187,7 @@ sampler:
             logA, ns, theta_MC_100, omegabh2, omegach2, tau
           ]
         ]
-      - [3,
+      - [4,
           [
             DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1,
             DES_A1_2, DES_A2_1, DES_A2_2, DES_BTA_1

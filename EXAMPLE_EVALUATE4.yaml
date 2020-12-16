@@ -108,13 +108,13 @@ theory:
 
 sampler:
   evaluate:
+    N: 10
     override:
       As_1e9: 2.1
       ns: 0.96605
       H0: 67.32
       omegab: 0.04
       omegam: 0.3
-      #m_ncdm: 0.06
       DES_DZ_S1: 0.0
       DES_DZ_S2: 0.0
       DES_DZ_S3: 0.0

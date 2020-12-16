@@ -290,17 +290,17 @@ void cpp_init_source_sample(std::string multihisto_file, const int Ntomo) {
   if (multihisto_file.size() > CHAR_MAX_SIZE - 1) {
     spdlog::critical(
       "\x1b[90m{}\x1b[0m: insufficient pre-allocated char memory (max = {}) for"
-      "the string: {}", "init_lens_sample", CHAR_MAX_SIZE-1, multihisto_file);
+      "the string: {}", "init_source_sample", CHAR_MAX_SIZE-1, multihisto_file);
     exit(1);
   }
   if (!(multihisto_file.size() > 0)) {
     spdlog::critical("\x1b[90m{}\x1b[0m: empty {} string not supported",
-      "init_lens_sample", "multihisto_file");
+      "init_source_sample", "multihisto_file");
     exit(1);
   }
   if (!(Ntomo > 0) || Ntomo > MAX_SIZE_ARRAYS) {
     spdlog::critical("\x1b[90m{}\x1b[0m: {} = {} not supported (max = {})",
-      "init_lens_sample", "Ntomo", Ntomo, MAX_SIZE_ARRAYS);
+      "init_source_sample", "Ntomo", Ntomo, MAX_SIZE_ARRAYS);
     exit(1);
   }
 #endif
@@ -313,7 +313,7 @@ void cpp_init_source_sample(std::string multihisto_file, const int Ntomo) {
   tomo.shear_Npowerspectra = tomo.shear_Nbin * (tomo.shear_Nbin + 1) / 2;
 
   spdlog::debug("\x1b[90m{}\x1b[0m: tomo.shear_Npowerspectra = {}",
-    "init_lens_sample", tomo.shear_Npowerspectra);
+    "init_source_sample", tomo.shear_Npowerspectra);
 
   for (int i = 0; i < tomo.shear_Nbin; i++) {
     nuisance.bias_zphot_shear[i] = 0.0;
@@ -622,7 +622,7 @@ void cpp_set_nuisance_nonlinear_bias(std::vector<double> B1, std::vector<double>
 void cpp_set_nuisance_magnification_bias(std::vector<double> B_MAG) {
 #ifdef DEBUG
   if (tomo.clustering_Nbin == 0) {
-    spdlog::critical("\x1b[90m{}\x1b[0m: {} = 0 is invalid", 
+    spdlog::critical("\x1b[90m{}\x1b[0m: {} = 0 is invalid",
       "set_nuisance_magnification_bias",
       "clustering_Nbin");
     exit(1);

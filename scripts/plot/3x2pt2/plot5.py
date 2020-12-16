@@ -57,7 +57,7 @@ samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
 
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 
-samples.saveAsText('VM_TMP_P4_0')
+samples.saveAsText('VM_TMP_P5_0')
 
 
 samples=loadMCSamples('../../../chains/EXAMPLE_MCMC11',settings=analysissettings)
@@ -70,7 +70,7 @@ samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
 
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 
-samples.saveAsText('VM_TMP_P4_1')
+samples.saveAsText('VM_TMP_P5_1')
 
 
 samples=loadMCSamples('../../../chains/EXAMPLE_MCMC16',settings=analysissettings)
@@ -83,7 +83,7 @@ samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
 
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 
-samples.saveAsText('VM_TMP_P4_2')
+samples.saveAsText('VM_TMP_P5_2')
 
 g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=15.5)
 g.settings.lw_contour = 1.2
@@ -96,9 +96,9 @@ g.settings.lab_fontsize=14.5
 g.legend_labels=False
 
 roots = [
-'VM_TMP_P4_0',
-'VM_TMP_P4_1',
-'VM_TMP_P4_2'
+'VM_TMP_P5_0',
+'VM_TMP_P5_1',
+'VM_TMP_P5_2'
 ]
 params = [
 'DES_A1_1','DES_A1_2','DES_A2_1','DES_A2_2', 'DES_BTA_1','DES_DZ_S1',
@@ -130,4 +130,4 @@ contour_colors=['black','royalblue','firebrick']
 g.export()
 
 #DELETE TMP FILES
-subprocess.Popen("rm VM_TMP_P4_[0-9].*", shell=True, cwd=".")
+subprocess.Popen("rm VM_TMP_P5_[0-9].*", shell=True, cwd=".")

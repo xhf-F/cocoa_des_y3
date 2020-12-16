@@ -49,27 +49,35 @@ analysissettings2={'smooth_scale_2D':0.5,
 
 samples=loadMCSamples('../../../chains/EXAMPLE_MCMC3',settings=analysissettings)
 p = samples.getParams()
-
 samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
 	range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
-
 samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
-
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
-
 samples.saveAsText('VM_TMP_P1_0')
+
+samples=loadMCSamples('../../../chains/EXAMPLE_MCMC26',settings=analysissettings)
+p = samples.getParams()
+samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
+  range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
+samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
+samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
+samples.saveAsText('VM_TMP_P1_1')
+
+samples=loadMCSamples('../../../chains/EXAMPLE_MCMC27',settings=analysissettings)
+p = samples.getParams()
+samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
+  range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
+samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
+samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
+samples.saveAsText('VM_TMP_P1_2')
 
 samples=loadMCSamples('../../../chains/EXAMPLE_MCMC4',settings=analysissettings)
 p = samples.getParams()
-
 samples.addDerived(10*p.ns,name='ns10',label='10 n_s',
 	range=[10*samples.getLower('ns'),10*samples.getUpper('ns')])
-
 samples.addDerived(10*p.omegam,name='omegam10',label='10 \Omega_m')
-
 samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
-
-samples.saveAsText('VM_TMP_P1_1')
+samples.saveAsText('VM_TMP_P1_3')
 
 g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=7.25)
 g.settings.lw_contour = 1.2
@@ -82,8 +90,10 @@ g.settings.lab_fontsize=14.5
 g.legend_labels=False
 
 roots = [
+'VM_TMP_P1_2',
 'VM_TMP_P1_0',
-'VM_TMP_P1_1'
+'VM_TMP_P1_1',
+'VM_TMP_P1_3'
 ]
 params = ['As','ns10', 'H0', 'omegab','omegam','sigma8','s8omegamp5']
 param_3d = None
@@ -95,19 +105,22 @@ imax_shaded=0,
 line_args=[
 {'lw': 1.8,'ls': '--', 'color':'royalblue'},
 {'lw': 1.0,'ls': 'solid', 'color':'black'},
-{'lw': 1.2,'ls': 'solid', 'color':'firebrick'}
+{'lw': 2.5,'ls': ':', 'color':'maroon'},
+{'lw': 1.2,'ls': '-.', 'color':'green'}
 ],
 legend_labels=[
+'Galaxy Clustering',
 'Cosmic Shear',
-'3x2pt',
+'Galaxy-Galaxy Lensing',
+'3x2pt'
 ],
 legend_loc=(0.50,0.75),
-contour_ls=['--','solid','solid'],
-contour_lws=[2.0,1.0,1.2],
-contour_colors=['royalblue','black','firebrick']
+contour_ls=['--','solid',':','-.'],
+contour_lws=[1.8,1.0,2.5,1.2],
+contour_colors=['royalblue','black','maroon','green']
 )
 
 g.export()
 
 #DELETE TMP FILES
-#subprocess.Popen("rm VM_TMP_P1_[0-9].*", shell=True, cwd=".")
+subprocess.Popen("rm VM_TMP_P1_[0-9].*", shell=True, cwd=".")

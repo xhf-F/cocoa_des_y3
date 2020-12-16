@@ -84,11 +84,11 @@ samples.addDerived(100*p.omegab,name='omegab100',label='100 \Omega_b')
 
 samples.saveAsText('VM_TMP_P4_2')
 
-g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=12.5)
+g=gplot.getSubplotPlotter(chain_dir=r'./',analysis_settings=analysissettings2,width_inch=15.5)
 g.settings.lw_contour = 1.2
 g.settings.legend_rect_border = False
 g.settings.figure_legend_frame = False
-g.settings.axes_fontsize = 6.15
+g.settings.axes_fontsize = 6.00
 g.settings.legend_fontsize = 15.5
 g.settings.alpha_filled_add = 0.7
 g.settings.lab_fontsize=14.5
