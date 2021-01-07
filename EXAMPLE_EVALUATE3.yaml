@@ -125,7 +125,7 @@ theory:
 
 sampler:
   evaluate:
-    N: 100
+    N: 10
     override:
       As_1e9: 2.1
       ns: 0.96605
@@ -156,5 +156,5 @@ sampler:
       DES_M2: -0.0431752
       DES_M3: -0.034961
       DES_M4: -0.0158096
-# chi2_des_y3.des_3x2pt = 2377.39
+
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE3
