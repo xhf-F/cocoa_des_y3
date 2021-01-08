@@ -336,19 +336,54 @@ params:
   # ------------------------------------------------------------------------
   # Point Mass parameters
   DES_PM1:
-    value: 0.0
+    prior:
+      min: -100
+      max: 100
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 10.0
+    proposal: 7.0
     latex: PM_\mathrm{DES}^1
   DES_PM2:
-    value: 0.0
+    prior:
+      min: -100
+      max: 100
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 10.0
+    proposal: 7.0
     latex: PM_\mathrm{DES}^2
   DES_PM3:
-    value: 0.0
+    prior:
+      min: -100
+      max: 100
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 10.0
+    proposal: 7.0
     latex: PM_\mathrm{DES}^3
   DES_PM4:
-    value: 0.0
+    prior:
+      min: -100
+      max: 100
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 10.0
+    proposal: 7.0
     latex: PM_\mathrm{DES}^4
   DES_PM5:
-    value: 0.0
+    prior:
+      min: -100
+      max: 100
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 10.0
+    proposal: 7.0
     latex: PM_\mathrm{DES}^5
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------

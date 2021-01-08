@@ -68,8 +68,8 @@ params:
     max: 100
   omegabh2:
     prior:
-      min: 0.005
-      max: 0.1
+      min: 0.01
+      max: 0.04
     ref:
       dist: norm
       loc: 0.022383
@@ -98,6 +98,26 @@ params:
       scale: 0.006
     proposal: 0.003
     latex: \tau_\mathrm{reio}
+  w:
+    prior:
+      min: -3
+      max: 1
+    ref:
+      dist: norm
+      loc: -0.99
+      scale: 0.05
+    proposal: 0.05
+    latex: w_{0,\mathrm{DE}}
+  wa:
+    prior:
+      min: -3
+      max: 2
+    ref:
+      dist: norm
+      loc: 0
+      scale: 0.35
+    proposal: 0.2
+    latex: w_{a,\mathrm{DE}}
   omegal:
     latex: \Omega_\Lambda
   omegam:
@@ -136,6 +156,42 @@ params:
   omegan:
     derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
     latex: \Omega_\mathrm{\\nu}
+  zstar:
+    latex: z_*
+  rstar:
+    latex: r_*
+  thetastar:
+    latex: 100\theta_*
+  DAstar:
+    latex: D_\mathrm{A}/\mathrm{Gpc}
+  zdrag:
+    latex: z_\mathrm{drag}
+  kd:
+    latex: k_\mathrm{D}
+  thetad:
+    latex: 100\theta_\mathrm{D}
+  zeq:
+    latex: z_\mathrm{eq}
+  keq:
+    latex: k_\mathrm{eq}
+  thetaeq:
+    latex: 100\theta_\mathrm{eq}
+  thetarseq:
+    latex: 100\theta_\mathrm{s,eq}
+  DHBBN:
+    derived: "lambda DH: 10**5*DH"
+    latex: 10^5 \mathrm{D}/\mathrm{H}
+  zrei:
+    latex: z_\mathrm{re}
+  nrun:
+    value: 0.0
+    latex: n_\mathrm{run}
+  nrunrun:
+    value: 0.0
+    latex: n_\mathrm{run,run}
+  omegak:
+    value: 0.0
+    latex: \Omega_k
 
 theory:
   camb:
@@ -143,9 +199,13 @@ theory:
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.1
+      AccuracyBoost: 1.25
+      lens_potential_accuracy: 1.1
       num_massive_neutrinos: 1
       nnu: 3.046
+      dark_energy_model: ppf
+      accurate_massive_neutrino_transfers: true
+      k_per_logint: 20
 
 sampler:
   evaluate:

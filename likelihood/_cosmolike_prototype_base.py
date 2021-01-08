@@ -107,27 +107,21 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     # ------------------------------------------------------------------------
 
-    self.z_interp_1D = np.linspace(0,1.5,250)
-    self.z_interp_1D = np.concatenate((self.z_interp_1D,np.linspace(1.5,10.1,50)),axis=0)
+    self.z_interp_1D = np.linspace(0,10.01,1200)
     self.z_interp_1D[0] = 0
 
-    self.z_interp_2D = np.linspace(0,1.7,100)
-    self.z_interp_2D = np.concatenate((self.z_interp_2D,np.linspace(1.7,10.1,25)),axis=0)
+    self.z_interp_2D = np.linspace(0,10.01,150)
     self.z_interp_2D[0] = 0
 
     self.len_z_interp_2D = len(self.z_interp_2D)
-    self.len_log10k_interp_2D = int(550*(1+(self.acc-1.0)/3.0))
-
-    self.log10k_interp_2D = np.linspace(-4.5,8.0,self.len_log10k_interp_2D)
+    self.len_log10k_interp_2D = 1000
+    self.log10k_interp_2D = np.linspace(-4.2,2.0,self.len_log10k_interp_2D)
 
     # Cobaya wants k in 1/Mpc
     self.k_interp_2D = np.power(10.0,self.log10k_interp_2D)
-
     self.len_k_interp_2D = len(self.k_interp_2D)
-
     self.len_pkz_interp_2D = self.len_log10k_interp_2D*self.len_z_interp_2D
-
-    self.extrap_kmax = 5e8 * self.acc
+    self.extrap_kmax = 2.5e2 * self.acc
     # ------------------------------------------------------------------------
 
     ci.initial_setup()
@@ -180,13 +174,16 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
       "omegam": None,
       "Pk_interpolator": {
         "z": self.z_interp_2D,
-        "k_max": 12 * self.acc,
+        "k_max": 20 * self.acc,
         "nonlinear": (True,False),
         "vars_pairs": ([("delta_tot", "delta_tot")])
       },
       "comoving_radial_distance": {
         "z": self.z_interp_1D
       # Get comoving radial distance from us to redshift z in Mpc.
+      },
+      "Cl": { # DONT REMOVE THIS - SOME WEIRD BEHAVIOR IN CAMB WITHOUT WANTS_CL
+        'tt': 0
       }
     }
 

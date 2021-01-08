@@ -1183,9 +1183,8 @@ arma::Mat<double> cpp_print_a() {
   const double chi_min = 10.;
   const double chi_max = 7000.;
   const double dlnchi = std::log(chi_max/chi_min)/(Nchi-1.);
-  const double real_coverH0 = cosmology.coverH0/cosmology.h0;
   for(int i=0; i<Nchi; i++) {
-    r(i,0) = chi_min*exp(dlnchi*i)/real_coverH0;
+    r(i,0) = chi_min*exp(dlnchi*i)/cosmology.coverH0;
     r(i,1) = a_chi(r(i,0));
   }
   return r;
@@ -1252,10 +1251,10 @@ arma::Mat<double> cpp_print_ps() {
     for (int j=0; j<Ntable.N_k_nlin; j++) {
       const double k = std::exp(logkmin + j * dk);
       r(i*Ntable.N_k_nlin+j,0) = a;
-      r(i*Ntable.N_k_nlin+j,1) = k;
+      r(i*Ntable.N_k_nlin+j,1) = k/cosmology.coverH0;
       r(i*Ntable.N_k_nlin+j,2) = p_lin(k, a);
       r(i*Ntable.N_k_nlin+j,3) = p_nonlin(k, a);
-    }
+     }
   }
   return r;
 }

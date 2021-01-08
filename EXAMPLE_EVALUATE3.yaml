@@ -74,23 +74,46 @@ params:
       loc: 0.25
       scale: 0.1
     proposal: 0.05
-
-  ombh2:
+    latex: \sum m_\nu
+  w:
+    prior:
+      min: -3
+      max: 1
+    ref:
+      dist: norm
+      loc: -0.99
+      scale: 0.05
+    proposal: 0.05
+    latex: w_{0,\mathrm{DE}}
+  wa:
+    prior:
+      min: -3
+      max: 2
+    ref:
+      dist: norm
+      loc: 0
+      scale: 0.35
+    proposal: 0.2
+    latex: w_{a,\mathrm{DE}}
+  omegabh2:
     value: 'lambda omegab, H0: omegab*(H0/100)**2'
     latex: \Omega_\mathrm{b} h^2
-  omch2:
+  omegach2:
     value: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)*(H0/100)**2-(mnu*(3.046/3)**0.75)/94.0708'
     latex: \Omega_\mathrm{c} h^2
+  omegac:
+    derived: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)-(mnu*(3.046/3)**0.75)/94.0708/(H0/100)**2'
+    latex: \Omega_\mathrm{c}
   tau:
     value: 0.0697186
     latex: \tau_\mathrm{reio}
   omegal:
     latex: \Omega_\Lambda
+  sigma8:
+    latex: \sigma_8
   omegamh2:
     derived: 'lambda omegam, H0: omegam*(H0/100)**2'
     latex: \Omega_\mathrm{m} h^2
-  sigma8:
-    latex: \sigma_8
   s8h5:
     derived: 'lambda sigma8, H0: sigma8*(H0*1e-2)**(-0.5)'
     latex: \sigma_8/h^{0.5}
@@ -111,6 +134,42 @@ params:
   omegan:
     derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
     latex: \Omega_\mathrm{\\nu}
+  zstar:
+    latex: z_*
+  rstar:
+    latex: r_*
+  thetastar:
+    latex: 100\theta_*
+  DAstar:
+    latex: D_\mathrm{A}/\mathrm{Gpc}
+  zdrag:
+    latex: z_\mathrm{drag}
+  kd:
+    latex: k_\mathrm{D}
+  thetad:
+    latex: 100\theta_\mathrm{D}
+  zeq:
+    latex: z_\mathrm{eq}
+  keq:
+    latex: k_\mathrm{eq}
+  thetaeq:
+    latex: 100\theta_\mathrm{eq}
+  thetarseq:
+    latex: 100\theta_\mathrm{s,eq}
+  DHBBN:
+    derived: "lambda DH: 10**5*DH"
+    latex: 10^5 \mathrm{D}/\mathrm{H}
+  zrei:
+    latex: z_\mathrm{re}
+  nrun:
+    value: 0.0
+    latex: n_\mathrm{run}
+  nrunrun:
+    value: 0.0
+    latex: n_\mathrm{run,run}
+  omegak:
+    value: 0.0
+    latex: \Omega_k
 
 theory:
   camb:
@@ -119,13 +178,17 @@ theory:
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.1
+      AccuracyBoost: 1.25
+      lens_potential_accuracy: 1.1
       num_massive_neutrinos: 1
       nnu: 3.046
+      dark_energy_model: ppf
+      accurate_massive_neutrino_transfers: true
+      k_per_logint: 20
 
 sampler:
   evaluate:
-    N: 10
+    N: 1
     override:
       As_1e9: 2.1
       ns: 0.96605
@@ -156,5 +219,12 @@ sampler:
       DES_M2: -0.0431752
       DES_M3: -0.034961
       DES_M4: -0.0158096
+      DES_PM1: 0.5
+      DES_PM2: -0.5
+      DES_PM3: 0.3
+      DES_PM4: -0.3
+      DES_PM5: 0.9
+      w: -0.9
+      wa: 0.0
 
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE3

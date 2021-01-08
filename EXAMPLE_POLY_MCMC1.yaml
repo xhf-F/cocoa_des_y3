@@ -4,7 +4,6 @@ timing: True
 likelihood:
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
-    print_intermediate_products: False
 
 params:
   As_1e9:
@@ -14,8 +13,8 @@ params:
     ref:
       dist: norm
       loc: 2.1
-      scale: 0.5
-    proposal: 0.25
+      scale: 0.65
+    proposal: 0.4
     latex: 10^9 A_\mathrm{s})
     drop: true
     renames: A
@@ -64,10 +63,10 @@ params:
     proposal: 0.02
     latex: \Omega_\mathrm{m}
     drop: true
-  ombh2:
+  omegabh2:
     value: 'lambda omegab, H0: omegab*(H0/100)**2'
     latex: \Omega_\mathrm{b} h^2
-  omch2:
+  omegach2:
     value: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)*(H0/100)**2-(mnu*(3.046/3)**0.75)/94.0708'
     latex: \Omega_\mathrm{c} h^2
   mnu:
@@ -102,6 +101,42 @@ params:
   omegan:
     derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
     latex: \Omega_\mathrm{\\nu}
+  zstar:
+    latex: z_*
+  rstar:
+    latex: r_*
+  thetastar:
+    latex: 100\theta_*
+  DAstar:
+    latex: D_\mathrm{A}/\mathrm{Gpc}
+  zdrag:
+    latex: z_\mathrm{drag}
+  kd:
+    latex: k_\mathrm{D}
+  thetad:
+    latex: 100\theta_\mathrm{D}
+  zeq:
+    latex: z_\mathrm{eq}
+  keq:
+    latex: k_\mathrm{eq}
+  thetaeq:
+    latex: 100\theta_\mathrm{eq}
+  thetarseq:
+    latex: 100\theta_\mathrm{s,eq}
+  DHBBN:
+    derived: "lambda DH: 10**5*DH"
+    latex: 10^5 \mathrm{D}/\mathrm{H}
+  zrei:
+    latex: z_\mathrm{re}
+  nrun:
+    value: 0.0
+    latex: n_\mathrm{run}
+  nrunrun:
+    value: 0.0
+    latex: n_\mathrm{run,run}
+  omegak:
+    value: 0.0
+    latex: \Omega_k
 
 theory:
   camb:
@@ -109,9 +144,13 @@ theory:
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.1
+      AccuracyBoost: 1.25
+      lens_potential_accuracy: 1.1
       num_massive_neutrinos: 1
       nnu: 3.046
+      dark_energy_model: ppf
+      accurate_massive_neutrino_transfers: true
+      k_per_logint: 20
 
 sampler:
   polychord:
@@ -126,7 +165,7 @@ sampler:
     blocking:
       - [1,
           [
-            logA, ns, H0, omegabh2, omegach2, w, wa
+            As_1e9, ns, H0, omegab, omegam
           ]
         ]
       - [3,
@@ -137,7 +176,8 @@ sampler:
         ]
       - [25,
           [
-            DES_M1, DES_M2, DES_M3, DES_M4
+            DES_M1, DES_M2, DES_M3, DES_M4, DES_PM1,
+            DES_PM2, DES_PM3, DES_PM4, DES_PM5
           ]
         ]
     oversample_power: 0

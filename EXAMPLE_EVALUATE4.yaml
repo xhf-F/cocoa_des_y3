@@ -6,6 +6,14 @@ likelihood:
   des_y3.des_3x2pt:
     path: ./external_modules/data/des_y3
     print_intermediate_products: False
+  planck_2018_lowl.TT:
+    path: ./external_modules/
+  planck_2018_lowl.EE:
+    path: ./external_modules/
+  planck_2018_highl_plik.TTTEEE_lite:
+    path: ./external_modules/
+  planck_2018_lensing.clik:
+    path: ./external_modules/
 
 params:
   As_1e9:
@@ -53,6 +61,7 @@ params:
       scale: 0.004
     proposal: 0.004
     latex: \Omega_\mathrm{b}
+    drop: true
   omegam:
     prior:
       min: 0.1
@@ -63,17 +72,23 @@ params:
       scale: 0.02
     proposal: 0.02
     latex: \Omega_\mathrm{m}
+    drop: true
   m_ncdm:
-    value: 0.06
+    prior:
+      min: 0.06
+      max: 0.6
+    ref:
+      dist: norm
+      loc: 0.25
+      scale: 0.1
+    proposal: 0.05
+    latex: \sum m_\nu
     renames: mnu
   tau:
     value: 0.0697186
     latex: \tau_\mathrm{reio}
   omegal:
     latex: \Omega_\Lambda
-  omegamh2:
-    derived: 'lambda omegam, H0: omegam*(H0/100)**2'
-    latex: \Omega_\mathrm{m} h^2
   sigma8:
     latex: \sigma_8
   s8h5:
@@ -90,16 +105,29 @@ params:
   rdrag:
     latex: r_\mathrm{drag}
   yheused:
-    latex: Y_P^\mathrm{BBN}
+    latex: Y_\mathrm{P}
+  omegabh2:
+    value: 'lambda omegab, H0: omegab*(H0/100)**2'
+    latex: \Omega_\mathrm{b} h^2
+  omegach2:
+    value: 'lambda omegam, omegab, m_ncdm, H0: (omegam-omegab)*(H0/100)**2-(m_ncdm*(3.046/3)**0.75)/94.0708'
+    latex: \Omega_\mathrm{c} h^2
+  omegamh2:
+    derived: 'lambda omegam, H0: omegam*(H0/100)**2'
+    latex: \Omega_\mathrm{m} h^2
   omegan:
     latex: \Omega_\mathrm{\\nu}
-  omegan2:
+  omeganh2:
     derived: 'lambda omegan, H0: omegan*((H0/100)**2)'
     latex: \Omega_\mathrm{\\nu} h^2
+  omegak:
+    value: 0.0
+    latex: \Omega_k
 
 theory:
   classy:
     path: ./external_modules/code/class_public
+    stop_at_error: True
     use_renames: True
     extra_args:
       non linear: halofit
@@ -108,35 +136,42 @@ theory:
 
 sampler:
   evaluate:
-    N: 10
+    N: 1
     override:
       As_1e9: 2.1
       ns: 0.96605
       H0: 67.32
       omegab: 0.04
       omegam: 0.3
-      DES_DZ_S1: 0.0
-      DES_DZ_S2: 0.0
-      DES_DZ_S3: 0.0
-      DES_DZ_S4: 0.0
-      DES_M1: 0.0
-      DES_M2: 0.0
-      DES_M3: 0.0
-      DES_M4: 0.0
-      DES_A1_1: 0.7
-      DES_A1_2: -1.7
-      DES_A2_1: -1.36
-      DES_A2_2: -2.5
-      DES_BTA_1: 1.0
-      DES_B1_1: 1.45
-      DES_B1_2: 1.55
-      DES_B1_3: 1.65
-      DES_B1_4: 1.8
-      DES_B1_5: 2.0
-      DES_DZ_L1: 0.0
-      DES_DZ_L2: 0.0
-      DES_DZ_L3: 0.0
-      DES_DZ_L4: 0.0
-      DES_DZ_L5: 0.0
+      m_ncdm: 0.06
+      DES_DZ_S1: 0.0414632
+      DES_DZ_S2: 0.00147332
+      DES_DZ_S3: 0.0237035
+      DES_DZ_S4: -0.0773436
+      DES_A1_1: 0.606102
+      DES_A1_2: -1.51541
+      DES_A2_1: -1.73583
+      DES_A2_2: -2.91558
+      DES_BTA_1: 0.930588
+      DES_DZ_L1: 0.00457604
+      DES_DZ_L2: 0.000309875
+      DES_DZ_L3: 0.00855907
+      DES_DZ_L4: -0.00316269
+      DES_DZ_L5: -0.0146753
+      DES_B1_1: 1.72716
+      DES_B1_2: 1.65168
+      DES_B1_3: 1.61423
+      DES_B1_4: 1.92886
+      DES_B1_5: 2.11633
+      DES_M1: 0.0191832
+      DES_M2: -0.0431752
+      DES_M3: -0.034961
+      DES_M4: -0.0158096
+      DES_PM1: 0.5
+      DES_PM2: -0.5
+      DES_PM3: 0.3
+      DES_PM4: -0.3
+      DES_PM5: 0.9
+      A_planck: 1.0
 
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE4

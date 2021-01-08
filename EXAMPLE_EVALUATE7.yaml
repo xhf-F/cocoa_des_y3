@@ -74,7 +74,26 @@ params:
       loc: 0.25
       scale: 0.1
     proposal: 0.05
-
+  w:
+    prior:
+      min: -3
+      max: 1
+    ref:
+      dist: norm
+      loc: -0.99
+      scale: 0.05
+    proposal: 0.05
+    latex: w_{0,\mathrm{DE}}
+  wa:
+    prior:
+      min: -3
+      max: 2
+    ref:
+      dist: norm
+      loc: 0
+      scale: 0.35
+    proposal: 0.2
+    latex: w_{a,\mathrm{DE}}
   ombh2:
     value: 'lambda omegab, H0: omegab*(H0/100)**2'
     latex: \Omega_\mathrm{b} h^2
@@ -111,6 +130,42 @@ params:
   omegan:
     derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
     latex: \Omega_\mathrm{\\nu}
+  zstar:
+    latex: z_*
+  rstar:
+    latex: r_*
+  thetastar:
+    latex: 100\theta_*
+  DAstar:
+    latex: D_\mathrm{A}/\mathrm{Gpc}
+  zdrag:
+    latex: z_\mathrm{drag}
+  kd:
+    latex: k_\mathrm{D}
+  thetad:
+    latex: 100\theta_\mathrm{D}
+  zeq:
+    latex: z_\mathrm{eq}
+  keq:
+    latex: k_\mathrm{eq}
+  thetaeq:
+    latex: 100\theta_\mathrm{eq}
+  thetarseq:
+    latex: 100\theta_\mathrm{s,eq}
+  DHBBN:
+    derived: "lambda DH: 10**5*DH"
+    latex: 10^5 \mathrm{D}/\mathrm{H}
+  zrei:
+    latex: z_\mathrm{re}
+  nrun:
+    value: 0.0
+    latex: n_\mathrm{run}
+  nrunrun:
+    value: 0.0
+    latex: n_\mathrm{run,run}
+  omegak:
+    value: 0.0
+    latex: \Omega_k
 
 theory:
   camb:
@@ -119,9 +174,13 @@ theory:
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.1
+      AccuracyBoost: 1.25
+      lens_potential_accuracy: 1.1
       num_massive_neutrinos: 1
       nnu: 3.046
+      dark_energy_model: ppf
+      accurate_massive_neutrino_transfers: true
+      k_per_logint: 20
 
 sampler:
   evaluate:
@@ -133,15 +192,17 @@ sampler:
       omegab: 0.04
       omegam: 0.3
       mnu: 0.06
-      DES_B1_1: 1.45
-      DES_B1_2: 1.55
-      DES_B1_3: 1.65
-      DES_B1_4: 1.8
-      DES_B1_5: 2.0
-      DES_DZ_L1: 0.0
-      DES_DZ_L2: 0.0
-      DES_DZ_L3: 0.0
-      DES_DZ_L4: 0.0
-      DES_DZ_L5: 0.0
+      DES_B1_1: 1.72716
+      DES_B1_2: 1.65168
+      DES_B1_3: 1.61423
+      DES_B1_4: 1.92886
+      DES_B1_5: 2.11633
+      DES_DZ_L1: 0.00457604
+      DES_DZ_L2: 0.000309875
+      DES_DZ_L3: 0.00855907
+      DES_DZ_L4: -0.00316269
+      DES_DZ_L5: -0.0146753
+      w: -0.9
+      wa: 0.0
 
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE7
