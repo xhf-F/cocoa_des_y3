@@ -107,14 +107,16 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     # ------------------------------------------------------------------------
 
-    self.z_interp_1D = np.linspace(0,10.01,1200)
+    self.z_interp_1D = np.linspace(0,2.0,1000)
+    self.z_interp_1D = np.concatenate((self.z_interp_1D,np.linspace(2.0,10.1,200)),axis=0)
     self.z_interp_1D[0] = 0
 
-    self.z_interp_2D = np.linspace(0,10.01,150)
+    self.z_interp_2D = np.linspace(0,2.0,100)
+    self.z_interp_2D = np.concatenate((self.z_interp_2D,np.linspace(2.0,10.1,50)),axis=0)
     self.z_interp_2D[0] = 0
 
     self.len_z_interp_2D = len(self.z_interp_2D)
-    self.len_log10k_interp_2D = 1000
+    self.len_log10k_interp_2D = 1200
     self.log10k_interp_2D = np.linspace(-4.2,2.0,self.len_log10k_interp_2D)
 
     # Cobaya wants k in 1/Mpc

@@ -6,6 +6,12 @@ likelihood:
   des_y3.des_3x2pt:
     path: ./external_modules/data/des_y3
     print_intermediate_products: False
+  planck_2018_lowl.TT:
+    path: ./external_modules/
+  planck_2018_lowl.EE:
+    path: ./external_modules/
+  planck_2018_highl_plik.TTTEEE_lite:
+    path: ./external_modules/
 
 params:
   As_1e9:
@@ -178,12 +184,12 @@ theory:
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.25
-      lens_potential_accuracy: 1.1
+      AccuracyBoost: 1.15
+      lens_potential_accuracy: 1.15
       num_massive_neutrinos: 1
       nnu: 3.046
       dark_energy_model: ppf
-      accurate_massive_neutrino_transfers: true
+      accurate_massive_neutrino_transfers: false
       k_per_logint: 20
 
 sampler:
@@ -224,7 +230,8 @@ sampler:
       DES_PM3: 0.3
       DES_PM4: -0.3
       DES_PM5: 0.9
-      w: -0.9
+      w: -1.0
       wa: 0.0
+      A_planck: 1.0
 
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE3

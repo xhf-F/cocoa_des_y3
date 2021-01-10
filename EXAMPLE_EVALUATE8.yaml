@@ -502,9 +502,13 @@ theory:
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.1
+      AccuracyBoost: 1.15
+      lens_potential_accuracy: 1.1
       num_massive_neutrinos: 1
       nnu: 3.046
+      dark_energy_model: ppf
+      accurate_massive_neutrino_transfers: false
+      k_per_logint: 20
 
 sampler:
   evaluate:
@@ -539,10 +543,10 @@ sampler:
       DES_DZ_L3: 0.0
       DES_DZ_L4: 0.0
       DES_DZ_L5: 0.0
-      #DES_PM1: 0.0
-      #DES_PM2: 0.0
-      #DES_PM3: 0.0
-      #DES_PM4: 0.0
-      #DES_PM5: 0.0
+      DES_PM1: 0.0
+      DES_PM2: 0.0
+      DES_PM3: 0.0
+      DES_PM4: 0.0
+      DES_PM5: 0.0
 
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE8
