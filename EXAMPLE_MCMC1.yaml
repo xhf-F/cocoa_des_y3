@@ -16,6 +16,10 @@ likelihood:
       H0: null
       omegach2: null
 
+prior:
+  external: "lambda omegabh2, H0: np.log(0.03 <= omegabh2/((H0/100)**2) <= 0.07)"
+  external: "lambda omegach2, H0: np.log(0.01 <= omegach2/((H0/100)**2) <= 0.9)"
+
 params:
   logA:
     prior:

@@ -4,16 +4,6 @@ timing: True
 likelihood:
   des_y3.des_3x2pt:
     path: ./external_modules/data/des_y3
-  like_DY3P1:
-    external: "lambda _self: np.log(0.03 <= _self.provider.get_param('omegabh2')/((_self.provider.get_param('H0')/100)**2) <= 0.07)"
-    requires:
-      H0: null
-      omegabh2: null
-  like_DY3P2:
-    external: "lambda _self: np.log(0.01 <= _self.provider.get_param('omegach2')/((_self.provider.get_param('H0')/100)**2) <= 0.9)"
-    requires:
-      H0: null
-      omegach2: null
   planck_2018_lowl.TT:
     path: ./external_modules/
   planck_2018_lowl.EE:
@@ -22,6 +12,10 @@ likelihood:
     path: ./external_modules/
   planck_2018_lensing.clik:
     path: ./external_modules/
+
+prior:
+  external: "lambda omegabh2, H0: np.log(0.03 <= omegabh2/((H0/100)**2) <= 0.07)"
+  external: "lambda omegach2, H0: np.log(0.01 <= omegach2/((H0/100)**2) <= 0.9)"
 
 params:
   logA:

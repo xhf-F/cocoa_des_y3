@@ -4,11 +4,10 @@ timing: True
 likelihood:
   des_y3.des_3x2pt:
     path: ./external_modules/data/des_y3
-  like_DY3P3:
-    external: "lambda _self: np.log(0.01 <= _self.provider.get_param('omegab')*((_self.provider.get_param('H0')/100)**2) <= 0.04)"
-    requires:
-      H0: null
-      omegab: null
+
+prior:
+  external: "lambda omegab, H0: np.log(0.01 <= omegab*((H0/100)**2) <= 0.04)"
+  external: "lambda w, wa: np.log(w+wa <= 0.0)"
 
 params:
   As_1e9:
