@@ -224,7 +224,7 @@ sampler:
     blocking:
       - [1,
           [
-            As_1e9, ns, H0, omegab, omegam
+            logA, omegach2, theta_MC_100, omegabh2, tau
           ]
         ]
       - [4,
