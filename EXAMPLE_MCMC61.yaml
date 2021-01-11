@@ -2,39 +2,29 @@ stop_at_error: False
 timing: True
 
 likelihood:
-  des_y3.des_xi_ggl:
+  des_y3.des_3x2pt:
     path: ./external_modules/data/des_y3
-  like_DY3P1:
-    external: "lambda _self: np.log(0.03 <= _self.provider.get_param('omegabh2')/((_self.provider.get_param('H0')/100)**2) <= 0.07)"
+  like_DY3P3:
+    external: "lambda _self: np.log(0.01 <= _self.provider.get_param('omegab')*((_self.provider.get_param('H0')/100)**2) <= 0.04)"
     requires:
       H0: null
-      omegabh2: null
-  like_DY3P2:
-    external: "lambda _self: np.log(0.01 <= _self.provider.get_param('omegach2')/((_self.provider.get_param('H0')/100)**2) <= 0.9)"
-    requires:
-      H0: null
-      omegach2: null
-  planck_2018_lowl.TT:
-    path: ./external_modules/
-  planck_2018_lowl.EE:
-    path: ./external_modules/
-  planck_2018_highl_plik.TTTEEE:
-    path: ./external_modules/
+      omegab: null
 
 params:
-  logA:
+  As_1e9:
     prior:
-      min: 1.61
-      max: 3.91
+      min: 0.5
+      max: 5
     ref:
       dist: norm
-      loc: 3.0448
-      scale: 0.05
-    proposal: 0.05
-    latex: \log(10^{10} A_\mathrm{s})
+      loc: 2.1
+      scale: 0.5
+    proposal: 0.25
+    latex: 10^9 A_\mathrm{s})
     drop: true
+    renames: A
   As:
-    value: 'lambda logA: 1e-10*np.exp(logA)'
+    value: 'lambda As_1e9: 1e-9 * As_1e9'
     latex: A_\mathrm{s}
   ns:
     prior:
@@ -43,60 +33,41 @@ params:
     ref:
       dist: norm
       loc: 0.96605
-      scale: 0.005
-    proposal: 0.005
+      scale: 0.01
+    proposal: 0.01
     latex: n_\mathrm{s}
-  theta_MC_100:
-    prior:
-      min: 0.5
-      max: 10
-    ref:
-      dist: norm
-      loc: 1.04109
-      scale: 0.0004
-    proposal: 0.0002
-    latex: 100\theta_\mathrm{MC}
-    drop: true
-    renames: theta
-  cosmomc_theta:
-    value: 'lambda theta_MC_100: 1.e-2*theta_MC_100'
-    derived: false
   H0:
+    prior:
+      min: 55
+      max: 91
+    ref:
+      dist: norm
+      loc: 67.32
+      scale: 3
+    proposal: 3
     latex: H_0
-    min: 20
-    max: 100
-  omegabh2:
+  omegab:
     prior:
-      min: 0.01
-      max: 0.04
+      min: 0.03
+      max: 0.07
     ref:
       dist: norm
-      loc: 0.022383
-      scale: 0.005
-    proposal: 0.005
-    latex: \Omega_\mathrm{b} h^2
-  omegach2:
+      loc: 0.0495
+      scale: 0.004
+    proposal: 0.004
+    latex: \Omega_\mathrm{b}
+    drop: true
+  omegam:
     prior:
-      min: 0.001
-      max: 0.99
+      min: 0.1
+      max: 0.9
     ref:
       dist: norm
-      loc: 0.12011
-      scale: 0.03
-    proposal: 0.03
-    latex: \Omega_\mathrm{c} h^2
-  mnu:
-    value: 0.06
-  tau:
-    prior:
-      min: 0.01
-      max: 0.2
-    ref:
-      dist: norm
-      loc: 0.055
-      scale: 0.006
-    proposal: 0.003
-    latex: \tau_\mathrm{reio}
+      loc: 0.316
+      scale: 0.02
+    proposal: 0.02
+    latex: \Omega_\mathrm{m}
+    drop: true
   w:
     prior:
       min: -3
@@ -107,29 +78,22 @@ params:
       scale: 0.05
     proposal: 0.05
     latex: w_{0,\mathrm{DE}}
-  wa:
-    prior:
-      min: -3
-      max: 2
-    ref:
-      dist: norm
-      loc: 0
-      scale: 0.35
-    proposal: 0.2
-    latex: w_{a,\mathrm{DE}}
-  omegal:
-    latex: \Omega_\Lambda
-  omegam:
-    latex: \Omega_\mathrm{m}
-  omegamh2:
+  omch2:
+    value: 'lambda omegab, H0: omegab*(H0/100)**2'
+    latex: \Omega_\mathrm{b} h^2
+  omch2:
+    value: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)*(H0/100)**2-(mnu*(3.046/3)**0.75)/94.0708'
+    latex: \Omega_\mathrm{c} h^2
+  ommh2:
     derived: 'lambda omegam, H0: omegam*(H0/100)**2'
     latex: \Omega_\mathrm{m} h^2
-  omegab:
-    derived: 'lambda omegabh2, H0: omegabh2/((H0/100)**2)'
-    latex: \Omega_\mathrm{b}
-  omegac:
-    derived: 'lambda omegach2, H0: omegach2/((H0/100)**2)'
-    latex: \Omega_\mathrm{c}
+  mnu:
+    value: 0.06
+  tau:
+    value: 0.0543
+    latex: \tau_\mathrm{reio}
+  omegal:
+    latex: \Omega_\Lambda
   sigma8:
     latex: \sigma_8
   s8h5:
@@ -141,9 +105,6 @@ params:
   s8omegamp25:
     derived: 'lambda sigma8, omegam: sigma8*omegam**0.25'
     latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
-  A:
-    derived: 'lambda As: 1e9*As'
-    latex: 10^9 A_\mathrm{s}
   age:
     latex: '{\rm{Age}}/\mathrm{Gyr}'
   rdrag:
@@ -191,16 +152,22 @@ params:
   omegak:
     value: 0.0
     latex: \Omega_k
-  # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------
+  HMCode_logT_AGN:
+    prior:
+      min: 7.8
+      max: 8.3
+    ref:
+      min: 7.8
+      max: 7.9
+    proposal: 0.05
+    latex: HMCode_logT_AGN
 
 theory:
   camb:
     path: ./external_modules/code/CAMB
     use_renames: True
     extra_args:
-      halofit_version: takahashi
+      halofit_version: mead2020
       AccuracyBoost: 1.15
       lens_potential_accuracy: 1.1
       num_massive_neutrinos: 1
@@ -247,7 +214,7 @@ sampler:
     blocking:
       - [1,
           [
-            logA, ns, theta_MC_100, omegabh2, omegach2, tau, w, wa
+            As_1e9, ns, H0, omegab, omegam, w, HMCode_logT_AGN
           ]
         ]
       - [3,
@@ -262,15 +229,6 @@ sampler:
           [
             DES_M1, DES_M2, DES_M3, DES_M4, DES_PM1,
             DES_PM2, DES_PM3, DES_PM4, DES_PM5
-          ]
-        ]
-      - [300,
-          [
-            A_cib_217, gal545_A_217, calib_217T, galf_TE_A_217, ps_A_100_100,
-            galf_TE_A_100_143, ps_A_217_217, ksz_norm, A_planck, calib_100T,
-            ps_A_143_217, ps_A_143_143, gal545_A_100, galf_TE_A_143_217,
-            gal545_A_143_217, galf_TE_A_100_217, galf_TE_A_143, gal545_A_143,
-            xi_sz_cib, galf_TE_A_100, A_sz
           ]
         ]
     oversample_power: 0
@@ -289,4 +247,4 @@ sampler:
     # ---------------------------------------------------------------------
     Rminus1_single_split: 4
 
-output: ./projects/des_y3/chains/EXAMPLE_MCMC49
+output: ./projects/des_y3/chains/EXAMPLE_MCMC61
