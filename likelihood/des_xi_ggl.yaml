@@ -4,4 +4,4 @@ acc: 1
 speed: 1
 print_intermediate_products: False
 
-params: !defaults [des_3x2pt.py]
+params: !defaults [params_des_3x2pt]
