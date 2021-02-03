@@ -5,12 +5,12 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=4
 #SBATCH --ntasks-per-socket=2
-#SBATCH --cpus-per-task=11
+#SBATCH --cpus-per-task=10
 #SBATCH --partition=standard
 #SBATCH --qos=user_qos_timeifler
 #SBATCH --account=cosmo
 #SBATCH --mem-per-cpu=5GB
-#SBATCH --time=110:00:00
+#SBATCH --time=99:00:00
 #SBATCH --export=none
 
 echo Running on host `hostname`

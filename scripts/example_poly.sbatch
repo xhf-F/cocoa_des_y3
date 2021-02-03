@@ -25,4 +25,4 @@ source start_cocoa
 
 export OMP_PROC_BIND=close
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
-mpirun -n ${SLURM_NTASKS} --bind-to core --rank-by core --map-by numa:pe=${OMP_NUM_THREADS} cobaya-run ./projects/des_y3/EXAMPLE_POLY${SLURM_ARRAY_TASK_ID}.yaml -r
+mpirun --mca pml ob1 --mca btl ^openib -n ${SLURM_NTASKS} --bind-to core --rank-by core --map-by numa:pe=${OMP_NUM_THREADS} cobaya-run ./projects/des_y3/EXAMPLE_POLY${SLURM_ARRAY_TASK_ID}.yaml -r
