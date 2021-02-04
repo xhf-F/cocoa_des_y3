@@ -66,7 +66,7 @@ params:
     proposal: 0.02
     latex: \Omega_\mathrm{m}
     drop: true
-  omch2:
+  ombh2:
     value: 'lambda omegab, H0: omegab*(H0/100)**2'
     latex: \Omega_\mathrm{b} h^2
   omch2:
