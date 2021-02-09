@@ -1159,13 +1159,22 @@ std::vector<double> ima::PointMass::get_pm_vector() const {
   return this->pm_;
 }
 
-double ima::PointMass::get_pm(const int zl, const int zs,
+/*double ima::PointMass::get_pm(const int zl, const int zs,
 const double theta) const {
   const double a_lens = 1./(1+zmean(zl));
   constexpr double G_over_c2 = 1.6e-23;
   constexpr double PM1 = 4*G_over_c2*1.e+13;
   const double PM2 = this->pm_[zl]*g_tomo(a_lens, zs)/(chi(a_lens)*a_lens);
   return PM1*PM2/(theta*theta);
+}*/
+
+double ima::PointMass::get_pm(const int zl, const int zs,
+const double theta) const {
+  const double a_lens = 1.0/(1.0+zmean(zl));
+  const double chi_lens = chi(a_lens);
+  const double PM1 = 1.e+14/(cosmology.Omega_m*cosmology.rho_crit);
+  const double PM2 = theta*chi_lens*a_lens;
+  return this->pm_[zl]*PM1*W_kappa(a_lens,chi_lens,zs)/(PM2*PM2);
 }
 
 #ifdef PYBIND11
