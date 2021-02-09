@@ -15,7 +15,10 @@ class des_clustering(_cosmolike_prototype_base):
 
 	def logp(self, **params_values):
 		self.set_cosmo_related()
+
 		self.set_lens_related(**params_values)
+
 		datavector = ci.compute_data_vector()
+
 		return self.compute_logp(datavector)
 

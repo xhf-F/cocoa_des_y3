@@ -20,7 +20,4 @@ class des_cosmic_shear(_cosmolike_prototype_base):
 
     datavector = ci.compute_data_vector()
 
-    if self.print_intermediate_products == True:
-      self.test_all()
-
     return self.compute_logp(datavector)
