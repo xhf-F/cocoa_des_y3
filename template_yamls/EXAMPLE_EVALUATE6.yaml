@@ -1,8 +1,9 @@
-stop_at_error: False
 timing: True
+debug: True
+stop_at_error: True
 
 likelihood:
-  des_y3.des_3x2pt:
+  des_y3.des_xi_ggl:
     path: ./external_modules/data/des_y3
 
 params:
@@ -13,8 +14,8 @@ params:
     ref:
       dist: norm
       loc: 2.1
-      scale: 0.5
-    proposal: 0.25
+      scale: 0.65
+    proposal: 0.4
     latex: 10^9 A_\mathrm{s})
     drop: true
     renames: A
@@ -38,7 +39,7 @@ params:
     ref:
       dist: norm
       loc: 67.32
-      scale: 3
+      scale: 5
     proposal: 3
     latex: H_0
   omegab:
@@ -63,16 +64,43 @@ params:
     proposal: 0.02
     latex: \Omega_\mathrm{m}
     drop: true
-  omegabh2:
+  mnu:
+    prior:
+      min: 0.06
+      max: 0.6
+    ref:
+      dist: norm
+      loc: 0.25
+      scale: 0.1
+    proposal: 0.05
+  w:
+    prior:
+      min: -3
+      max: 1
+    ref:
+      dist: norm
+      loc: -0.99
+      scale: 0.05
+    proposal: 0.05
+    latex: w_{0,\mathrm{DE}}
+  wa:
+    prior:
+      min: -3
+      max: 2
+    ref:
+      dist: norm
+      loc: 0
+      scale: 0.35
+    proposal: 0.2
+    latex: w_{a,\mathrm{DE}}
+  ombh2:
     value: 'lambda omegab, H0: omegab*(H0/100)**2'
     latex: \Omega_\mathrm{b} h^2
-  omegach2:
+  omch2:
     value: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)*(H0/100)**2-(mnu*(3.046/3)**0.75)/94.0708'
     latex: \Omega_\mathrm{c} h^2
-  mnu:
-    value: 0.06
   tau:
-    value: 0.0543
+    value: 0.0697186
     latex: \tau_\mathrm{reio}
   omegal:
     latex: \Omega_\Lambda
@@ -141,6 +169,7 @@ params:
 theory:
   camb:
     path: ./external_modules/code/CAMB
+    stop_at_error: True
     use_renames: True
     extra_args:
       halofit_version: takahashi
@@ -153,35 +182,44 @@ theory:
       k_per_logint: 20
 
 sampler:
-  polychord:
-    path: ./external_modules/code/PolyChordLite
-    nlive: 128
-    num_repeats: 2d
-    do_clustering: False
-    precision_criterion: 0.05
-    boost_posterior: 10
-    feedback: 1
-    measure_speeds: False
-    blocking:
-      - [1,
-          [
-            As_1e9, ns, H0, omegab, omegam
-          ]
-        ]
-      - [2,
-          [
-            DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1, DES_A1_2,
-            DES_A2_1, DES_A2_2, DES_BTA_1, DES_DZ_L1, DES_DZ_L2, DES_DZ_L3,
-            DES_DZ_L4, DES_DZ_L5, DES_B1_1,
-            DES_B1_2, DES_B1_3, DES_B1_4, DES_B1_5
-          ]
-        ]
-      - [25,
-          [
-            DES_M1, DES_M2, DES_M3, DES_M4, DES_PM1,
-            DES_PM2, DES_PM3, DES_PM4, DES_PM5
-          ]
-        ]
-    oversample_power: 0
+  evaluate:
+    N: 1
+    override:
+      As_1e9: 2.1
+      ns: 0.96605
+      H0: 67.32
+      omegab: 0.04
+      omegam: 0.3
+      mnu: 0.06
+      DES_DZ_S1: 0.0414632
+      DES_DZ_S2: 0.00147332
+      DES_DZ_S3: 0.0237035
+      DES_DZ_S4: -0.0773436
+      DES_A1_1: 0.606102
+      DES_A1_2: -1.51541
+      DES_A2_1: -1.73583
+      DES_A2_2: -2.91558
+      DES_BTA_1: 0.930588
+      DES_DZ_L1: 0.00457604
+      DES_DZ_L2: 0.000309875
+      DES_DZ_L3: 0.00855907
+      DES_DZ_L4: -0.00316269
+      DES_DZ_L5: -0.0146753
+      DES_B1_1: 1.72716
+      DES_B1_2: 1.65168
+      DES_B1_3: 1.61423
+      DES_B1_4: 1.92886
+      DES_B1_5: 2.11633
+      DES_M1: 0.0191832
+      DES_M2: -0.0431752
+      DES_M3: -0.034961
+      DES_M4: -0.0158096
+      DES_PM1: 0.5
+      DES_PM2: -0.5
+      DES_PM3: 0.3
+      DES_PM4: -0.3
+      DES_PM5: 0.9
+      w: -0.9
+      wa: 0.0
 
-output: ./projects/des_y3/chains/EXAMPLE_POLY_MCMC3
+output: ./projects/des_y3/chains/EXAMPLE_EVALUATE6

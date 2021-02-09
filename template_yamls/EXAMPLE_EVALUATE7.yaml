@@ -3,9 +3,8 @@ debug: True
 stop_at_error: True
 
 likelihood:
-  des_y3.des_xi_ggl:
+  des_y3.des_clustering:
     path: ./external_modules/data/des_y3
-    print_intermediate_products: False
 
 params:
   As_1e9:
@@ -192,35 +191,17 @@ sampler:
       omegab: 0.04
       omegam: 0.3
       mnu: 0.06
-      DES_DZ_S1: 0.0414632
-      DES_DZ_S2: 0.00147332
-      DES_DZ_S3: 0.0237035
-      DES_DZ_S4: -0.0773436
-      DES_A1_1: 0.606102
-      DES_A1_2: -1.51541
-      DES_A2_1: -1.73583
-      DES_A2_2: -2.91558
-      DES_BTA_1: 0.930588
-      DES_DZ_L1: 0.00457604
-      DES_DZ_L2: 0.000309875
-      DES_DZ_L3: 0.00855907
-      DES_DZ_L4: -0.00316269
-      DES_DZ_L5: -0.0146753
       DES_B1_1: 1.72716
       DES_B1_2: 1.65168
       DES_B1_3: 1.61423
       DES_B1_4: 1.92886
       DES_B1_5: 2.11633
-      DES_M1: 0.0191832
-      DES_M2: -0.0431752
-      DES_M3: -0.034961
-      DES_M4: -0.0158096
-      DES_PM1: 0.5
-      DES_PM2: -0.5
-      DES_PM3: 0.3
-      DES_PM4: -0.3
-      DES_PM5: 0.9
+      DES_DZ_L1: 0.00457604
+      DES_DZ_L2: 0.000309875
+      DES_DZ_L3: 0.00855907
+      DES_DZ_L4: -0.00316269
+      DES_DZ_L5: -0.0146753
       w: -0.9
       wa: 0.0
 
-output: ./projects/des_y3/chains/EXAMPLE_EVALUATE6
+output: ./projects/des_y3/chains/EXAMPLE_EVALUATE7

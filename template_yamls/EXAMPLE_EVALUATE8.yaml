@@ -5,7 +5,6 @@ stop_at_error: True
 likelihood:
   des_y3.des_ggl:
     path: ./external_modules/data/des_y3
-    print_intermediate_products: False
 
 params:
   As_1e9:
