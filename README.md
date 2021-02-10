@@ -20,7 +20,7 @@ The data products must include the covariance matrice, data vector, source and l
 
 ### Step 3: create a dataset file on `/data`
 
-The dataset file must include options that can be altered at runtime. See [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template. 
+The dataset file is the place to include options about the project's dataset that users can alter at runtime. See [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template. 
 
 ### Step 4: create the interface files on the `interface` folder.
 
