@@ -46,18 +46,18 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
 [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, located at [${ROOTDIR}/external_modules/code](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code), as shown below.
 
     CSOURCES += \
-	   ${ROOTDIR}/external_modules/code/cfftlog/cfftlog.c \
+	    ${ROOTDIR}/external_modules/code/cfftlog/cfftlog.c \
 	  
-	   (...)
+	    (...)
 	  
-	   ${ROOTDIR}/external_modules/code/cosmolike/pt_cfastpt.c \
+	    ${ROOTDIR}/external_modules/code/cosmolike/pt_cfastpt.c \
 
     OBJECTC += \
-	   ./cfftlog.o \
+	    ./cfftlog.o \
 	  
-	   (...)
+	    (...)
 	  
-	   ./pt_cfastpt.o \
+	    ./pt_cfastpt.o \
 
 [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) creates a shared dynamical library, as shown below
 
