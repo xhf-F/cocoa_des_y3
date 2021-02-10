@@ -257,3 +257,7 @@ On double loops, this general strategy can be used recursivelly to avoid the `i 
 	}
 	
 **Notice that our OpenMP threading requires duplication of code. Optimization and readability - as usual - are anticorrelated.** 
+
+### Step 11: add repository's URL to `Cocoa/projects/clone_all.sh`
+
+Even if the repository is private and inaccessible to most users, its URL can be added to [Cocoa/projects/clone_all.sh](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/projects/clone_all.sh). The bash script will know how to handle cloning failure for private repositories. 
