@@ -126,9 +126,9 @@ Linking C++ and Python is rather straightforward. First, we've created the file 
 	def __bootstrap__():
 	    (...)
 	   
-	     __file__ = pkg_resources.resource_filename(__name__, 'cosmolike_des_y3_interface.so')
+	    __file__ = pkg_resources.resource_filename(__name__, 'cosmolike_des_y3_interface.so')
 	   
-	     (...)
+	    (...)
 	__bootstrap__()
 
 Second, we've inserted the following snippets of code at [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp)
