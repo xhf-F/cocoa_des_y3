@@ -30,7 +30,7 @@ PS: we've adopted a C++ interface given the straightforward procedure to link C+
 
 ### Step 5: create a Makefile on `/interface`.
 
-[MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, located at [${ROOTDIR}/external_modules/code](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code). A snippet of the places that need modified in [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) for different projects is shown below.
+[MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, located at [${ROOTDIR}/external_modules/code](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code). A snippet of the places that need to be modified in [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) for different projects is shown below.
 
     CSOURCES += \
 	    ${ROOTDIR}/external_modules/code/cfftlog/cfftlog.c \
@@ -46,7 +46,7 @@ PS: we've adopted a C++ interface given the straightforward procedure to link C+
 	  
 	    ./pt_cfastpt.o \
 
-[MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) creates a shared dynamical library, as shown below
+[MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) also creates a shared dynamical library that will be loaded from the python likelihood code, as shown below
 
 	all:  shared
 	shared: cosmolike_des_y3_interface.so
