@@ -43,7 +43,7 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
 
 ### Step 5: create the Makefile on the `interface` folder.
 
-[MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike), located at the `interface` folder, contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, as shown below.
+[MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, located at [${ROOTDIR}/external_modules/code](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code), as shown below.
 
     CSOURCES += \
 	${ROOTDIR}/external_modules/code/cfftlog/cfftlog.c \
@@ -55,7 +55,7 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
 	(...)
 	./pt_cfastpt.o \
 
-[MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) creates a shared dynamical library for python linking, as shown below
+[MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) creates a shared dynamical library, as shown below
 
 	all:  shared
 	shared: cosmolike_des_y3_interface.so
@@ -66,9 +66,9 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
 	$(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
 	@rm *.o
 
-### Step 6: Link the CPP functions implemented at interface.cpp to python
+### Step 6: Link C++ and Python
 	
-Linking C++ and Python is rather straightforward. First, we created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
+Linking C++ and Python is rather straightforward. We created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
 
 	def __bootstrap__():
 	   (...)
@@ -98,11 +98,11 @@ We've also inserted the following snippets of code at [interface.cpp](https://gi
 	    m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 	}
 
-### Step 7: Teach Cocoa how to compile, start/stop (i.e., set/unset environment variables) the project
+### Step 7: Create scripts to compile, start/stop (i.e., set/unset environment variables) the project
 
 See the files [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3), [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) and [stop_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/stop_des_y3) on `script` folder. 
 
-Users should always adapt the snippet `cd $ROOTDIR/projects/des_y3/interface` on [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) to match the name of the desired project.
+Users should adapt the snippet `cd $ROOTDIR/projects/des_y3/interface` on [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) script to match the name of the desired project.
 
 ### Step 8: Create the Python likelihoods on the `likelihood` folder
 
@@ -132,4 +132,50 @@ Each Python file includes a class with the same name of the file; for instance, 
 		def get_requirements(self):
 			Tell the Boltzmann code what Cosmolike needs to evaluate chi^2
 		
-Python programming paradigm can help to avoid code repetition. In the des_y3 project, the base class `_cosmolike_prototype_base` contains almost all likelihood implementation.
+Python programming paradigm can help to avoid code repetition. In the des_y3 project, the base class `_cosmolike_prototype_base`, located at [\_cosmolike_prototype_base.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/_cosmolike_prototype_base.py) contains almost all likelihood implementation.
+
+The YAML files should point to the dataset file (step 3) as shown below
+
+	path: null
+	data_file: DES_Y3.dataset
+	acc: 1
+	speed: 1
+	(...)
+Finally, the YAML file should also include the nuisance parameters, their priors, and reference points (initial distribution of points in the chains), as shown below (including fixed parameters)
+
+	 DES_DZ_S1:
+	    prior:
+	      dist: norm
+	      loc: 0.0
+	      scale: 0.018
+	    ref:
+	      dist: norm
+	      loc: 0.0
+	      scale: 0.036
+	    proposal: 0.018
+	    latex: \Delta z_\mathrm{s,DES}^1
+	 
+	 (...)
+	
+	DES_A1_1:
+	    prior:
+	      min: -5
+	      max:  5
+	    ref:
+	      dist: norm
+	      loc: 0.7
+	      scale: 0.5
+	    proposal: 0.5
+	    latex: A_\mathrm{1-IA,DES}^1
+
+	 (...)
+	 
+	DES_BMAG_1:
+            value: 1.31
+            latex: b_\mathrm{BMAG-DES}^1
+	
+	(...)
+
+To avoid repetition among multiple YAML files, we suggest the usage of the following command included in [des_3x2pt.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_3x2pt.yaml), [des_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_ggl.yaml), [des_xi_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_xi_ggl.yaml) and [des_2x2.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_2x2pt.yaml)
+
+	params: !defaults [params_des_3x2pt]
