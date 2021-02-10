@@ -176,7 +176,7 @@ The python likelihoods (see step 8), can then load the Cosmolike interface with 
 
 **The consistency of the required mandatory naming conventions allows Cocoa to load multiple projects without mixing their code**. Users must be diligent in updating all `_des_y3_` snippets with the appropriate project's name. 
 
-### Final Step: [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) refactoring
+### Step 10: [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) refactoring
 
 Check that all needed functions implemented at [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) have been refactored in [external_modules/code/cosmolike](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code/cosmolike), which is an incomplete port to streamline development. Such refactoring require a few steps that we are going to explain below:
 
@@ -202,3 +202,58 @@ For optimzations, we've changed the APIs of a few radial window weights (see [ra
 	double W_source(double a, double nz, double hoverh0);
 	double W_HOD(double a, double nz, double hoverh0);
 	
+#### Refactoring Step 3 (optional): thread with OpenMP most expensive functions call
+
+This is an optional but important step that can significantly speed up the chains as Cobaya samplers utilize OpenMP to accelerate convergence. Given Cosmolike design, which caches critical information on static variables, threading loops that are computationally expensive was performed with the following general strategy
+
+	// single-thread version of the loop
+	for(int i=0; i<N; i++) {
+	    // call functions that hold static variables. If they need to be changed, 
+	    // that will happen at the i=0 iteration (please check that in your particular code)
+	}
+	
+	// multi--thread version
+	{
+	    const int i = 0;
+	    // do the i=0 iteration of the loop without threading
+	}
+	
+	#pragma omp parallel for
+	for(int i=1; i<N; i++) {
+	    // repeat the same loop code - now static variables will be read-only (Cosmolike design)
+	}
+
+Users must carefully check the code against race conditions, by running chains with and without OpenMP threading and making sure they give consistent results.
+
+On double loops, this general strategy can be used recursivelly to avoid the `i = 0` evaluation to dominate the runtime, as shown below
+
+	// single-thread version of the loop
+	for(int i=0; i<N; i++) {
+	    for(int j=0; j<M; j++) {
+	        // call functions that hold static variables. If they need to be changed, 
+	        // that will happen at the i=0 iteration (please check that in your particular code)
+	    }
+	}
+	
+	// multi--thread version
+	{
+	    const int i = 0;
+	    // do the i=0 iteration of the loop without threading
+	    {
+	    	const int j=0;
+		// inner loop w/ i=0,j=0 (no threading)
+	    }
+	    #pragma omp parallel for
+	    for(int j=0; j<M; j++) {
+	    	// inner loop
+	    }
+	}
+	
+	#pragma omp parallel for // when possible threading only the outer loop is more optimal
+	for(int i=1; i<N; i++) {
+	    for(int j=0; j<M; j++) {
+	    // repeat the same loop code - now static variables will be read-only (Cosmolike design)
+	    }
+	}
+	
+**Notice that our OpenMP threading requires duplication of code. Optimization and readability - as usual - are anticorrelated.** 
