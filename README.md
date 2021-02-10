@@ -196,7 +196,7 @@ See [bias.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules
 
 #### Refactoring Step 2: update the API of window weights called by the project's code
 
-For optimzations, we've changed the APIs of a few radial window weights (see [radial_weights.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/radial_weights.c), including
+For optimzations, we've changed the APIs of a few radial window weights (see [radial_weights.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/radial_weights.c)), including
 
 	double W_gal(double a, double nz, double chi, double hoverh0);
 	double W_source(double a, double nz, double hoverh0);
