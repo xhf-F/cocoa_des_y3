@@ -48,44 +48,24 @@ You must always include the covariance matrice, data vector, source and lens red
 
 ### Step 4: Create a dataset file on `data` folder.
 
-Check [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) file as a template
+Check [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) file as a template. Additional keys can be added. For instance, if the project mixes Fourier and real correlation function, the binning of both spaces must be set on the dataset file)
     
 ### Step 5: Create the interface files
 
-The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) mainly contains C++ adaptation of many functions implemented on files `like_real_y3.c` and `init_y3.c`, as shown below
+The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) contains our C++ refactoring of many functions implemented on files `like_real_y3.c` and `init_y3.c`.
     
-    +-- Adapted from y3_production/like_real_y3.c:
-         - void cpp_set_cosmological_parameters(const double omega_matter, const double hubble, const bool is_cached_cosmology);
-         - void cpp_set_nuisance_shear_photoz(vec SP);
-         - void cpp_set_nuisance_clustering_photoz(vec CP);
-         - void cpp_set_nuisance_linear_bias(vec B1);
-         - void cpp_set_nuisance_nonlinear_bias(vec B1, vec B2);
-         - void cpp_set_nuisance_bias(vec B1, vec B2, vec B_MAG); 
-         - void cpp_set_nuisance_ia_mpp(vec A1, vec A2, vec B_TA);
-         - void cpp_set_pm(vec pm);
-         - double cpp_compute_chi2(vec datavector);
-         - vec cpp_compute_data_vector();
-    +-- Adapted from y3_production/init_y3.c: 
-         - void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo, const double ggl_cut);
-         - void cpp_init_binning(const int Ntheta, const double theta_min_arcmin, const double theta_max_arcmin);
-         - void cpp_init_cosmo_runmode(const bool is_linear);
-         - void cpp_init_survey(std::string surveyname, double area, double sigma_e);
-         - void cpp_init_probes(std::string possible_probes);
-         - void cpp_initial_setup();
-         - void cpp_init_data_real(std::string COV, std::string MASK, std::string DATA);
-            
-where `vec` is short for `std::vector<double>`. As a naming convention, the functions converted/adapted from Cosmolike starts with the prefix `cpp_` on `interface.cpp` (CPP stands for C++). There are also functions on how to initialize the interpolation tables of functions evaluated on the Boltzmann code, as shown below
+The interface files also contains the following functions:
 
     - void cpp_init_distances(vec io_z, vec io_chi);
     - void cpp_init_growth(vec io_z, vec io_G);
     - void cpp_init_linear_power_spectrum(vec io_log10k, vec io_z, vec io_lnP);
     - void cpp_init_non_linear_power_spectrum(vec io_log10k, vec io_z, vec io_lnP);
 
-We understand that providing the growth factor as a redshift function is redundant given the linear power spectrum, but we chose to have such an API (Application Programming Interface) for runtime optimization (1D splines have faster evaluation times).
+These routines initialize the interpolation tables of functions evaluated on the Boltzmann code and needed by Cosmolike. We understand that providing the growth factor as a redshift function is redundant given the linear power spectrum, but we chose to have such an API (Application Programming Interface) for runtime optimization (1D splines have faster evaluation times).
 
 ### Step 6: Create Makefile
 
-The Makefile [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike), located at the `interface` folder, requires a list of the necessary cosmolike files (adapted from [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) repository and saved on `/external_modules/code/theory`) as shown below.
+[MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike), located at the `interface` folder, contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, as shown below.
 
     CSOURCES += \
 	${ROOTDIR}/external_modules/code/cfftlog/cfftlog.c \
@@ -97,7 +77,16 @@ The Makefile [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/
 	(...)
 	./pt_cfastpt.o \
 
-The makefile should create a shared dynamical library for python linking, which is done with the line `shared: cosmolike_des_y3_interface.so`. As a naming convention in our API, the python module created for linking Cocoa and Cosmolike should start with the prefix `cosmolike_` and ends with the suffix `_interface`. In between the prefix and the suffix, users should write the name of the project.
+[MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) creates a shared dynamical library for python linking, as shown below
+
+	all:  shared
+	shared: cosmolike_des_y3_interface.so
+	
+	(...)
+	
+	cosmolike_des_y3_interface.so: $(OBJECTC) $(CSOURCES) interface.cpp
+	$(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
+	@rm *.o
 
 ### Step 7: Link the CPP functions implemented at interface.cpp to python
 	
