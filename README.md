@@ -266,4 +266,4 @@ Even if the repository is private and inaccessible to most users, its URL can be
       	git@github.com:CosmoLike/cocoa_desxplanck.git
       	git@github.com:CosmoLike/cocoa_lsst_fourier.git"
 
-The bash script will know how to handle cloning failure for private repositories. 
+The bash script will know how to handle cloning failures in private repositories. 
