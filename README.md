@@ -57,7 +57,9 @@ PS: we've adopted a C++ interface given the straightforward procedure to link C+
 	   $(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
 	   @rm *.o
 
-### Step 6: Link C++ interface to Python
+PS: Given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike\_` followed by the name of the project followed by the suffix `\_interface `.  
+
+### Step 6: Link the interface to Python
 	
 Linking C++ and Python is rather straightforward. First, we created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
 
