@@ -156,7 +156,7 @@ Each likelihood must contain a class with the same name of the file, as shown be
 
 	    class des_3x2pt(_cosmolike_prototype_base):
 		def initialize(self):
-			Initialize CosmoLike before the chain starts
+			Initialize CosmoLike before the chain starts, including reading the keys stored at /data/DES_Y3.dataset
 		def logp(self, **params_values):
 			Evaluate \chi^2 
 		def get_requirements(self):
