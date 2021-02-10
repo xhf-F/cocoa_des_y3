@@ -72,6 +72,8 @@ See [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/s
 Each two-point function (or a particular combination of two-point functions) must have its python file (and class) and YAML files. For instance, the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains the following files
 
     +-- likelihood
+    |    __init__.py
+    |    _cosmolike_prototype_base.py
     |    +-- des_2x2pt.py
     |    +-- des_2x2pt.yaml
     |    +-- des_3x2pt.py
@@ -217,7 +219,6 @@ This is an optional but important step that can significantly speed up the chain
 	    const int i = 0;
 	    // do the i=0 iteration of the loop without threading
 	}
-	
 	#pragma omp parallel for
 	for(int i=1; i<N; i++) {
 	    // repeat the same loop code - now static variables will be read-only (Cosmolike design)
@@ -248,11 +249,10 @@ On double loops, this general strategy can be used recursivelly to avoid the `i 
 	    	// inner loop
 	    }
 	}
-	
 	#pragma omp parallel for // when possible threading only the outer loop is more optimal
 	for(int i=1; i<N; i++) {
-	    for(int j=0; j<M; j++) {
-	    // repeat the same loop code - now static variables will be read-only (Cosmolike design)
+	    for(int j=1; j<M; j++) {
+	        // inner loop
 	    }
 	}
 	
