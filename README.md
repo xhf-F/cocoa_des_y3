@@ -59,24 +59,24 @@ See [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DE
 The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) mainly contains C++ adaptation of many functions implemented on files `like_real_y3.c` and `init_y3.c`, as shown below
     
     +-- Adapted from y3_production/like_real_y3.c:
-    |    - void cpp_set_cosmological_parameters(const double omega_matter, const double hubble, const bool is_cached_cosmology);
-    |    - void cpp_set_nuisance_shear_photoz(vec SP);
-    |    - void cpp_set_nuisance_clustering_photoz(vec CP);
-    |    - void cpp_set_nuisance_linear_bias(vec B1);
-    |    - void cpp_set_nuisance_nonlinear_bias(vec B1, vec B2);
-    |    - void cpp_set_nuisance_bias(vec B1, vec B2, vec B_MAG); 
-    |    - void cpp_set_nuisance_ia_mpp(vec A1, vec A2, vec B_TA);
-    |    - void cpp_set_pm(vec pm);
-    |    - double cpp_compute_chi2(vec datavector);
-    |    - vec cpp_compute_data_vector();
+         - void cpp_set_cosmological_parameters(const double omega_matter, const double hubble, const bool is_cached_cosmology);
+         - void cpp_set_nuisance_shear_photoz(vec SP);
+         - void cpp_set_nuisance_clustering_photoz(vec CP);
+         - void cpp_set_nuisance_linear_bias(vec B1);
+         - void cpp_set_nuisance_nonlinear_bias(vec B1, vec B2);
+         - void cpp_set_nuisance_bias(vec B1, vec B2, vec B_MAG); 
+         - void cpp_set_nuisance_ia_mpp(vec A1, vec A2, vec B_TA);
+         - void cpp_set_pm(vec pm);
+         - double cpp_compute_chi2(vec datavector);
+         - vec cpp_compute_data_vector();
     +-- Adapted from y3_production/init_y3.c: 
-    |    - void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo, const double ggl_cut);
-    |    - void cpp_init_binning(const int Ntheta, const double theta_min_arcmin, const double theta_max_arcmin);
-    |    - void cpp_init_cosmo_runmode(const bool is_linear);
-    |    - void cpp_init_survey(std::string surveyname, double area, double sigma_e);
-    |    - void cpp_init_probes(std::string possible_probes);
-    |    - void cpp_initial_setup();
-    |    - void cpp_init_data_real(std::string COV, std::string MASK, std::string DATA);
+         - void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo, const double ggl_cut);
+         - void cpp_init_binning(const int Ntheta, const double theta_min_arcmin, const double theta_max_arcmin);
+         - void cpp_init_cosmo_runmode(const bool is_linear);
+         - void cpp_init_survey(std::string surveyname, double area, double sigma_e);
+         - void cpp_init_probes(std::string possible_probes);
+         - void cpp_initial_setup();
+         - void cpp_init_data_real(std::string COV, std::string MASK, std::string DATA);
             
 where `vec` is short for `std::vector<double>`. As a naming convention, the functions converted/adapted from Cosmolike starts with the prefix `cpp_` on `interface.cpp` (CPP stands for C++). There are also functions on how to initialize the interpolation tables of functions evaluated on the Boltzmann code, as shown below
 
