@@ -97,7 +97,7 @@ We've also inserted the following snippets of code at [interface.cpp](https://gi
 
 	      m.def("initial_setup", &cpp_initial_setup, "Def Setup");
 	    
-	      (...) // list of all functions that will be called from the project python likelihood (see step 9).
+	      (...) // list of all functions that are called from the project's python likelihood (see step 9).
 	    
 	      m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 	}
