@@ -129,7 +129,39 @@ We've also inserted the following snippets of code at the beginning and end of [
 	    m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 	}
 
-### Step 8: Teach Cocoa how to compile, start (set enviroment variables) and stop (unset enviroment variables) the project 
+### Step 8: Teach Cocoa how to compile, start (set environment variables) and stop (unset environment variables) the project 
 
 To accomplish this, created the files [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3), [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) and [stop_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/stop_des_y3) on `script` folder. At minimum, users should always change the line
-`cd $ROOTDIR/projects/des_y3/interface` on [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) to match the name of the desired project. 
+`cd $ROOTDIR/projects/des_y3/interface` on [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) to match the name of the desired project.
+
+### Step 9: Create the Cocoa python likelihoods on likelihood folder
+
+Each two point function must have their own separate likelihood and yaml file. That is why the [likelihood]() folder contains 
+
+    +-- y3_production
+    |    +-- des_2x2pt.py
+    |    +-- des_2x2pt.yaml
+    |    +-- des_3x2pt.py
+    |    +-- des_3x2pt.yaml
+    |    +-- des_clustering.py
+    |    +-- des_clustering.yaml
+    |    +-- des_cosmic_shear.py
+    |    +-- des_cosmic_shear.yaml
+    |    +-- des_ggl.py
+    |    +-- des_ggl.yaml
+    |    +-- des_xi_ggl.py
+    |    +-- des_xi_ggl.yaml
+    
+    Each likelihood must contain a class with the same name of the file, as shown below
+    
+    	from cobaya.likelihoods.des_y3._cosmolike_prototype_base import _cosmolike_prototype_base
+	import cosmolike_des_y3_interface as ci
+
+	class des_3x2pt(_cosmolike_prototype_base):
+		def initialize(self):
+			Initialize CosmoLike before the chain starts
+		def logp(self, **params_values):
+			Evaluate \chi^2 
+		def get_requirements(self):
+			Tell the Boltzmann code what Cosmolike needs to evaluate chi^2
+		
