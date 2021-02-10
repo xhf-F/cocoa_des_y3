@@ -41,16 +41,7 @@ Check [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/
 
 ### Step 5: Create the interface files
 
-The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) contains our C++ refactoring of many functions implemented on files `like_real_y3.c` and `init_y3.c`.
-    
-The interface files also contains the following functions:
-
-    - void cpp_init_distances(vec io_z, vec io_chi);
-    - void cpp_init_growth(vec io_z, vec io_G);
-    - void cpp_init_linear_power_spectrum(vec io_log10k, vec io_z, vec io_lnP);
-    - void cpp_init_non_linear_power_spectrum(vec io_log10k, vec io_z, vec io_lnP);
-
-These routines initialize the interpolation tables of functions evaluated on the Boltzmann code and needed by Cosmolike. We understand that providing the growth factor as a redshift function is redundant given the linear power spectrum, but we chose to have such an API (Application Programming Interface) for runtime optimization (1D splines have faster evaluation times).
+The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) contains our C++ refactoring of many functions implemented on files `like_real_y3.c` and `init_y3.c`. 
 
 ### Step 6: Create Makefile
 
