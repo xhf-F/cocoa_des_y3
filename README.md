@@ -59,72 +59,15 @@ The Makefile contains the list of the necessary refactored [cosmolike_core](http
 
 PS: Given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike_` followed by the name of the project followed by the suffix `_interface `.  
 
-### Step 6: link the Cosmolike interface to the python likelihoods
-	
-Linking C++ and Python is rather straightforward. First, we've created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
-
-	def __bootstrap__():
-	     (...)
-	   
-	     __file__ = pkg_resources.resource_filename(__name__, 'cosmolike_des_y3_interface.so')
-	   
-	     (...)
-	__bootstrap__()
-
-Second, we've inserted the following snippets of code at [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp)
-	
-	// Python Binding
-	#include <pybind11/pybind11.h>
-	#include <pybind11/stl.h>
-	#include <pybind11/numpy.h>
-	namespace py = pybind11;
-	
-	(...)
-	
-	PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
-	      m.doc() = "CosmoLike Interface for DES-Y3 3x2 Module";
-
-	      m.def("initial_setup", &cpp_initial_setup, "Def Setup");
-	    
-	      (...) // list of all functions that are called from the project's python likelihood (see step 9).
-	    
-	      m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
-	}
-
-Notice that the module's name, shown in the snippet `PYBIND11_MODULE(cosmolike_des_y3_interface, m)`, follows the mandatory naming convention for the dynamical library file (cosmolike_des_y3_interface.so). The python file with the bootstrap snippet is also named following this rule. 
-
-Third, we've added the following flags, which do not need to be modified for different projects, in [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike)
-
-	# LINK PYBIND LIBRARY
-	PYBIND := 1
-	
-	(...)
-	
-	ifdef PYBIND
-	    CXXFLAGS += $(shell python3 -m pybind11 --includes) -DPYBIND11
-	    LDFLAGS += $(shell python3-config --ldflags)
-	endif
-
-Finally, we've added the project's directory to the `LD_LIBRARY_PATH` and `PYTHONPATH` by inserting the following snippet on [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) script (see step 8)
-
-	addvar LD_LIBRARY_PATH $ROOTDIR/projects/des_y3/interface
-	addvar PYTHONPATH $ROOTDIR/projects/des_y3/interface
-
-The python likelihoods (see step 9), can then load the Cosmolike interface with the line
-
-	import cosmolike_des_y3_interface
-
-**The consistency of the required mandatory naming conventions allows Cocoa to load multiple projects without mixing their code**. Users must be diligent in updating all `_des_y3_` snippets with the appropriate project's name. 
-
-### Step 7: create a script on `/script` that teaches Cocoa how to compile the project 
+### Step 6: create a script on `/script` that teaches Cocoa how to compile the project 
 
 See files [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) as a template. Users should adapt the snippet `cd $ROOTDIR/projects/des_y3/interface` on [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) script to match the name of the desired project.
 
-### Step 8: create scripts on `/script` to set/unset environment variables for the project
+### Step 7: create scripts on `/script` to set/unset environment variables for the project
 
 See [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) and [stop_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/stop_des_y3) as templates. 
 
-### Step 9: create the project's python likelihoods on `/likelihood`
+### Step 8: create the project's python likelihoods on `/likelihood`
 
 Each two-point function (or a particular combination of two point functions) must have its python and YAML files. For instance, the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains the following files
 
@@ -180,6 +123,63 @@ Finally, the YAML file should also include the nuisance parameters, their priors
 To avoid repetition among multiple YAML files, we suggest the usage of the following command included in [des_3x2pt.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_3x2pt.yaml), [des_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_ggl.yaml), [des_xi_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_xi_ggl.yaml) and [des_2x2.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_2x2pt.yaml)
 
 	params: !defaults [params_des_3x2pt]
+	
+### Step 9: link the Cosmolike interface to the python likelihoods
+	
+Linking C++ and Python is rather straightforward. First, we've created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
+
+	def __bootstrap__():
+	     (...)
+	   
+	     __file__ = pkg_resources.resource_filename(__name__, 'cosmolike_des_y3_interface.so')
+	   
+	     (...)
+	__bootstrap__()
+
+Second, we've inserted the following snippets of code at [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp)
+	
+	// Python Binding
+	#include <pybind11/pybind11.h>
+	#include <pybind11/stl.h>
+	#include <pybind11/numpy.h>
+	namespace py = pybind11;
+	
+	(...)
+	
+	PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
+	      m.doc() = "CosmoLike Interface for DES-Y3 3x2 Module";
+
+	      m.def("initial_setup", &cpp_initial_setup, "Def Setup");
+	    
+	      (...) // list of all functions that are called from the project's python likelihood (see step 9).
+	    
+	      m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
+	}
+
+Notice that the module's name, shown in the snippet `PYBIND11_MODULE(cosmolike_des_y3_interface, m)`, follows the mandatory naming convention for the dynamical library file (cosmolike_des_y3_interface.so). The python file with the bootstrap snippet is also named following this rule. 
+
+Third, we've added the following flags, which do not need to be modified for different projects, in [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike)
+
+	# LINK PYBIND LIBRARY
+	PYBIND := 1
+	
+	(...)
+	
+	ifdef PYBIND
+	    CXXFLAGS += $(shell python3 -m pybind11 --includes) -DPYBIND11
+	    LDFLAGS += $(shell python3-config --ldflags)
+	endif
+
+Finally, we've added the project's directory to the `LD_LIBRARY_PATH` and `PYTHONPATH` by inserting the following snippet on [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) (the script that set environment variables for the project - see step 7).
+
+	addvar LD_LIBRARY_PATH $ROOTDIR/projects/des_y3/interface
+	addvar PYTHONPATH $ROOTDIR/projects/des_y3/interface
+
+The python likelihoods (see step 8), can then load the Cosmolike interface with the line
+
+	import cosmolike_des_y3_interface
+
+**The consistency of the required mandatory naming conventions allows Cocoa to load multiple projects without mixing their code**. Users must be diligent in updating all `_des_y3_` snippets with the appropriate project's name. 
 
 ### Final Step: Check that all needed functions implemented at [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) have been refactored in [external_modules/code/cosmolike](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code/cosmolike).
 
