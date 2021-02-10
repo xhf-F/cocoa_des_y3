@@ -176,13 +176,13 @@ The python likelihoods (see step 8), can then load the Cosmolike interface with 
 
 **The consistency of the required mandatory naming conventions allows Cocoa to load multiple projects without mixing their code**. Users must be diligent in updating all `_des_y3_` snippets with the appropriate project's name. 
 
-### Final Step: Check that all needed functions implemented at [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) have been refactored in [external_modules/code/cosmolike](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code/cosmolike).
+### Final Step: [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) refactoring
 
-The refactoring of [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) is highly incomplete to simplify development. Such refactoring require a few steps that we are going to describe below:
+Check that all needed functions implemented at [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) have been refactored in [external_modules/code/cosmolike](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code/cosmolike), which is an incomplete port to streamline development. Such refactoring require a few steps that we are going to explain below:
 
 #### Refactoring Step 1: Create header files
 
-See [bias.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/bias.c) and [bias.h](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/bias.h) for templates. Don't forget the following special guards on the header file to allow linking between C and C++:
+See [bias.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/bias.c) and [bias.h](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/bias.h) as templates. Don't forget the following special guards on every header file to allow linking between C and C++:
  
  	#ifdef __cplusplus
 	extern "C" {
@@ -194,7 +194,7 @@ See [bias.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules
 	}
 	#endif
 
-#### Refactoring Step 2: update the API of window weights called by the project's code
+#### Refactoring Step 2: update the project's code to take into account the API changes on window weights
 
 For optimzations, we've changed the APIs of a few radial window weights (see [radial_weights.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/radial_weights.c)), including
 
