@@ -154,12 +154,12 @@ Each two point function must have their own separate likelihood and yaml file. T
     
 Each likelihood must contain a class with the same name of the file, as shown below
 
-    class des_3x2pt(_cosmolike_prototype_base):
-	  def initialize(self):
-		Initialize CosmoLike before the chain starts
-	  def logp(self, **params_values):
-		Evaluate \chi^2 
-	  def get_requirements(self):
-		Tell the Boltzmann code what Cosmolike needs to evaluate chi^2
+	    class des_3x2pt(_cosmolike_prototype_base):
+		def initialize(self):
+			Initialize CosmoLike before the chain starts
+		def logp(self, **params_values):
+			Evaluate \chi^2 
+		def get_requirements(self):
+			Tell the Boltzmann code what Cosmolike needs to evaluate chi^2
 		
 To avoid code repetition, we extensively used Python object oriented program (base class `_cosmolike_prototype_base` is implemented at [_cosmolike_prototype_base.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/_cosmolike_prototype_base.py)
