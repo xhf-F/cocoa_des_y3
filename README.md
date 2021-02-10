@@ -97,53 +97,23 @@ where `vec` is short for `std::vector<double>`. As a naming convention, the func
 
 We understand that providing the growth factor as a redshift function is redundant given the linear power spectrum, but we chose to have such an API (Application Programming Interface) for runtime optimization (1D splines have faster evaluation times).
 
-### Step 6: Create a Makefile that will compile and link the necessary Cosmolike files with interface.cpp
+### Step 6: Create Makefile for compiling/linking the necessary theory files
 
-The Makefile [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike), located at the `interface` folder, requires a list of the necessary Cosmolike files (adapted from [Cosmolike_Core](https://github.com/CosmoLike/cosmolike_core) repository and saved on `/external_modules/code/theory`) as shown below.
+The Makefile [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike), located at the `interface` folder, requires a list of the necessary cosmolike files (adapted from [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) repository and saved on `/external_modules/code/theory`) as shown below.
 
     CSOURCES += \
 		${ROOTDIR}/external_modules/code/cfftlog/cfftlog.c \
-		${ROOTDIR}/external_modules/code/cfftlog/utils_complex.c \
-		${ROOTDIR}/external_modules/code/cfftlog/utils.c \
-		${ROOTDIR}/external_modules/code/cfastpt/cfastpt.c \
-		${ROOTDIR}/external_modules/code/cfastpt/utils_complex_cfastpt.c \
-		${ROOTDIR}/external_modules/code/cfastpt/utils_cfastpt.c \
-		${ROOTDIR}/external_modules/code/cosmolike/basics.c \
-		${ROOTDIR}/external_modules/code/cosmolike/bias.c \
-		${ROOTDIR}/external_modules/code/cosmolike/cosmo3D.c \
-		${ROOTDIR}/external_modules/code/cosmolike/cosmo2D_fourier.c \
-		${ROOTDIR}/external_modules/code/cosmolike/cosmo2D_exact_fft.c \
-		${ROOTDIR}/external_modules/code/cosmolike/cosmo2D_fullsky_TATT.c \
-		${ROOTDIR}/external_modules/code/cosmolike/halo.c \
-		${ROOTDIR}/external_modules/code/cosmolike/recompute.c \
-		${ROOTDIR}/external_modules/code/cosmolike/radial_weights.c \
-		${ROOTDIR}/external_modules/code/cosmolike/redshift_spline.c \
-		${ROOTDIR}/external_modules/code/cosmolike/structs.c \
+		(...)
 		${ROOTDIR}/external_modules/code/cosmolike/pt_cfastpt.c \
 
         OBJECTC += \
                 ./cfftlog.o \
-                ./utils_complex.o \
-                ./utils.o \
-                ./cfastpt.o \
-                ./utils_complex_cfastpt.o \
-                ./utils_cfastpt.o \
-                ./basics.o \
-                ./bias.o \
-                ./cosmo3D.o \
-                ./cosmo2D_exact_fft.o \
-                ./cosmo2D_fourier.o \
-                ./cosmo2D_fullsky_TATT.o \
-                ./halo.o \
-                ./radial_weights.o \
-                ./recompute.o \
-                ./redshift_spline.o \
-                ./structs.o \
+                (...)
                 ./pt_cfastpt.o \
 
 The makefile should create a shared dynamical library for python linking, which is done with the line `shared: cosmolike_des_y3_interface.so`. As a naming convention in our API, the python module created for linking Cocoa and Cosmolike should start with the prefix `cosmolike_` and ends with the suffix `_interface`. In between the prefix and the suffix, users should write the name of the project.
 
-### Create the Python Linking. 
+### Step 7: Link the CPP functions listed on interface.cpp to python
 	
 Linking C++ and Python is rather straightforward. First, we created the file named `cosmolike_des_y3_interface.py`, following the naming convention described above, and inserted the following snippet in it
 
@@ -167,60 +137,6 @@ We've also inserted the following snippets of code at the beginning and end of [
 	    m.doc() = "CosmoLike Interface for DES-Y3 3x2 Module";
 
 	    m.def("initial_setup", &cpp_initial_setup, "Def Setup");
-
-	    m.def("init_probes", &cpp_init_probes, "Init Probes", py::arg("possible_probes"));
-
-	    m.def("init_survey_parameters", &cpp_init_survey, "Init Survey", py::arg("surveyname"), py::arg("area"), py::arg("sigma_e"));
-
-	    m.def("init_cosmo_runmode", &cpp_init_cosmo_runmode,"Init Run Mode", py::arg("is_linear"));
-
-	    m.def("init_IA", &cpp_init_IA, "Init IA", py::arg("ia_model"));
-
-	    m.def("init_binning", &cpp_init_binning,"Init Bining", py::arg("Ntheta"), py::arg("theta_min_arcmin"), py::arg("theta_max_arcmin"));
-
-	    m.def("init_lens_sample", &cpp_init_lens_sample,"Init Lens Sample", py::arg("multihisto_file"), py::arg("Ntomo"), py::arg("ggl_cut"));
-
-	    m.def("init_source_sample", &cpp_init_source_sample,"Init Source Sample", py::arg("multihisto_file"), py::arg("Ntomo"));
-
-	    m.def("init_size_data_vector", &cpp_init_size_data_vector, "Init Size Data Vector");
-
-	    m.def("init_linear_power_spectrum", &cpp_init_linear_power_spectrum, "Transfer Linear Matter Power Spectrum from Cobaya to Cosmolike",py::arg("log10k"), py::arg("z"), py::arg("lnP"));
-
-	    m.def("init_non_linear_power_spectrum", &cpp_init_non_linear_power_spectrum, "Transfer Matter Power Spectrum from Cobaya to Cosmolike", py::arg("log10k"), py::arg("z"), py::arg("lnP"));
-
-	    m.def("init_growth", &cpp_init_growth, "Transfer Growth Factor from Cobaya to Cosmolike", py::arg("z"), py::arg("G"));
-
-	    m.def("init_distances", &cpp_init_distances, "Transfer chi(z) from Cobaya to Cosmolike", py::arg("z"), py::arg("chi"));
-
-	    m.def("compute_chi2", &cpp_compute_chi2,"Get chi^2", py::arg("datavector"));
-
-	    m.def("compute_data_vector", &cpp_compute_data_vector,"Get data vector");
-
-	    m.def("set_nuisance_ia", &cpp_set_nuisance_ia_mpp,"Set Nuisance IA Parameters", py::arg("A1"), py::arg("A2"), py::arg("B_TA"));
-
-	    m.def("set_nuisance_bias", &cpp_set_nuisance_bias,"Set Nuisance Bias Parameters", py::arg("B1"), py::arg("B2"), py::arg("B_MAG"));
-
-	    m.def("set_nuisance_shear_calib", &cpp_set_nuisance_shear_calib,"Set Shear Calibration Parameters", py::arg("M"));
-
-	    m.def("set_nuisance_clustering_photoz", &cpp_set_nuisance_clustering_photoz,"Set Clustering Shear Photo-Z Parameters", py::arg("bias"));
-
-	    m.def("set_nuisance_shear_photoz", &cpp_set_nuisance_shear_photoz,"Set Shear Photo-Z Parameters", py::arg("bias"));
-
-	    m.def("set_cosmological_parameters", &cpp_set_cosmological_parameters,  "Set Cosmological Parameters", py::arg("omega_matter"), py::arg("hubble"), py::arg("is_cached"));
-
-	    m.def("set_point_mass", &cpp_set_pm, py::arg("PMV"));
-
+	    (...)
 	    m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
-	}
-	
-
-Finally, we've added the following code in [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) Makefile 
-	
-	# LINK PYBIND LIBRARY
-	PYBIND := 1
-	(...)
-	ifdef PYBIND
-	CXXFLAGS += $(shell python3 -m pybind11 --includes) -DPYBIND11
-	LDFLAGS += $(shell python3-config --ldflags)
-	endif
-	
+	}	
