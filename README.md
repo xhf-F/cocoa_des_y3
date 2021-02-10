@@ -75,11 +75,11 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
 Linking C++ and Python is rather straightforward. We created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
 
 	def __bootstrap__():
-	   (...)
+	     (...)
 	   
-	   __file__ = pkg_resources.resource_filename(__name__, 'cosmolike_des_y3_interface.so') // the only line that needs to be modified in different projects
+	     __file__ = pkg_resources.resource_filename(__name__, 'cosmolike_des_y3_interface.so') // the only line that needs to be modified in different projects
 	   
-	   (...)
+	     (...)
 	__bootstrap__()
 
 We've also inserted the following snippets of code at [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp)
@@ -93,13 +93,13 @@ We've also inserted the following snippets of code at [interface.cpp](https://gi
 	(...)
 	
 	PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
-	    m.doc() = "CosmoLike Interface for DES-Y3 3x2 Module";
+	      m.doc() = "CosmoLike Interface for DES-Y3 3x2 Module";
 
-	    m.def("initial_setup", &cpp_initial_setup, "Def Setup");
+	      m.def("initial_setup", &cpp_initial_setup, "Def Setup");
 	    
-	    (...) // list of all functions that will be called from the project python likelihood (see step 9).
+	      (...) // list of all functions that will be called from the project python likelihood (see step 9).
 	    
-	    m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
+	      m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 	}
 
 PS: we've adopted a C++ interface given the straightforward procedure to link C++ code with Python. Advanced developers who prefer to code exclusively in C can create a good old C interface without any issues.
@@ -131,12 +131,12 @@ Each two-point function must have its python and YAML files. On des-y3 project, 
 Each Python file includes a class with the same name of the file; for instance, the schematic of the class `des_3x2pt` is shown below
 
 	    class des_3x2pt(_cosmolike_prototype_base):
-		def initialize(self):
-			Initialize CosmoLike before the chain starts, including reading the keys stored at /data/DES_Y3.dataset
-		def logp(self, **params_values):
-			Evaluate \chi^2 
-		def get_requirements(self):
-			Tell the Boltzmann code what Cosmolike needs to evaluate chi^2
+		  def initialize(self):
+			  Initialize CosmoLike before the chain starts, including reading the keys stored at /data/DES_Y3.dataset
+		  def logp(self, **params_values):
+			  Evaluate \chi^2 
+		  def get_requirements(self):
+			  Tell the Boltzmann code what Cosmolike needs to evaluate chi^2
 		
 Python programming paradigm can help to avoid code repetition. In the des_y3 project, the base class `_cosmolike_prototype_base`, located at [\_cosmolike_prototype_base.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/_cosmolike_prototype_base.py) contains almost all likelihood implementation.
 
@@ -150,38 +150,19 @@ The YAML files should point to the dataset file (step 3) as shown below
 Finally, the YAML file should also include the nuisance parameters, their priors, and reference points (initial distribution of points in the chains), as shown below (including fixed parameters)
 
 	 DES_DZ_S1:
-	    prior:
-	      dist: norm
-	      loc: 0.0
-	      scale: 0.018
-	    ref:
-	      dist: norm
-	      loc: 0.0
-	      scale: 0.036
-	    proposal: 0.018
-	    latex: \Delta z_\mathrm{s,DES}^1
+	      prior:
+	          dist: norm
+	          loc: 0.0
+	          scale: 0.018
+	      ref:
+	          dist: norm
+	          loc: 0.0
+	          scale: 0.036
+	      proposal: 0.018
+	      latex: \Delta z_\mathrm{s,DES}^1
 	 
 	 (...)
 	
-	DES_A1_1:
-	    prior:
-	      min: -5
-	      max:  5
-	    ref:
-	      dist: norm
-	      loc: 0.7
-	      scale: 0.5
-	    proposal: 0.5
-	    latex: A_\mathrm{1-IA,DES}^1
-
-	 (...)
-	 
-	DES_BMAG_1:
-            value: 1.31
-            latex: b_\mathrm{BMAG-DES}^1
-	
-	(...)
-
 To avoid repetition among multiple YAML files, we suggest the usage of the following command included in [des_3x2pt.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_3x2pt.yaml), [des_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_ggl.yaml), [des_xi_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_xi_ggl.yaml) and [des_2x2.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_2x2pt.yaml)
 
 	params: !defaults [params_des_3x2pt]
