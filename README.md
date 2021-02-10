@@ -39,11 +39,11 @@ You must include the covariance matrice, data vector, source and lens redshift d
 
 Check [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template. 
 
-### Step 5: Create the interface files
+### Step 5: Create the interface files on the `interface` folder.
 
 The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) contains our C++ refactoring of many functions implemented on files `like_real_y3.c` and `init_y3.c`. 
 
-### Step 6: Create Makefile
+### Step 6: Create Makefile on the `interface` folder.
 
 [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike), located at the `interface` folder, contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, as shown below.
 
@@ -70,7 +70,7 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
 
 ### Step 7: Link the CPP functions implemented at interface.cpp to python
 	
-Linking C++ and Python is rather straightforward. First, we created the file named `cosmolike_des_y3_interface.py`, following the naming convention described above, and inserted the following snippet in it
+Linking C++ and Python is rather straightforward. First, we created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
 
 	def __bootstrap__():
 	   (...)
