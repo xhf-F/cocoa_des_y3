@@ -226,7 +226,7 @@ This is an optional (and dangerous) step that can significantly speed up the cha
 
 Users must carefully check the code against race conditions, by running chains with and without OpenMP threading and making sure they give consistent results.
 
-On double loops, this general strategy can be used recursivelly to avoid the `i = 0` evaluation to dominate the runtime, as shown below
+On double loops, this general strategy can be used recursivelly to avoid the `i = 0` evaluation to dominate the project's runtime, as shown below
 
 	// single-threaded version of the double loop
 	for(int i=0; i<N; i++) {
