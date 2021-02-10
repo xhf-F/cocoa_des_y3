@@ -78,7 +78,7 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
     |    - void cpp_initial_setup();
     |    - void cpp_init_data_real(std::string COV, std::string MASK, std::string DATA);
             
-where `vec` is short for `std::vector<double>`. As a naming convention, the functions converted/adapted from Cosmolike starts with the prefix `cpp_` on `interface.cpp` (CPP stands for C++). There are also functions on how to initialize the interpolation tables of functions evaluated on the Boltzmann code
+where `vec` is short for `std::vector<double>`. As a naming convention, the functions converted/adapted from Cosmolike starts with the prefix `cpp_` on `interface.cpp` (CPP stands for C++). There are also functions on how to initialize the interpolation tables of functions evaluated on the Boltzmann code, as shown below
 
     - void cpp_init_distances(vec io_z, vec io_chi);
     - void cpp_init_growth(vec io_z, vec io_G);
