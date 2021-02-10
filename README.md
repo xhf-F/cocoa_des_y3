@@ -162,4 +162,4 @@ Each likelihood must contain a class with the same name of the file, as shown be
 		def get_requirements(self):
 			Tell the Boltzmann code what Cosmolike needs to evaluate chi^2
 		
-To avoid code repetition, we used the Python programming paradigm extensively (base class `_cosmolike_prototype_base` is implemented at [_cosmolike_prototype_base.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/_cosmolike_prototype_base.py)
+Python programming paradigm can help to avoid code repetition (for instance, the base class `_cosmolike_prototype_base`, implemented at [\_cosmolike_prototype_base.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/_cosmolike_prototype_base.py), contains most of the DES_Y3 likelihood implementation.
