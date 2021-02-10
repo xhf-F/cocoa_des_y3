@@ -31,11 +31,11 @@ Every project must have the following structure
 
 We suggest the `chains` path be included in the `.gitignore` file once the folder is added and committed to the project's repository.
 
-### Step 3: copy data files
+### Step 3: copy the data products to the `/data` folder
 
-You must always include the covariance matrice, data vector, source and lens redshift distributions, and mask files. 
+You must include the covariance matrice, data vector, source and lens redshift distributions, and mask files. 
 
-### Step 4: Create a dataset file on `data` folder.
+### Step 4: Create a dataset file on the `/data` folder.
 
 Check [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template. 
 
