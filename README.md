@@ -59,7 +59,7 @@ The Makefile contains the list of the necessary refactored [cosmolike_core](http
 
 PS: Given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike_` followed by the name of the project followed by the suffix `_interface `.  
 
-### Step 6: Link the Cosmolike interface to the python likelihoods
+### Step 6: link the Cosmolike interface to the python likelihoods
 	
 Linking C++ and Python is rather straightforward. First, we've created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
 
@@ -114,7 +114,7 @@ The python likelihoods (see step 9), can then load the Cosmolike interface with 
 
 	import cosmolike_des_y3_interface
 
-**The consistency of the required mandatory naming conventions allows Cocoa to load multiple projects without mixing their code (this is very important!)**.
+**The consistency of the required mandatory naming conventions allows Cocoa to load multiple projects without mixing their code**.
 
 ### Step 7: Create a script to compile the project on `/script`
 
