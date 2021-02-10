@@ -204,9 +204,9 @@ For optimzations, we've changed the APIs of a few radial window weights (see [ra
 	double W_source(double a, double nz, double hoverh0);
 	double W_HOD(double a, double nz, double hoverh0);
 	
-#### Refactoring Step 3 (optional): thread with OpenMP most expensive functions call
+#### Refactoring Step 3 (optional): thread expensive loops with OpenMP
 
-This is an optional but important step that can significantly speed up the chains as Cobaya samplers utilize OpenMP to accelerate convergence. Given Cosmolike design, which caches critical information on static variables, threading loops that are computationally expensive was performed with the following general strategy
+This is an optional (and dangerous) step that can significantly speed up the chains as Cobaya samplers utilize OpenMP to accelerate convergence. Given Cosmolike design, which caches critical information on static variables, threading loops that are computationally expensive was performed with the following general strategy
 
 	// single-threaded version of the loop
 	for(int i=0; i<N; i++) {
