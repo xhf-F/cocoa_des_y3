@@ -149,17 +149,17 @@ The YAML files should point to the dataset file (step 3) as shown below
 	(...)
 Finally, the YAML file should also include the nuisance parameters, their priors, and reference points (initial distribution of points in the chains), as shown below (including fixed parameters)
 
-	 DES_DZ_S1:
-	      prior:
-	          dist: norm
-	          loc: 0.0
-	          scale: 0.018
-	      ref:
-	          dist: norm
-	          loc: 0.0
-	          scale: 0.036
-	      proposal: 0.018
-	      latex: \Delta z_\mathrm{s,DES}^1
+	DES_DZ_S1:
+	    prior:
+	        dist: norm
+	        loc: 0.0
+	        scale: 0.018
+	    ref:
+	        dist: norm
+	        loc: 0.0
+	        scale: 0.036
+	    proposal: 0.018
+	    latex: \Delta z_\mathrm{s,DES}^1
 	 
 	 (...)
 	
