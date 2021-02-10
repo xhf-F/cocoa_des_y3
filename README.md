@@ -45,48 +45,35 @@ This repository converts the Cosmolike only implementation of DES-Y3 3x2pt analy
 
 ### Step 4: Create a dataset file on `data` folder.
 
-See [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) file, which for the des_y3 project contains the following keys: 
+See [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) file that contains several runtime options such as
 
     data_file = Y3_unblinded_11_13_20.txt
-    cov_file = cov_unblinded_11_13_20.txt
-    mask_file = 3x2pt_baseline.mask
-    nz_lens_file = nz_lens_Y3_unblinded_11_13_20.txt
-    nz_source_file = nz_source_Y3_unblinded_11_13_20.txt
-    lensing_overlap_cut = 0.0015
-    nuisance_params = DES.paramnames
-    lens_ntomo = 5
-    source_ntomo = 4
-    n_theta = 20
-    IA_model = 6
-    theta_min_arcmin = 2.5
+    (...)
     theta_max_arcmin = 250.
-    
-Additional project specific runtime options can be added
     
 ### Step 5: Create the interface files 
 
 The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) mainly contains C++ adaptation of many functions implemented on files `like_real_y3.c` and `init_y3.c`, as shown below
     
-    +-- y3_production
-    |    +-- like_real_y3.c
-            - void cpp_set_cosmological_parameters(const double omega_matter, const double hubble, const bool is_cached_cosmology);
-            - void cpp_set_nuisance_shear_photoz(vec SP);
-            - void cpp_set_nuisance_clustering_photoz(vec CP);
-            - void cpp_set_nuisance_linear_bias(vec B1);
-            - void cpp_set_nuisance_nonlinear_bias(vec B1, vec B2);
-            - void cpp_set_nuisance_bias(vec B1, vec B2, vec B_MAG); 
-            - void cpp_set_nuisance_ia_mpp(vec A1, vec A2, vec B_TA);
-            - void cpp_set_pm(vec pm);
-            - double cpp_compute_chi2(vec datavector);
-            - vec cpp_compute_data_vector();
-    |    +-- init_y3.c
-            - void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo, const double ggl_cut);
-            - void cpp_init_binning(const int Ntheta, const double theta_min_arcmin, const double theta_max_arcmin);
-            - void cpp_init_cosmo_runmode(const bool is_linear);
-            - void cpp_init_survey(std::string surveyname, double area, double sigma_e);
-            - void cpp_init_probes(std::string possible_probes);
-            - void cpp_initial_setup();
-	    - void cpp_init_data_real(std::string COV, std::string MASK, std::string DATA);
+    +-- Adapted from y3_production/like_real_y3.c:
+	- void cpp_set_cosmological_parameters(const double omega_matter, const double hubble, const bool is_cached_cosmology);
+	- void cpp_set_nuisance_shear_photoz(vec SP);
+	- void cpp_set_nuisance_clustering_photoz(vec CP);
+	- void cpp_set_nuisance_linear_bias(vec B1);
+	- void cpp_set_nuisance_nonlinear_bias(vec B1, vec B2);
+	- void cpp_set_nuisance_bias(vec B1, vec B2, vec B_MAG); 
+	- void cpp_set_nuisance_ia_mpp(vec A1, vec A2, vec B_TA);
+	- void cpp_set_pm(vec pm);
+	- double cpp_compute_chi2(vec datavector);
+	- vec cpp_compute_data_vector();
+    +-- Adapted from y3_production/init_y3.c: 
+	- void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo, const double ggl_cut);
+	- void cpp_init_binning(const int Ntheta, const double theta_min_arcmin, const double theta_max_arcmin);
+	- void cpp_init_cosmo_runmode(const bool is_linear);
+	- void cpp_init_survey(std::string surveyname, double area, double sigma_e);
+	- void cpp_init_probes(std::string possible_probes);
+	- void cpp_initial_setup();
+	- void cpp_init_data_real(std::string COV, std::string MASK, std::string DATA);
             
 where `vec` is short for `std::vector<double>`. As a naming convention, the functions converted/adapted from Cosmolike starts with the prefix `cpp_` on `interface.cpp` (CPP stands for C++). There are also functions on how to initialize the interpolation tables of functions evaluated on the Boltzmann code
 
@@ -106,10 +93,10 @@ The Makefile [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/
 		(...)
 		${ROOTDIR}/external_modules/code/cosmolike/pt_cfastpt.c \
 
-        OBJECTC += \
-                ./cfftlog.o \
-                (...)
-                ./pt_cfastpt.o \
+    OBJECTC += \
+	./cfftlog.o \
+	(...)
+	./pt_cfastpt.o \
 
 The makefile should create a shared dynamical library for python linking, which is done with the line `shared: cosmolike_des_y3_interface.so`. As a naming convention in our API, the python module created for linking Cocoa and Cosmolike should start with the prefix `cosmolike_` and ends with the suffix `_interface`. In between the prefix and the suffix, users should write the name of the project.
 
@@ -118,11 +105,9 @@ The makefile should create a shared dynamical library for python linking, which 
 Linking C++ and Python is rather straightforward. First, we created the file named `cosmolike_des_y3_interface.py`, following the naming convention described above, and inserted the following snippet in it
 
 	def __bootstrap__():
-	   global __bootstrap__, __loader__, __file__
-	   import sys, pkg_resources, imp
-	   __file__ = pkg_resources.resource_filename(__name__,'cosmolike_des_y3_interface.so')
-	   __loader__ = None; del __bootstrap__, __loader__
-	   imp.load_dynamic(__name__,__file__)
+	   (...)
+	   __file__ = pkg_resources.resource_filename(__name__, 'cosmolike_des_y3_interface.so')
+	   (...)
 	__bootstrap__()
 
 We've also inserted the following snippets of code at the beginning and end of [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) C++ file respectively
@@ -139,4 +124,8 @@ We've also inserted the following snippets of code at the beginning and end of [
 	    m.def("initial_setup", &cpp_initial_setup, "Def Setup");
 	    (...)
 	    m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
-	}	
+	}
+
+### Step 8: Teach Cocoa how to compile, start and stop your project (start/stop important given possible enviroment variables)
+
+	To accomplish this, we created the files [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3), [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) and [stop_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/stop_des_y3) on `script` folder 
