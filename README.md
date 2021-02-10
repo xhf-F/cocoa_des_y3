@@ -93,7 +93,7 @@ Second, we've inserted the following snippets of code at [interface.cpp](https:/
 
 Notice that the module's name, shown in the snippet `PYBIND11_MODULE(cosmolike_des_y3_interface, m)`, follows the mandatory naming convention for the dynamical library file (cosmolike_des_y3_interface.so). The python file with the bootstrap snippet is also named following this rule. 
 
-Finally, we've added the following flags, which do not need to be modified for different projects, in [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike)
+Third, we've added the following flags, which do not need to be modified for different projects, in [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike)
 
 	# LINK PYBIND LIBRARY
 	PYBIND := 1
@@ -105,11 +105,16 @@ Finally, we've added the following flags, which do not need to be modified for d
 	    LDFLAGS += $(shell python3-config --ldflags)
 	endif
 
+Finally, we've added the project's directory to the `LD_LIBRARY_PATH` and `PYTHONPATH` on [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) (see step 8)
+
+	addvar LD_LIBRARY_PATH $ROOTDIR/projects/des_y3/interface
+	addvar PYTHONPATH $ROOTDIR/projects/des_y3/interface
+
 The python likelihoods (see step 9), can then load the Cosmolike interface with the line
 
 	import cosmolike_des_y3_interface
 
-The consistency of the required mandatory naming conventions allows Cocoa to load multiple projects without mixing their code (this is very important!).
+**The consistency of the required mandatory naming conventions allows Cocoa to load multiple projects without mixing their code (this is very important!)**.
 
 ### Step 7: Create a script to compile the project on `/script`
 
