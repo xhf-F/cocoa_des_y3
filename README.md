@@ -26,7 +26,7 @@ The dataset file is the place to include options about the project's dataset tha
 
 The C++ code on files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp)  consists of refactoring of several functions originally implemented at [like_real_y3.c](https://github.com/CosmoLike/y3_production/blob/master/like_real_y3.c) and [init_y3.c](https://github.com/CosmoLike/y3_production/blob/master/init_y3.c). Most Cosmolike only projects contains C files with similar structure to [like_real_y3.c](https://github.com/CosmoLike/y3_production/blob/master/like_real_y3.c) and [init_y3.c](https://github.com/CosmoLike/y3_production/blob/master/init_y3.c).
 
-PS: we've adopted a C++ interface given the straightforward procedure to link C++ code with Python. Advanced developers who prefer to code exclusively in C can create a pure C interface without any issues.
+PS we've adopted a C++ interface given the straightforward procedure to link C++ code with Python. Advanced developers who prefer to code exclusively in C can create a pure C interface without any issues.
 
 ### Step 5: create a makefile on `/interface`.
 
@@ -57,7 +57,7 @@ The Makefile contains the list of the necessary refactored [cosmolike_core](http
 	    $(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
 	    @rm *.o
 
-P.S.: Given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike_` followed by the name of the project followed by the suffix `_interface`.  
+PS Given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike_` followed by the name of the project followed by the suffix `_interface`.  
 
 ### Step 6: create a script on `/script` that teaches Cocoa how to compile the project 
 
