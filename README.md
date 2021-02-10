@@ -103,7 +103,7 @@ The Makefile [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/
 
 The makefile should create a shared dynamical library for python linking, which is done with the line `shared: cosmolike_des_y3_interface.so`. As a naming convention in our API, the python module created for linking Cocoa and Cosmolike should start with the prefix `cosmolike_` and ends with the suffix `_interface`. In between the prefix and the suffix, users should write the name of the project.
 
-### Step 7: Link the CPP functions listed on interface.cpp to python
+### Step 7: Link the CPP functions implemented at interface.cpp to python
 	
 Linking C++ and Python is rather straightforward. First, we created the file named `cosmolike_des_y3_interface.py`, following the naming convention described above, and inserted the following snippet in it
 
