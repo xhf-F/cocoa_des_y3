@@ -14,7 +14,7 @@ Repository names must always start with the prefix `cocoa_` followed by the proj
 
 We suggest the `chains` path be included in the `.gitignore` file once the folder is added and committed to the project's repository to avoid filling the project's repository with large chain files. See [.gitignore](https://github.com/CosmoLike/cocoa_des_y3/blob/main/.gitignore) as a template. 
 
-### Step 2: copy the the project's data products to `/data`
+### Step 2: copy the project's data products to `/data`
 
 The data products must include the covariance matrice, data vector, source and lens redshift distributions, and mask files. See [cocoa_des_y3/data](https://github.com/CosmoLike/cocoa_des_y3/tree/main/data) as a template 
 
@@ -22,7 +22,7 @@ The data products must include the covariance matrice, data vector, source and l
 
 The dataset file is the place to include options about the project's dataset that users can alter at runtime. See [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template. 
 
-### Step 4: create the interface on `/interface`.
+### Step 4: create the Cosmolike interface on `/interface`.
 
 The C++ code on files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp)  consists of refactoring of several functions originally implemented at [like_real_y3.c](https://github.com/CosmoLike/y3_production/blob/master/like_real_y3.c) and [init_y3.c](https://github.com/CosmoLike/y3_production/blob/master/init_y3.c). Most Cosmolike only projects contains C files with similar structure to [like_real_y3.c](https://github.com/CosmoLike/y3_production/blob/master/like_real_y3.c) and [init_y3.c](https://github.com/CosmoLike/y3_production/blob/master/init_y3.c).
 
@@ -59,9 +59,9 @@ The Makefile contains the list of the necessary refactored [cosmolike_core](http
 
 PS: Given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike\_` followed by the name of the project followed by the suffix `\_interface `.  
 
-### Step 6: Link the interface to Python
+### Step 6: Link the Cosmolike interface to Python
 	
-Linking C++ and Python is rather straightforward. First, we created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
+Linking C++ and Python is rather straightforward. First, we've created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
 
 	def __bootstrap__():
 	     (...)
@@ -105,17 +105,17 @@ Finally, we've added the following flags, which do not need to be modified for d
 	    LDFLAGS += $(shell python3-config --ldflags)
 	endif
 	
-### Step 7: Create `/script` a script to compile the project
+### Step 7: Create a script to compile the project on `/script`
 
 See files [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) as a template. Users should adapt the snippet `cd $ROOTDIR/projects/des_y3/interface` on [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) script to match the name of the desired project.
 
-### Step 8: Create a set/unset environment variables for the project
+### Step 8: Create scripts to set/unset environment variables for the project on `/script`
 
 See [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) and [stop_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/stop_des_y3) as templates. 
 
-### Step 9: Create the Python likelihoods on the `likelihood` folder
+### Step 9: Create the project's python likelihoods on `/likelihood`
 
-Each two-point function must have its python and YAML files. On des-y3 project, the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains
+Each two-point function (or a particular combination of two point functions) must have its python and YAML files. For instance, the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains the following files
 
     +-- y3_production
     |    +-- des_2x2pt.py
