@@ -16,9 +16,11 @@ This repository converts the Cosmolike only implementation of DES-Y3 3x2pt analy
     |    |   +-- cov_unblinded_11_13_20.txt
     
 ### Step 1: create a project name and an associated repository
-  Repository names should always start with the prefix `cocoa_` followed by the name of the project. In our case, the project name is `des_y3`, and the repository is called `cocoa_des_y3`.
+  Repository names should always start with the prefix `cocoa_` followed by the project's name. In our case, the project name is `des_y3`, and the repository is called `cocoa_des_y3`. Given the many bash scripts that automate Cocoa tasks, users must follow our proposed naming convention to avoid undefined behavior.
 
 ### Step 2: create the following file structure inside the project's repository
+
+Every project must contain the following folders at minimum
 
     +-- cocoa_des_y3
     |    +-- likelihood
@@ -29,7 +31,7 @@ This repository converts the Cosmolike only implementation of DES-Y3 3x2pt analy
 
 To avoid polluting the repository with large chain files, we suggest that its path is included in a `.gitignore` file once the `chains` folder is added and committed to the repository.
 
-### Step 3: Copy the redshift distributions, covariance matrix, data vector, and mask.
+### Step 3: Copy the files that contains the source and lens redshift distributions, covariance matrix, data vector, and mask .
 
   The files listed below must be copied to the `data` folder 
     
