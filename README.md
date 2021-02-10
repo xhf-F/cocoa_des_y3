@@ -26,7 +26,8 @@ This repository converts the Cosmolike only implementation of DES-Y3 3x2pt analy
     |    +-- data
     |    +-- interface
     |    +-- chains
-    |    |   +-- README (blank file)
+
+To avoid polluting the repository with large chain files, we suggest that its path is included in a `.gitignore` file once the `chains` folder is added and committed to the repository.
 
 ### Step 3: Copy the redshift distributions, covariance matrix, data vector, and mask.
 
