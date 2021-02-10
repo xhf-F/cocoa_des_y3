@@ -24,7 +24,7 @@ The dataset file is the place to include options about the project's dataset tha
 
 ### Step 4: create the interface files on the `interface` folder.
 
-The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) contains our C++ refactoring of many functions implemented on files `like_real_y3.c` and `init_y3.c`. 
+The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) C++ code consists of a refactoring of many functions implemented on files [like_real_y3.c](https://github.com/CosmoLike/y3_production/blob/master/like_real_y3.c) and [init_y3.c](https://github.com/CosmoLike/y3_production/blob/master/init_y3.c). C files with similar structure are pretty common in most Cosmolike only projects.
 
 ### Step 5: create the Makefile on the `interface` folder.
 
