@@ -12,7 +12,7 @@ Repository names must always start with the prefix `cocoa_` followed by the proj
     |    +-- interface
     |    +-- chains
 
-We suggest the `chains` path be included in the `.gitignore` file once the folder is added and committed to the project's repository to avoid filling the project's repository with large chain files. See [.gitignore](https://github.com/CosmoLike/cocoa_des_y3/blob/main/.gitignore) as a template. 
+We suggest the path for the `chains` folder to be included in `.gitignore` once the folder is added and committed to the project's repository. This exclusion avoids filling the project's repository with large chain files. See [.gitignore](https://github.com/CosmoLike/cocoa_des_y3/blob/main/.gitignore) as a template. 
 
 ### Step 2: copy the project's data products to `/data`
 
@@ -98,13 +98,10 @@ Each Python file includes a class with the same name of the file; for instance, 
 Python programming paradigm can help to avoid code repetition. In the des_y3 project, the base class `_cosmolike_prototype_base`, located at [\_cosmolike_prototype_base.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/_cosmolike_prototype_base.py) contains almost all likelihood implementation.
 
 The YAML files should point to the dataset file (step 3) as shown below
-
-	path: null
+	
 	data_file: DES_Y3.dataset
-	acc: 1
-	speed: 1
-	(...)
-Finally, the YAML file should also include the nuisance parameters, their priors, and reference points (initial distribution of points in the chains), as shown below (including fixed parameters)
+	
+Finally, the YAML file should also include the list of nuisance parameters, their priors, and reference points (initial distribution of points in the chains), as exemplified below
 
 	DES_DZ_S1:
 	    prior:
@@ -118,9 +115,7 @@ Finally, the YAML file should also include the nuisance parameters, their priors
 	    proposal: 0.018
 	    latex: \Delta z_\mathrm{s,DES}^1
 	 
-	 (...)
-	
-To avoid repetition among multiple YAML files, we suggest the usage of the following command included in [des_3x2pt.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_3x2pt.yaml), [des_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_ggl.yaml), [des_xi_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_xi_ggl.yaml) and [des_2x2.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_2x2pt.yaml)
+To avoid repetition of code among multiple YAML files, we suggest the usage of the following command,  included in [des_3x2pt.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_3x2pt.yaml), [des_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_ggl.yaml), [des_xi_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_xi_ggl.yaml) and [des_2x2.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_2x2pt.yaml) sripts.
 
 	params: !defaults [params_des_3x2pt]
 	
