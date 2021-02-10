@@ -105,7 +105,7 @@ Third, we've added the following flags, which do not need to be modified for dif
 	    LDFLAGS += $(shell python3-config --ldflags)
 	endif
 
-Finally, we've added the project's directory to the `LD_LIBRARY_PATH` and `PYTHONPATH` on [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) (see step 8)
+Finally, we've added the project's directory to the `LD_LIBRARY_PATH` and `PYTHONPATH` by inserting the following snippet on [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) script (see step 8)
 
 	addvar LD_LIBRARY_PATH $ROOTDIR/projects/des_y3/interface
 	addvar PYTHONPATH $ROOTDIR/projects/des_y3/interface
