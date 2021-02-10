@@ -16,9 +16,7 @@ This repository converts the Cosmolike only implementation of DES-Y3 3x2pt analy
     |    |   +-- cov_unblinded_11_13_20.txt
     
 ### Step 1: create the project name and associated repository
-  Repository names should always start with the prefix `cocoa_` followed by the project's name. Given how the bash scripts that automate Cocoa tasks were written, users must follow our proposed naming convention to avoid undefined behavior.
-
-### Step 2: create the project's repository structure
+  Repository names should always start with the prefix `cocoa_` followed by the project's name. Given how the bash scripts that automate Cocoa tasks were written, users must follow our proposed naming convention to avoid undefined behavior. The project's repository structure must be the following
 
 Every project must have the following structure
 
@@ -31,19 +29,19 @@ Every project must have the following structure
 
 We suggest the `chains` path be included in the `.gitignore` file once the folder is added and committed to the project's repository.
 
-### Step 3: copy the data products to the `data` folder
+### Step 2: copy the data products to the `data` folder
 
 You must include the covariance matrice, data vector, source and lens redshift distributions, and mask files. 
 
-### Step 4: Create a dataset file on the `data` folder.
+### Step 3: create a dataset file on the `data` folder.
 
 Check [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template. 
 
-### Step 5: Create the interface files on the `interface` folder.
+### Step 4: create the interface files on the `interface` folder.
 
 The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) contains our C++ refactoring of many functions implemented on files `like_real_y3.c` and `init_y3.c`. 
 
-### Step 6: Create Makefile on the `interface` folder.
+### Step 5: Create Makefile on the `interface` folder.
 
 [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike), located at the `interface` folder, contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, as shown below.
 
@@ -68,7 +66,7 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
 	$(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
 	@rm *.o
 
-### Step 7: Link the CPP functions implemented at interface.cpp to python
+### Step 6: Link the CPP functions implemented at interface.cpp to python
 	
 Linking C++ and Python is rather straightforward. First, we created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
 
@@ -100,13 +98,13 @@ We've also inserted the following snippets of code at [interface.cpp](https://gi
 	    m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 	}
 
-### Step 8: Teach Cocoa how to compile, start/stop (i.e., set/unset environment variables) the project
+### Step 7: Teach Cocoa how to compile, start/stop (i.e., set/unset environment variables) the project
 
 See the files [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3), [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) and [stop_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/stop_des_y3) on `script` folder. 
 
 Users should always adapt the snippet `cd $ROOTDIR/projects/des_y3/interface` on [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) to match the name of the desired project.
 
-### Step 9: Create the Python likelihoods
+### Step 8: Create the Python likelihoods on the `likelihood` folder
 
 Each two-point function must have its python and YAML files. On des-y3 project, the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains
 
