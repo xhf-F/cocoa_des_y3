@@ -72,8 +72,8 @@ See [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/s
 Each two-point function (or a particular combination of two-point functions) must have its python file (and class) and YAML files. For instance, the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains the following files
 
     +-- likelihood
-    |    __init__.py
-    |    _cosmolike_prototype_base.py
+    |    +-- __init__.py
+    |    +-- _cosmolike_prototype_base.py
     |    +-- des_2x2pt.py
     |    +-- des_2x2pt.yaml
     |    +-- des_3x2pt.py
