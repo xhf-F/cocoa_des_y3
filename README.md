@@ -28,7 +28,7 @@ The C++ code on files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/
 
 PS: we've adopted a C++ interface given the straightforward procedure to link C++ code with Python. Advanced developers who prefer to code exclusively in C can create a pure C interface without any issues.
 
-### Step 5: create a Makefile on `/interface`.
+### Step 5: create a makefile on `/interface`.
 
 The Makefile contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, located at [${ROOTDIR}/external_modules/code](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code). See [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) as a template. A snippet of the places that need to be modified in [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) for different projects is shown below.
 
