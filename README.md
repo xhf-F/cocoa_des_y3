@@ -88,11 +88,11 @@ Each two-point function (or a particular combination of two point functions) mus
 Each Python file includes a class with the same name of the file; for instance, the schematic of the class `des_3x2pt` is shown below
 
     class des_3x2pt(_cosmolike_prototype_base):
-	  def initialize(self):
+	    def initialize(self):
 		  Initialize CosmoLike before the chain starts, including reading the keys stored at /data/DES_Y3.dataset
-	  def logp(self, **params_values):
+	    def logp(self, **params_values):
 		  Evaluate \chi^2 
-	  def get_requirements(self):
+	   def get_requirements(self):
 		  Tell the Boltzmann code what Cosmolike needs to evaluate chi^2
 		
 Python programming paradigm can help to avoid code repetition. In the des_y3 project, the base class `_cosmolike_prototype_base`, located at [\_cosmolike_prototype_base.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/_cosmolike_prototype_base.py) contains almost all likelihood implementation.
