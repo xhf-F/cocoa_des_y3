@@ -16,11 +16,11 @@ This repository converts the Cosmolike only implementation of DES-Y3 3x2pt analy
     |    |   +-- cov_unblinded_11_13_20.txt
     
 ### Step 1: create the project name and associated repository
-  Repository names should always start with the prefix `cocoa_` followed by the project's name. In our case, the project name is `des_y3`, and the repository is called `cocoa_des_y3`. Given the many bash scripts that automate Cocoa tasks, users must follow our proposed naming convention to avoid undefined behavior.
+  Repository names should always start with the prefix `cocoa_` followed by the project's name. Given how the bash scripts that automate Cocoa tasks were written, users must follow our proposed naming convention to avoid undefined behavior.
 
 ### Step 2: create the project's repository structure
 
-Every project must contain the following folders at minimum
+Every project must have the following structure
 
     +-- cocoa_des_y3
     |    +-- likelihood
@@ -29,27 +29,16 @@ Every project must contain the following folders at minimum
     |    +-- interface
     |    +-- chains
 
-To avoid polluting the repository with large chain files, we suggest that its path is included in a `.gitignore` file once the `chains` folder is added and committed to the repository.
+We suggest the `chains` path be included in the `.gitignore` file once the folder is added and committed to the project's repository.
 
 ### Step 3: copy data files
 
-You must always include the covariance matrice, data vector, source and lens redshift distributions, and mask file. For instance, the files listed below were copied to the `data` folder from the [y3_production](https://github.com/CosmoLike/y3_production) repository. 
-
-    +-- y3_production
-    |    +-- zdistris
-    |    |   +-- nz_lens_Y3_unblinded_10_26_20.txt
-    |    |   +-- nz_source_Y3_unblinded_10_26_20.txt
-    |    +-- datav
-    |    |   +-- Y3_unblinded_10_26_20.txt
-    |    +-- yaml
-    |    |   +-- 3x2pt_baseline.mask
-    |    +-- cov
-    |    |   +-- cov_unblinded_11_13_20.txt
+You must always include the covariance matrice, data vector, source and lens redshift distributions, and mask files. 
 
 ### Step 4: Create a dataset file on `data` folder.
 
-Check [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) file as a template. Additional keys can be added. For instance, if the project mixes Fourier and real correlation function, the binning of both spaces must be set on the dataset file)
-    
+Check [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template. 
+
 ### Step 5: Create the interface files
 
 The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) contains our C++ refactoring of many functions implemented on files `like_real_y3.c` and `init_y3.c`.
