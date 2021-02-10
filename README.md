@@ -136,7 +136,7 @@ To accomplish this, created the files [compile_des_y3](https://github.com/CosmoL
 
 ### Step 9: Create the Cocoa python likelihoods on likelihood folder
 
-Each two point function must have their own separate likelihood and yaml file. That is why the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains 
+Each two-point function must have its python and YAML files. That is why the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains
 
     +-- y3_production
     |    +-- des_2x2pt.py
@@ -162,4 +162,4 @@ Each likelihood must contain a class with the same name of the file, as shown be
 		def get_requirements(self):
 			Tell the Boltzmann code what Cosmolike needs to evaluate chi^2
 		
-To avoid code repetition, we extensively used Python object oriented program (base class `_cosmolike_prototype_base` is implemented at [_cosmolike_prototype_base.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/_cosmolike_prototype_base.py)
+To avoid code repetition, we used the Python programming paradigm extensively (base class `_cosmolike_prototype_base` is implemented at [_cosmolike_prototype_base.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/_cosmolike_prototype_base.py)
