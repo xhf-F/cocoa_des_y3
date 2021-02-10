@@ -114,17 +114,17 @@ The python likelihoods (see step 9), can then load the Cosmolike interface with 
 
 	import cosmolike_des_y3_interface
 
-**The consistency of the required mandatory naming conventions allows Cocoa to load multiple projects without mixing their code**.
+**The consistency of the required mandatory naming conventions allows Cocoa to load multiple projects without mixing their code**. Users must be diligent in updating all `_des_y3_` snippets with the appropriate project's name. 
 
-### Step 7: Create a script to compile the project on `/script`
+### Step 7: create a script on `/script` that teaches Cocoa how to compile the project 
 
 See files [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) as a template. Users should adapt the snippet `cd $ROOTDIR/projects/des_y3/interface` on [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) script to match the name of the desired project.
 
-### Step 8: Create scripts to set/unset environment variables for the project on `/script`
+### Step 8: create scripts on `/script` to set/unset environment variables for the project
 
 See [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) and [stop_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/stop_des_y3) as templates. 
 
-### Step 9: Create the project's python likelihoods on `/likelihood`
+### Step 9: create the project's python likelihoods on `/likelihood`
 
 Each two-point function (or a particular combination of two point functions) must have its python and YAML files. For instance, the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains the following files
 
