@@ -208,13 +208,13 @@ For optimzations, we've changed the APIs of a few radial window weights (see [ra
 
 This is an optional but important step that can significantly speed up the chains as Cobaya samplers utilize OpenMP to accelerate convergence. Given Cosmolike design, which caches critical information on static variables, threading loops that are computationally expensive was performed with the following general strategy
 
-	// single-thread version of the loop
+	// single-threaded version of the loop
 	for(int i=0; i<N; i++) {
 	    // call functions that hold static variables. If they need to be changed, 
 	    // that will happen at the i=0 iteration (please check that in your particular code)
 	}
 	
-	// multi--thread version
+	// multi-threaded version of the loop
 	{
 	    const int i = 0;
 	    // do the i=0 iteration of the loop without threading
@@ -228,7 +228,7 @@ Users must carefully check the code against race conditions, by running chains w
 
 On double loops, this general strategy can be used recursivelly to avoid the `i = 0` evaluation to dominate the runtime, as shown below
 
-	// single-thread version of the loop
+	// single-threaded version of the double loop
 	for(int i=0; i<N; i++) {
 	    for(int j=0; j<M; j++) {
 	        // call functions that hold static variables. If they need to be changed, 
@@ -236,7 +236,7 @@ On double loops, this general strategy can be used recursivelly to avoid the `i 
 	    }
 	}
 	
-	// multi--thread version
+	// multi-threaded version of the double loop
 	{
 	    const int i = 0;
 	    // do the i=0 iteration of the loop without threading
