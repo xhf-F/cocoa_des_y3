@@ -41,7 +41,7 @@ Check [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/
 
 The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) contains our C++ refactoring of many functions implemented on files `like_real_y3.c` and `init_y3.c`. 
 
-### Step 5: Create Makefile on the `interface` folder.
+### Step 5: create the Makefile on the `interface` folder.
 
 [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike), located at the `interface` folder, contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, as shown below.
 
