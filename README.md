@@ -66,7 +66,7 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
 	$(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
 	@rm *.o
 
-### Step 6: Link C++ and Python
+### Step 6: Link C++ interface to Python
 	
 Linking C++ and Python is rather straightforward. We created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
 
@@ -97,6 +97,8 @@ We've also inserted the following snippets of code at [interface.cpp](https://gi
 	    
 	    m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 	}
+
+PS: we've adopted a C++ interface given the straightforward procedure to link C++ code with Python. Advanced developers who prefer to code exclusively in C can create a good old C interface without any issues.
 
 ### Step 7: Create scripts to compile, start/stop (i.e., set/unset environment variables) the project
 
@@ -179,3 +181,21 @@ Finally, the YAML file should also include the nuisance parameters, their priors
 To avoid repetition among multiple YAML files, we suggest the usage of the following command included in [des_3x2pt.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_3x2pt.yaml), [des_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_ggl.yaml), [des_xi_ggl.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_xi_ggl.yaml) and [des_2x2.yaml](https://github.com/CosmoLike/cocoa_des_y3/blob/main/likelihood/des_2x2pt.yaml)
 
 	params: !defaults [params_des_3x2pt]
+
+### Final Step: Check that all needed functions implemented at [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) have been refactored in [/external_modules/code/cosmolike](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code/cosmolike).
+
+The refactoring of [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) is highly incomplete to simplify development. Such refactoring require a few steps that we are going to describe below:
+
+#### Refactoring Step 1: Create header files.
+
+ See [bias.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/bias.c) and [bias.h](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/bias.h) for templates. Don't forget the following special guards on the header file to allow linking between C and C++:
+ 
+ 	#ifdef __cplusplus
+	extern "C" {
+	#endif
+	
+	(...)
+	
+	#ifdef __cplusplus
+	}
+	#endif
