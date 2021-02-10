@@ -57,7 +57,7 @@ The Makefile contains the list of the necessary refactored [cosmolike_core](http
 	    $(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
 	    @rm *.o
 
-PS: Given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike_` followed by the name of the project followed by the suffix `_interface `.  
+P.S.: Given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike_` followed by the name of the project followed by the suffix `_interface`.  
 
 ### Step 6: create a script on `/script` that teaches Cocoa how to compile the project 
 
@@ -69,7 +69,7 @@ See [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/s
 
 ### Step 8: create the project's python likelihoods on `/likelihood`
 
-Each two-point function (or a particular combination of two point functions) must have its python and YAML files. For instance, the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains the following files
+Each two-point function (or a particular combination of two-point functions) must have its python file (and class) and YAML files. For instance, the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains the following files
 
     +-- y3_production
     |    +-- des_2x2pt.py
@@ -85,7 +85,7 @@ Each two-point function (or a particular combination of two point functions) mus
     |    +-- des_xi_ggl.py
     |    +-- des_xi_ggl.yaml
     
-Each Python file includes a class with the same name of the file; for instance, the schematic of the class `des_3x2pt` is shown below
+Each Python file includes a class with the same name as the file. For instance, the schematic of the class `des_3x2pt` is shown below.
 
     class des_3x2pt(_cosmolike_prototype_base):
 	    def initialize(self):
