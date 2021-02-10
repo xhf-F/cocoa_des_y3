@@ -167,13 +167,13 @@ To avoid repetition among multiple YAML files, we suggest the usage of the follo
 
 	params: !defaults [params_des_3x2pt]
 
-### Final Step: Check that all needed functions implemented at [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) have been refactored in [/external_modules/code/cosmolike](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code/cosmolike).
+### Final Step: Check that all needed functions implemented at [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) have been refactored in [external_modules/code/cosmolike](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code/cosmolike).
 
 The refactoring of [cosmolike_core/theory](https://github.com/CosmoLike/cosmolike_core/tree/master/theory) is highly incomplete to simplify development. Such refactoring require a few steps that we are going to describe below:
 
-#### Refactoring Step 1: Create header files.
+#### Refactoring Step 1: Create header files
 
- See [bias.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/bias.c) and [bias.h](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/bias.h) for templates. Don't forget the following special guards on the header file to allow linking between C and C++:
+See [bias.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/bias.c) and [bias.h](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/bias.h) for templates. Don't forget the following special guards on the header file to allow linking between C and C++:
  
  	#ifdef __cplusplus
 	extern "C" {
@@ -184,3 +184,12 @@ The refactoring of [cosmolike_core/theory](https://github.com/CosmoLike/cosmolik
 	#ifdef __cplusplus
 	}
 	#endif
+
+#### Refactoring Step 2: update the API of window weights called by the project's code
+
+For optimzations, we've changed the APIs of a few radial window weights (see [radial_weights.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/radial_weights.c), including
+
+	double W_gal(double a, double nz, double chi, double hoverh0);
+	double W_source(double a, double nz, double hoverh0);
+	double W_HOD(double a, double nz, double hoverh0);
+	
