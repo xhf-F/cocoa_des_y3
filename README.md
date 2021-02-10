@@ -57,7 +57,7 @@ The Makefile contains the list of the necessary refactored [cosmolike_core](http
 	   $(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
 	   @rm *.o
 
-PS: Given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike\_` followed by the name of the project followed by the suffix `\_interface `.  
+PS: Given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike_` followed by the name of the project followed by the suffix `_interface `.  
 
 ### Step 6: Link the Cosmolike interface to Python
 	
