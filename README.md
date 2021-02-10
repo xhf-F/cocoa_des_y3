@@ -1,19 +1,6 @@
 # cocoa_des_y3
 
-This repository converts the Cosmolike only implementation of DES-Y3 3x2pt analysis in real space archived on [y3_production](https://github.com/CosmoLike/y3_production) repository. Below, we will summarize the conversion of projects already implemented in Cosmolike. The relevant Files on [y3_production](https://github.com/CosmoLike/y3_production) repository are listed below
-
-    +-- y3_production
-    |    +-- like_real_y3.c
-    |    +-- init_y3.c
-    |    +-- zdistris
-    |    |   +-- nz_lens_Y3_unblinded_10_26_20.txt
-    |    |   +-- nz_source_Y3_unblinded_10_26_20.txt
-    |    +-- datav
-    |    |   +-- Y3_unblinded_10_26_20.txt
-    |    +-- yaml
-    |    |   +-- 3x2pt_baseline.mask
-    |    +-- cov
-    |    |   +-- cov_unblinded_11_13_20.txt
+This repository converts the Cosmolike only implementation of DES-Y3 3x2pt analysis in real space archived on [y3_production](https://github.com/CosmoLike/y3_production) repository. Below, we will summarize the steps necessary to convert projects already implemented in Cosmolike to Cocoa, using the cocoa_des_y3 as a guideline.
     
 ### Step 1: create the project name and associated repository
   Repository names should always start with the prefix `cocoa_` followed by the project's name. Given how the bash scripts that automate Cocoa tasks were written, users must follow our proposed naming convention to avoid undefined behavior. The project's repository structure must be the following
