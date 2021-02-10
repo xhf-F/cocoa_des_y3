@@ -18,7 +18,7 @@ We suggest the `chains` path be included in the `.gitignore` file once the folde
 
 ### Step 2: copy the data products to the `data` folder
 
-You must include the covariance matrice, data vector, source and lens redshift distributions, and mask files. 
+Include the covariance matrice, data vector, source and lens redshift distributions, and mask files. 
 
 ### Step 3: create a dataset file on the `data` folder.
 
@@ -59,7 +59,7 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
 
 ### Step 6: Link C++ interface to Python
 	
-Linking C++ and Python is rather straightforward. We created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
+Linking C++ and Python is rather straightforward. First, we created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
 
 	def __bootstrap__():
 	     (...)
@@ -69,7 +69,7 @@ Linking C++ and Python is rather straightforward. We created the file named [cos
 	     (...)
 	__bootstrap__()
 
-We've also inserted the following snippets of code at [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp)
+Finally, we've also inserted the following snippets of code at [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp)
 	
 	// Python Binding
 	#include <pybind11/pybind11.h>
