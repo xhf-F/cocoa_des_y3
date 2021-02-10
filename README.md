@@ -14,13 +14,13 @@ Repository names must always start with the prefix `cocoa_` followed by the proj
 
 We suggest the `chains` path be included in the `.gitignore` file once the folder is added and committed to the project's repository to avoid filling the project's repository with large chain files. See [.gitignore](https://github.com/CosmoLike/cocoa_des_y3/blob/main/.gitignore) as a template. 
 
-### Step 2: copy the data products to `/data`
+### Step 2: copy the the project's data products to `/data`
 
-The data products must include the covariance matrice, data vector, source and lens redshift distributions, and mask files. 
+The data products must include the covariance matrice, data vector, source and lens redshift distributions, and mask files. See [cocoa_des_y3/data](https://github.com/CosmoLike/cocoa_des_y3/tree/main/data) as a template 
 
 ### Step 3: create a dataset file on `/data`
 
-Check [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template for the dataset file. 
+The dataset file must include options that can be altered at runtime. See [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template. 
 
 ### Step 4: create the interface files on the `interface` folder.
 
