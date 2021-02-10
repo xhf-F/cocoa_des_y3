@@ -91,7 +91,7 @@ Second, we've inserted the following snippets of code at [interface.cpp](https:/
 	      m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 	}
 
-Notice that the module's name, shown in the snippet `PYBIND11_MODULE(cosmolike_des_y3_interface, m)` also follows the mandatory naming convention for the dynamical library file (cosmolike_des_y3_interface.so).
+Notice that the module's name, shown in the snippet `PYBIND11_MODULE(cosmolike_des_y3_interface, m)`, follows the mandatory naming convention for the dynamical library file (cosmolike_des_y3_interface.so). The python file with the bootstrap snippet is also named following this rule. 
 
 Finally, we've added the following flags, which do not need to be modified for different projects, in [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike)
 
