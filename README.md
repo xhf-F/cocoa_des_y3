@@ -67,8 +67,8 @@ The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/in
 	(...)
 	
 	cosmolike_des_y3_interface.so: $(OBJECTC) $(CSOURCES) interface.cpp
-	$(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
-	@rm *.o
+	   $(CXX) $(CXXFLAGS) -DCOBAYA_SAMPLER -shared -fPIC -o $@ $(OBJECTC) interface.cpp $(LDFLAGS)
+	   @rm *.o
 
 ### Step 6: Link C++ interface to Python
 	
