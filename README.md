@@ -22,11 +22,13 @@ The data products must include the covariance matrice, data vector, source and l
 
 The dataset file is the place to include options about the project's dataset that users can alter at runtime. See [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template. 
 
-### Step 4: create the interface files on the `interface` folder.
+### Step 4: create the interface files on `/interface`.
 
-The files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp) C++ code consists of a refactoring of many functions implemented on files [like_real_y3.c](https://github.com/CosmoLike/y3_production/blob/master/like_real_y3.c) and [init_y3.c](https://github.com/CosmoLike/y3_production/blob/master/init_y3.c). C files with similar structure are pretty common in most Cosmolike only projects.
+The C++ code on files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp)  consists of refactoring of several functions originally implemented at [like_real_y3.c](https://github.com/CosmoLike/y3_production/blob/master/like_real_y3.c) and [init_y3.c](https://github.com/CosmoLike/y3_production/blob/master/init_y3.c). Most Cosmolike only projects contains C files with similar structure to [like_real_y3.c](https://github.com/CosmoLike/y3_production/blob/master/like_real_y3.c) and [init_y3.c](https://github.com/CosmoLike/y3_production/blob/master/init_y3.c).
 
-### Step 5: create the Makefile on the `interface` folder.
+PS: we've adopted a C++ interface given the straightforward procedure to link C++ code with Python. Advanced developers who prefer to code exclusively in C can create a pure C interface without any issues.
+
+### Step 5: create a Makefile on `/interface`.
 
 [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) contains the list of the necessary refactored [cosmolike_core](https://github.com/CosmoLike/cosmolike_core) files, located at [${ROOTDIR}/external_modules/code](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code), as shown below.
 
@@ -86,8 +88,6 @@ Finally, we've also inserted the following snippets of code at [interface.cpp](h
 	    
 	      m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 	}
-
-PS: we've adopted a C++ interface given the straightforward procedure to link C++ code with Python. Advanced developers who prefer to code exclusively in C can create a good old C interface without any issues.
 
 ### Step 7: Create scripts to compile, start/stop (i.e., set/unset environment variables) the project
 
