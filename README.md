@@ -124,7 +124,7 @@ To avoid repetition of code among multiple YAML files, we suggest the usage of t
 Linking C++ and Python is rather straightforward. First, we've created the file named [cosmolike_des_y3_interface.py](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/cosmolike_des_y3_interface.py) on the `interface` folder, and inserted the following snippet in it
 
 	def __bootstrap__():
-	     (...)
+	    (...)
 	   
 	     __file__ = pkg_resources.resource_filename(__name__, 'cosmolike_des_y3_interface.so')
 	   
