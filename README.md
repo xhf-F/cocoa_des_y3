@@ -3,7 +3,7 @@ This repository converts the Cosmolike only implementation of DES-Y3 3x2pt analy
 To facilitate the conversion of other projects from Cosmolike to Cocoa, we summarize below the steps necessary for this refactoring, using the cocoa_des_y3 repository as a guideline.
     
 ### Step 1: name the project and create the repository
-Repository names must always start with the prefix `cocoa_` followed by the project's name. Users must follow this proposed naming convention to avoid undefined behavior, given how we wrote the bash scripts that automate Cocoa tasks. Also, every project must have the following file structure
+Repository names must always start with the prefix `cocoa_` followed by the project's name. Users must follow this proposed naming convention to avoid undefined behavior, given how we wrote the bash scripts that automate Cocoa's tasks. Also, projects must have the following directory structure
 
     +-- cocoa_des_y3
     |    +-- likelihood
@@ -12,7 +12,7 @@ Repository names must always start with the prefix `cocoa_` followed by the proj
     |    +-- interface
     |    +-- chains
 
-We suggest the `chains` path be included in the `.gitignore` file once the folder is added and committed to the project's repository to avoid filling the project's repository with large chain files.
+We suggest the `chains` path be included in the `.gitignore` file once the folder is added and committed to the project's repository to avoid filling the project's repository with large chain files. See [.gitignore](https://github.com/CosmoLike/cocoa_des_y3/blob/main/.gitignore) as a template. 
 
 ### Step 2: copy the data products to `/data`
 
