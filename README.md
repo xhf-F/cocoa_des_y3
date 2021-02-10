@@ -22,7 +22,7 @@ The data products must include the covariance matrice, data vector, source and l
 
 The dataset file is the place to include options about the project's dataset that users can alter at runtime. See [DES_Y3.dataset](https://github.com/CosmoLike/cocoa_des_y3/blob/main/data/DES_Y3.dataset) as a template. 
 
-### Step 4: create the interface files on `/interface`.
+### Step 4: create the interface on `/interface`.
 
 The C++ code on files [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp) and [interface.hpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.hpp)  consists of refactoring of several functions originally implemented at [like_real_y3.c](https://github.com/CosmoLike/y3_production/blob/master/like_real_y3.c) and [init_y3.c](https://github.com/CosmoLike/y3_production/blob/master/init_y3.c). Most Cosmolike only projects contains C files with similar structure to [like_real_y3.c](https://github.com/CosmoLike/y3_production/blob/master/like_real_y3.c) and [init_y3.c](https://github.com/CosmoLike/y3_production/blob/master/init_y3.c).
 
@@ -71,7 +71,7 @@ Linking C++ and Python is rather straightforward. First, we created the file nam
 	     (...)
 	__bootstrap__()
 
-Finally, we've also inserted the following snippets of code at [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp)
+Second, we've inserted the following snippets of code at [interface.cpp](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/interface.cpp)
 	
 	// Python Binding
 	#include <pybind11/pybind11.h>
@@ -91,13 +91,29 @@ Finally, we've also inserted the following snippets of code at [interface.cpp](h
 	      m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 	}
 
-### Step 7: Create scripts to compile, start/stop (i.e., set/unset environment variables) the project
+Notice that the module's name, shown in the snippet `PYBIND11_MODULE(cosmolike_des_y3_interface, m)` also follows the mandatory naming convention for the dynamical library file (cosmolike_des_y3_interface.so).
 
-See the files [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3), [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) and [stop_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/stop_des_y3) on `script` folder. 
+Finally, we've added the following flags, which do not need to be modified for different projects, in [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike)
 
-Users should adapt the snippet `cd $ROOTDIR/projects/des_y3/interface` on [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) script to match the name of the desired project.
+	# LINK PYBIND LIBRARY
+	PYBIND := 1
+	
+	(...)
+	
+	ifdef PYBIND
+	    CXXFLAGS += $(shell python3 -m pybind11 --includes) -DPYBIND11
+	    LDFLAGS += $(shell python3-config --ldflags)
+	endif
+	
+### Step 7: Create `/script` a script to compile the project
 
-### Step 8: Create the Python likelihoods on the `likelihood` folder
+See files [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) as a template. Users should adapt the snippet `cd $ROOTDIR/projects/des_y3/interface` on [compile_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/compile_des_y3) script to match the name of the desired project.
+
+### Step 8: Create a set/unset environment variables for the project
+
+See [start_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/start_des_y3) and [stop_des_y3](https://github.com/CosmoLike/cocoa_des_y3/blob/main/scripts/stop_des_y3) as templates. 
+
+### Step 9: Create the Python likelihoods on the `likelihood` folder
 
 Each two-point function must have its python and YAML files. On des-y3 project, the [likelihood](https://github.com/CosmoLike/cocoa_des_y3/tree/main/likelihood) folder contains
 
