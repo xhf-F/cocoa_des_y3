@@ -260,4 +260,10 @@ On double loops, this general strategy can be used recursivelly to avoid the `i 
 
 ### Step 11: add repository's URL to `Cocoa/projects/clone_all.sh`
 
-Even if the repository is private and inaccessible to most users, its URL can be added to [Cocoa/projects/clone_all.sh](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/projects/clone_all.sh). The bash script will know how to handle cloning failure for private repositories. 
+Even if the repository is private and inaccessible to most users, its URL can be added to [Cocoa/projects/clone_all.sh](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/projects/clone_all.sh) as shown below.
+
+	URLS="git@github.com:CosmoLike/cocoa_des_y3.git
+      	git@github.com:CosmoLike/cocoa_desxplanck.git
+      	git@github.com:CosmoLike/cocoa_lsst_fourier.git"
+
+The bash script will know how to handle cloning failure for private repositories. 
