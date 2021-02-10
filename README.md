@@ -1,5 +1,3 @@
-# cocoa_des_y3
-
 This repository converts the Cosmolike only implementation of DES-Y3 3x2pt analysis in real space  ([y3_production](https://github.com/CosmoLike/y3_production) repository). 
 
 To facilitate the conversion of other projects from Cosmolike to Cocoa, we summarize below the steps necessary for this refactoring, using the cocoa_des_y3 repository as a guideline.
