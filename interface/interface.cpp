@@ -16,13 +16,11 @@
 
 #include <boost/algorithm/string.hpp>
 
-#ifdef PYBIND11
 // Python Binding
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
 namespace py = pybind11;
-#endif
 
 #include "cosmolike/basics.h"
 #include "cosmolike/bias.h"
@@ -1177,7 +1175,6 @@ const double theta) const {
   return this->pm_[zl]*PM1*W_kappa(a_lens,chi_lens,zs)/(PM2*PM2);
 }
 
-#ifdef PYBIND11
 PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
     m.doc() = "CosmoLike Interface for DES-Y3 3x2 Module";
 
@@ -1227,7 +1224,6 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
 
     m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 }
-#endif // PYBIND11
 
 int main() {
   cpp_initial_setup();
