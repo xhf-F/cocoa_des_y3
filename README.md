@@ -34,16 +34,12 @@ The Makefile contains the list of the necessary refactored [cosmolike_core](http
 
     CSOURCES += \
 	    ${ROOTDIR}/external_modules/code/cfftlog/cfftlog.c \
-	  
 	    (...)
-	  
 	    ${ROOTDIR}/external_modules/code/cosmolike/pt_cfastpt.c \
 
     OBJECTC += \
 	    ./cfftlog.o \
-	  
 	    (...)
-	  
 	    ./pt_cfastpt.o \
 
 [MakefileCosmolike](https://github.com/CosmoLike/cocoa_des_y3/blob/main/interface/MakefileCosmolike) also creates a shared dynamical library that will be loaded from the python likelihood code, as shown below
@@ -146,10 +142,8 @@ Second, we've inserted the following snippets of code at [interface.cpp](https:/
 	PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
 	    m.doc() = "CosmoLike Interface for DES-Y3 3x2 Module";
 
-	    m.def("initial_setup", &cpp_initial_setup, "Def Setup");
-	    
-	    (...)
-	    
+	    m.def("initial_setup", &cpp_initial_setup, "Def Setup");  
+	    (...) 
 	    m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 	}
 
@@ -159,9 +153,7 @@ Third, we've added the following flags, which do not need to be modified for dif
 
 	# LINK PYBIND LIBRARY
 	PYBIND := 1
-	
 	(...)
-	
 	ifdef PYBIND
 	    CXXFLAGS += $(shell python3 -m pybind11 --includes) -DPYBIND11
 	    LDFLAGS += $(shell python3-config --ldflags)
@@ -189,9 +181,7 @@ See [bias.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules
  	#ifdef __cplusplus
 	extern "C" {
 	#endif
-	
 	(...)
-	
 	#ifdef __cplusplus
 	}
 	#endif
@@ -271,32 +261,20 @@ For further information on `log.c`, read the readme file at [/Cocoa/external_mod
 	        log_fatal("a>=1");
 	        exit(1);
 	    }
-	
-	(...)
-	
+	    (...)
 	}
 	
 	(...)
 	
 	double C_cl_tomo_nointerp(double l, int ni, int nj) {
-	
-	(...)
-	
-	if (init == -1) {
-            log_info(
-              "Called C_cl(l,z1=%d,z2=%d) with non-linear bias parameters set.",
-              ni,
-              nj
-            );
-            log_info(
-              "Cross-clustering beyond linear bias for cross-tomography bins "
-              "not yet supported."
+	    (...)	
+	    if (init == -1) {
+                log_info("Called C_cl(l,z1=%d,z2=%d) with non-linear bias parameters set.", ni, nj);
+                log_info("Cross-clustering beyond linear bias for cross-tomography bins not yet supported."
             );
             log_info("Use linear bias only for z1 != z2 clustering.");
             init = 1;
        }
-       
-       (...)
        
 ### Step 11: add repository's URL to `Cocoa/projects/clone_all.sh`
 
