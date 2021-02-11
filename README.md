@@ -55,7 +55,7 @@ The Makefile contains the list of the necessary refactored [cosmolike_core](http
 	    
         (...)
         clean:
-            @rm -rf cosmolike_desy1xplanck_interface.so cosmolike_desy1xplanck_interface.so.dSYM  *.o	
+            @rm -rf cosmolike_des_y3_interface.so cosmolike_des_y3_interface.so.dSYM  *.o	
 
 PS given that Cocoa can load multiple Cosmolike projects simultaneously, the mandatory nomenclature for the dynamical library is the prefix `cosmolike_` followed by the name of the project followed by the suffix `_interface`.  
 
