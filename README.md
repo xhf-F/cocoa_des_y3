@@ -266,8 +266,7 @@ Below we show a few examples of `log.c` calls on [/Cocoa/external_modules/code/c
     
     (...)
 	
-    double C_cl_tomo_nointerp(double l, int ni, int nj) 
-    {
+    double C_cl_tomo_nointerp(double l, int ni, int nj) {
         (...)	
         if (init == -1) {
             log_info("Called C_cl(l,z1=%d,z2=%d) with non-linear bias parameters set.", ni, nj);
@@ -275,7 +274,7 @@ Below we show a few examples of `log.c` calls on [/Cocoa/external_modules/code/c
             log_info("Use linear bias only for z1 != z2 clustering.");
             (...)
         }
-	(...)
+        (...)
     }
  
 For further information on `log.c`, read the readme file at [/Cocoa/external_modules/code/log.c](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code/log.c).
