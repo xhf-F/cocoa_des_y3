@@ -218,7 +218,7 @@ This is an optional (and dangerous) step that can significantly speed up the cha
 	    // repeat the same loop code - now static variables will be read-only (Cosmolike design)
 	}
 
-Users must carefully check the code against race conditions, by running chains with and without OpenMP threading and making sure they give consistent results.
+Users must carefully check the code against race conditions, by running chains with and without OpenMP threading and making sure they give consistent results. Changes in the code to increase the locality of variables written inside OpenMP loops are also required to avoid race conditions.
 
 On double loops, this general strategy can be used recursivelly to avoid the `i = 0` evaluation to dominate the project's runtime, as shown below
 
