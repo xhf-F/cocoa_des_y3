@@ -250,7 +250,7 @@ On double loops, this general strategy can be used recursivelly to avoid the `i 
 
 #### Refactoring Step 4 (optional): replace `printf` statements with `log.c` library calls
 
-For further information on `log.c`, read the readme file at [/Cocoa/external_modules/code/log.c](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code/log.c). Below we show a few examples of `log.c` calls on [/Cocoa/external_modules/code/cosmolike/cosmo2D_fourier.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/cosmo2D_fourier.c)
+Below we show a few examples of `log.c` calls on [/Cocoa/external_modules/code/cosmolike/cosmo2D_fourier.c](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/external_modules/code/cosmolike/cosmo2D_fourier.c)
 
     #include "log.c/src/log.h"
     
@@ -277,7 +277,9 @@ For further information on `log.c`, read the readme file at [/Cocoa/external_mod
         }
 	(...)
     }
-       
+ 
+For further information on `log.c`, read the readme file at [/Cocoa/external_modules/code/log.c](https://github.com/CosmoLike/cocoa/tree/main/Cocoa/external_modules/code/log.c).
+
 ### Step 11: add repository's URL to `Cocoa/projects/clone_all.sh`
 
 Even if the repository is private and inaccessible to most users, its URL can be added to [Cocoa/projects/clone_all.sh](https://github.com/CosmoLike/cocoa/blob/main/Cocoa/projects/clone_all.sh) as shown below.
