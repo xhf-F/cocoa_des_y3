@@ -24,8 +24,7 @@ namespace py = pybind11;
 
 #include "cosmolike/basics.h"
 #include "cosmolike/bias.h"
-#include "cosmolike/cosmo2D_fourier.h"
-#include "cosmolike/cosmo2D_exact_fft.h"
+#include "cosmolike/cosmo2D.h"
 #include "cosmolike/cosmo2D_fullsky_TATT.h"
 #include "cosmolike/cosmo3D.h"
 #include "cosmolike/halo.h"
@@ -805,7 +804,7 @@ std::vector<double> cpp_compute_data_vector() {
     for (int nz=0; nz<tomo.clustering_Npowerspectra; nz++) {
       for (int i=0; i<like.Ntheta; i++) {
         if (cpp_compute_mask(start+(like.Ntheta*nz)+i)) {
-          data_vector[start+(like.Ntheta*nz)+i] = w_tomo_nonLimber(i, nz, nz);
+          data_vector[start+(like.Ntheta*nz)+i] = w_tomo_fullsky_nonLimber(i, nz, nz);
         }
       }
     }
@@ -954,7 +953,6 @@ void ima::RealData::set_mask(std::string MASK) {
   this->mask_filename_ = MASK;
   this->is_mask_set_ = true;
 }
-
 
 void ima::RealData::set_inv_cov(std::string COV) {
 #ifdef DEBUG
