@@ -804,7 +804,7 @@ std::vector<double> cpp_compute_data_vector() {
     for (int nz=0; nz<tomo.clustering_Npowerspectra; nz++) {
       for (int i=0; i<like.Ntheta; i++) {
         if (cpp_compute_mask(start+(like.Ntheta*nz)+i)) {
-          data_vector[start+(like.Ntheta*nz)+i] = w_tomo_fullsky_nonLimber(i, nz, nz);
+          data_vector[start+(like.Ntheta*nz)+i] = w_gg_tomo_fullsky_nonlimber(i, nz, nz);
         }
       }
     }
