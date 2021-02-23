@@ -25,7 +25,6 @@ namespace py = pybind11;
 #include "cosmolike/basics.h"
 #include "cosmolike/bias.h"
 #include "cosmolike/cosmo2D.h"
-#include "cosmolike/cosmo2D_fullsky_TATT.h"
 #include "cosmolike/cosmo3D.h"
 #include "cosmolike/halo.h"
 #include "cosmolike/radial_weights.h"
@@ -771,13 +770,13 @@ std::vector<double> cpp_compute_data_vector() {
       for (int i = 0; i<like.Ntheta; i++) {
         if (cpp_compute_mask(like.Ntheta*nz+i)) {
           data_vector[like.Ntheta*nz+i] =
-            xi_pm_TATT(1,i,z1,z2)*
+            xi_pm_tomo(1, i, z1, z2, 1 /* limber option = 1 -> limber */)*
             (1.0 + nuisance.shear_calibration_m[z1])*
             (1.0 + nuisance.shear_calibration_m[z2]);
         }
         if (cpp_compute_mask(like.Ntheta*(tomo.shear_Npowerspectra+nz)+i)) {
           data_vector[like.Ntheta*(tomo.shear_Npowerspectra+nz)+i] =
-            xi_pm_TATT(-1,i,z1,z2)*
+            xi_pm_tomo(-1, i, z1, z2, 1 /*limber*/)*
             (1. + nuisance.shear_calibration_m[z1])*
             (1. + nuisance.shear_calibration_m[z2]);
         }
@@ -792,19 +791,20 @@ std::vector<double> cpp_compute_data_vector() {
       for (int i=0; i<like.Ntheta; i++) {
         if (cpp_compute_mask(start+(like.Ntheta*nz)+i)) {
           const double theta = like.theta[i];
-          data_vector[start+(like.Ntheta*nz)+i] = (w_gamma_t_TATT(i,zl,zs) +
-          cpp_compute_pm(zl,zs,theta))*(1.0+nuisance.shear_calibration_m[zs]);
+          data_vector[start+(like.Ntheta*nz)+i] = (
+            w_gammat_tomo(i, zl, zs, 1 /* limber option = 1 -> limber */) +
+            cpp_compute_pm(zl,zs,theta))*(1.0+nuisance.shear_calibration_m[zs]);
         }
       }
     }
-
   }
   start = start + like.Ntheta*tomo.ggl_Npowerspectra;
   if (like.pos_pos == 1) {
     for (int nz=0; nz<tomo.clustering_Npowerspectra; nz++) {
       for (int i=0; i<like.Ntheta; i++) {
         if (cpp_compute_mask(start+(like.Ntheta*nz)+i)) {
-          data_vector[start+(like.Ntheta*nz)+i] = w_gg_tomo_fullsky_nonlimber(i, nz, nz);
+          data_vector[start+(like.Ntheta*nz)+i] =
+            w_gg_tomo(i, nz, nz, 0 /* limber option = 0 -> nonlimber */);
         }
       }
     }
