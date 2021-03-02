@@ -793,7 +793,7 @@ std::vector<double> cpp_compute_data_vector() {
           const double theta = like.theta[i];
           data_vector[start+(like.Ntheta*nz)+i] = (
             w_gammat_tomo(i, zl, zs, 1 /* limber option = 1 -> limber */) +
-            cpp_compute_pm(zl,zs,theta))*(1.0+nuisance.shear_calibration_m[zs]);
+            cpp_compute_pm(zl, zs, theta))*(1.0+nuisance.shear_calibration_m[zs]);
         }
       }
     }
