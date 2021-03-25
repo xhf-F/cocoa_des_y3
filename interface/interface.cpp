@@ -24,6 +24,7 @@ namespace py = pybind11;
 
 #include "cosmolike/basics.h"
 #include "cosmolike/bias.h"
+#include "cosmolike/baryons.h"
 #include "cosmolike/cosmo2D.h"
 #include "cosmolike/cosmo3D.h"
 #include "cosmolike/halo.h"
@@ -53,7 +54,6 @@ void cpp_initial_setup() {
   tomo.shear_Nbin = 0;
   tomo.clustering_Nbin = 0;
 
-  like.shearcalib = 0; // on cpp_compute_data_vector I erased shearcalib flag
   like.shear_shear = 0;
   like.shear_pos = 0;
   like.pos_pos = 0;
@@ -66,14 +66,6 @@ void cpp_initial_setup() {
   like.clusterWL = 0;
   like.clusterCG = 0;
   like.clusterCC = 0;
-  like.SN_WFIRST = 0;
-  like.BAO = 0;
-  like.wlphotoz = 0;
-  like.clphotoz = 0;
-  like.Planck15_BAO_H070p6_JLA_w0wa = 0;
-  like.Planck18_BAO_Riess18_Pantheon_w0wa = 0;
-  like.Planck18_BAO_w0wa = 0;
-  like.Planck18_w0 = 0;
 
   // reset bias
   for (int i = 0; i < MAX_SIZE_ARRAYS; i++) {
@@ -173,6 +165,24 @@ void cpp_init_IA(int N) {
   }
 
   spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_IA");
+}
+
+void cpp_init_baryons(const bool use_baryonic_simulations,
+const std::string which_baryonic_simulations)
+{
+  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_baryons");
+
+  if(use_baryonic_simulations) {
+    init_baryons(which_baryonic_simulations.c_str());
+  }
+
+  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected", "init_baryons",
+    "use_baryonic_simulations", use_baryonic_simulations);
+
+  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected", "init_baryons",
+    "which_baryonic_simulations", which_baryonic_simulations);
+
+  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_baryons");
 }
 
 void cpp_init_binning(const int Ntheta, const double theta_min_arcmin,
@@ -813,6 +823,17 @@ std::vector<double> cpp_compute_data_vector() {
   return data_vector;
 }
 
+;
+double cpp_compute_baryon_ratio(double log10k, double a) {
+  const double KNL = pow(10.0,log10k)*cosmology.coverH0;
+  return PkRatio_baryons(KNL, a);
+}
+
+void cpp_reset_all_struct() {
+  reset_all_struct();
+  return;
+}
+
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -1155,15 +1176,6 @@ std::vector<double> ima::PointMass::get_pm_vector() const {
   return this->pm_;
 }
 
-/*double ima::PointMass::get_pm(const int zl, const int zs,
-const double theta) const {
-  const double a_lens = 1./(1+zmean(zl));
-  constexpr double G_over_c2 = 1.6e-23;
-  constexpr double PM1 = 4*G_over_c2*1.e+13;
-  const double PM2 = this->pm_[zl]*g_tomo(a_lens, zs)/(chi(a_lens)*a_lens);
-  return PM1*PM2/(theta*theta);
-}*/
-
 double ima::PointMass::get_pm(const int zl, const int zs,
 const double theta) const {
   const double a_lens = 1.0/(1.0+zmean(zl));
@@ -1184,9 +1196,16 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
 
     m.def("init_cosmo_runmode", &cpp_init_cosmo_runmode,"Init Run Mode", py::arg("is_linear"));
 
+    m.def("init_baryons", &cpp_init_baryons,
+      "Add baryonic simulations to power spectrum if wanted",
+      py::arg("use_baryonic_simulations"),
+      py::arg("which_baryonic_simulations"));
+
     m.def("init_IA", &cpp_init_IA, "Init IA", py::arg("ia_model"));
 
     m.def("init_binning", &cpp_init_binning,"Init Bining", py::arg("Ntheta"), py::arg("theta_min_arcmin"), py::arg("theta_max_arcmin"));
+
+    m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
 
     m.def("init_lens_sample", &cpp_init_lens_sample,"Init Lens Sample", py::arg("multihisto_file"), py::arg("Ntomo"), py::arg("ggl_cut"));
 
@@ -1206,6 +1225,8 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
 
     m.def("compute_data_vector", &cpp_compute_data_vector,"Get data vector");
 
+    m.def("compute_baryon_ratio", &cpp_compute_baryon_ratio, "Get Baryon Ratio");
+
     m.def("set_nuisance_ia", &cpp_set_nuisance_ia_mpp,"Set Nuisance IA Parameters", py::arg("A1"), py::arg("A2"), py::arg("B_TA"));
 
     m.def("set_nuisance_bias", &cpp_set_nuisance_bias,"Set Nuisance Bias Parameters", py::arg("B1"), py::arg("B2"), py::arg("B_MAG"));
@@ -1220,7 +1241,7 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
 
     m.def("set_point_mass", &cpp_set_pm, py::arg("PMV"));
 
-    m.def("init_data_real", &cpp_init_data_real,"Init cov, mask and data", py::arg("COV"), py::arg("MASK"), py::arg("DATA"));
+    m.def("reset_all_struct", &cpp_reset_all_struct, "reset all structs to original values");
 }
 
 int main() {

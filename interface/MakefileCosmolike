@@ -128,6 +128,7 @@ CSOURCES += \
 		${ROOTDIR}/external_modules/code/cfastpt/utils_cfastpt.c \
 		${ROOTDIR}/external_modules/code/cosmolike/basics.c \
 		${ROOTDIR}/external_modules/code/cosmolike/bias.c \
+		${ROOTDIR}/external_modules/code/cosmolike/baryons.c \
 		${ROOTDIR}/external_modules/code/cosmolike/cosmo3D.c \
 		${ROOTDIR}/external_modules/code/cosmolike/cosmo2D.c \
 		${ROOTDIR}/external_modules/code/cosmolike/halo.c \
@@ -145,6 +146,7 @@ OBJECTC += \
 		./utils_complex_cfastpt.o \
 		./utils_cfastpt.o \
 		./basics.o \
+		./baryons.o \
 		./bias.o \
 		./cosmo3D.o \
 		./cosmo2D.o \

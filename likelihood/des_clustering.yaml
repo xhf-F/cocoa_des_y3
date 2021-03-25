@@ -1,11 +1,16 @@
 path: null
 data_file: DES_Y3.dataset
 acc: 1
-speed: 1
+speed: 4
 print_intermediate_products: False
+use_baryonic_simulations: False
+which_baryonic_simulations: TNG100
 
 params:
- # Lensing photo-z errors
+  # ------------------------------------------------------------------------
+  # ------------------------------------------------------------------------
+  # ------------------------------------------------------------------------
+  # Lensing photo-z errors
   DES_DZ_L1:
     prior:
       dist: norm

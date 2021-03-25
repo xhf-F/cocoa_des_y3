@@ -3,6 +3,8 @@ data_file: DES_Y3.dataset
 acc: 1
 speed: 3
 print_intermediate_products: False
+use_baryonic_simulations: True
+which_baryonic_simulations: TNG100
 
 params:
   # ------------------------------------------------------------------------

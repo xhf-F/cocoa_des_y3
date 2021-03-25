@@ -79,8 +79,6 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     self.probe = probe
 
-    self.acc = ini.int('acc', default=1)
-
     self.IA_type = ini.int('IA_model')
 
     self.data_vector_file = ini.relativeFileName('data_file')
@@ -153,6 +151,12 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     ci.init_data_real(self.cov_file, self.mask_file, self.data_vector_file)
 
+    # FOR ALLOWED OPTIONS FOR `which_baryonic_simulations`, SEE BARYONS.C
+    # FUNCTION `void init_baryons(char* scenario)`. SIMS INCLUDE
+    # TNG100, HzAGN, mb2, illustris, eagle, owls_AGN_T80, owls_AGN_T85,
+    # owls_AGN_T87, BAHAMAS_T76, BAHAMAS_T78, BAHAMAS_T80
+    ci.init_baryons(self.use_baryonic_simulations,
+      self.which_baryonic_simulations)
     # ------------------------------------------------------------------------
 
     self.do_cache_lnPL = np.zeros(
