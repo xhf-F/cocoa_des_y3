@@ -206,7 +206,8 @@ void cpp_init_binning(const int Ntheta, const double theta_min_arcmin,
   like.vtmin = theta_min_arcmin * constants.arcmin;
   like.vtmax = theta_max_arcmin * constants.arcmin;
   const double logdt = (std::log(like.vtmax) - std::log(like.vtmin))/like.Ntheta;
-  like.theta = create_double_vector(0, like.Ntheta-1);
+  like.theta = (double*) calloc(like.Ntheta, sizeof(double));
+
   constexpr double x = 2./ 3.;
 
   for (int i = 0; i < like.Ntheta; i++) {
@@ -718,6 +719,11 @@ void cpp_set_pm(std::vector<double> pm) {
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 
+arma::Col<double> cpp_get_covariance() {
+   ima::RealData& instance = ima::RealData::get_instance();
+  return instance.get_cov();
+}
+
 double cpp_compute_chi2(std::vector<double> datavector) {
   ima::RealData& instance = ima::RealData::get_instance();
   return instance.get_chi2(datavector);
@@ -829,8 +835,8 @@ double cpp_compute_baryon_ratio(double log10k, double a) {
   return PkRatio_baryons(KNL, a);
 }
 
-void cpp_reset_all_struct() {
-  reset_all_struct();
+void cpp_reset_baryionic_struct() {
+  reset_bary_struct();
   return;
 }
 
@@ -991,17 +997,27 @@ void ima::RealData::set_inv_cov(std::string COV) {
   arma::Mat<double> table = ima::read_table(COV); // this reads cov!
   this->inv_cov_mask_.set_size(like.Ndata,like.Ndata);
   this->inv_cov_mask_.zeros();
+
+  this->cov_.set_size(like.Ndata,like.Ndata);
+  this->cov_.zeros();
   switch (table.n_cols) {
     case 3:
     {
-      for (int i=0; i<static_cast<int>(table.n_rows); i++) {
+      for (int i=0; i<static_cast<int>(table.n_rows); i++)
+      {
         const int j = static_cast<int>(table(i,0));
         const int k = static_cast<int>(table(i,1));
+
+        this->cov_(j,k) = table(i,2);
+        this->cov_(k,j) = this->cov_(j,k);
+
         this->inv_cov_mask_(j,k) = table(i,2);
+
         if (j!=k) {
           // apply mask to off-diagonal covariance elements
           this->inv_cov_mask_(j,k) *= this->get_mask(j);
           this->inv_cov_mask_(j,k) *= this->get_mask(k);
+
           // m(i,j) = m(j,i)
           this->inv_cov_mask_(k,j) = this->inv_cov_mask_(j,k);
         }
@@ -1010,15 +1026,21 @@ void ima::RealData::set_inv_cov(std::string COV) {
     }
     case 4:
     {
-      for (int i=0; i<static_cast<int>(table.n_rows); i++) {
+      for (int i=0; i<static_cast<int>(table.n_rows); i++)
+      {
         const int j = static_cast<int>(table(i,0));
         const int k = static_cast<int>(table(i,1));
+
+        this->cov_(j,k) = table(i,2) + table(i,3);
+        this->cov_(k,j) = this->cov_(j,k);
+
         this->inv_cov_mask_(j,k) = table(i,2) + table(i,3);
-        this->inv_cov_mask_(k,j) = this->inv_cov_mask_(j,k);
+
         if (j!=k) {
           // apply mask to off-diagonal covariance elements
           this->inv_cov_mask_(j,k) *= this->get_mask(j);
           this->inv_cov_mask_(j,k) *= this->get_mask(k);
+
           // m(i,j) = m(j,i)
           this->inv_cov_mask_(k,j) = this->inv_cov_mask_(j,k);
         }
@@ -1027,16 +1049,21 @@ void ima::RealData::set_inv_cov(std::string COV) {
     }
     case 10:
     {
-      for (int i=0; i<static_cast<int>(table.n_rows); i++) {
+      for (int i=0; i<static_cast<int>(table.n_rows); i++)
+      {
         const int j = static_cast<int>(table(i,0));
         const int k = static_cast<int>(table(i,1));
+
+        this->cov_(j,k) = table(i,8) + table(i,9);
+        this->cov_(k,j) = this->cov_(j,k);
+
         this->inv_cov_mask_(j,k) = table(i,8) + table(i,9);
-        this->inv_cov_mask_(k,j) = this->inv_cov_mask_(j,k);
-        this->inv_cov_mask_(k,j) = this->inv_cov_mask_(j,k);
+
         if (j!=k) {
           // apply mask to off-diagonal covariance elements
           this->inv_cov_mask_(j,k) *= this->get_mask(j);
           this->inv_cov_mask_(j,k) *= this->get_mask(k);
+
           // m(i,j) = m(j,i)
           this->inv_cov_mask_(k,j) = this->inv_cov_mask_(j,k);
         }
@@ -1108,6 +1135,14 @@ double ima::RealData::get_inv_cov(const int ci, const int cj) const {
   }
 #endif
   return this->inv_cov_mask_(ci,cj);
+}
+
+arma::Mat<double> ima::RealData::get_cov() const {
+  return this->cov_;
+}
+
+arma::Mat<double> ima::RealData::get_inv_cov_mask() const {
+  return this->inv_cov_mask_;
 }
 
 double ima::RealData::get_chi2(std::vector<double> datavector) const {
@@ -1241,7 +1276,9 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
 
     m.def("set_point_mass", &cpp_set_pm, py::arg("PMV"));
 
-    m.def("reset_all_struct", &cpp_reset_all_struct, "reset all structs to original values");
+    m.def("reset_baryionic_struct", &cpp_reset_baryionic_struct, "reset baryionic struct to original values");
+
+    m.def("get_covariance", &cpp_get_covariance, "Get Covariance Matrix");
 }
 
 int main() {

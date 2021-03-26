@@ -23,3 +23,4 @@ class des_2x2pt(_cosmolike_prototype_base):
 		datavector = ci.compute_data_vector()
 
 		return self.compute_logp(datavector)
+

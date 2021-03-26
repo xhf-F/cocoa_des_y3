@@ -103,6 +103,8 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     self.theta_max_arcmin = ini.float("theta_max_arcmin")
 
+    self.force_cache_false = False
+
     # ------------------------------------------------------------------------
     self.z_interp_1D = np.linspace(0,2.0,1000)
     self.z_interp_1D = np.concatenate((self.z_interp_1D,np.linspace(2.0,10.1,200)),axis=0)
@@ -121,6 +123,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     self.len_k_interp_2D = len(self.k_interp_2D)
     self.len_pkz_interp_2D = self.len_log10k_interp_2D*self.len_z_interp_2D
     self.extrap_kmax = 2.5e2 * self.acc
+
     # ------------------------------------------------------------------------
 
     ci.initial_setup()
@@ -218,7 +221,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
       ])
     )
 
-    return cache_alert_1 and cache_alert_2 and cache_alert_3 and cache_alert_4
+    return cache_alert_1 and cache_alert_2 and cache_alert_3 and cache_alert_4 and not self.force_cache_false
 
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
@@ -367,3 +370,41 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
+
+  # Hack to create baryonic PCAs
+  def compute_dm_datavector(self, **params_values):
+    self.force_cache_false = True
+
+    self.set_cosmo_related()
+
+    self.force_cache_false = False
+
+    self.set_lens_related(**params_values)
+
+    self.set_source_related(**params_values)
+
+    return ci.compute_data_vector()
+
+  # Hack to create baryonic PCAs
+  def compute_barionic_datavector(self, which_baryonic_simulations, **params_values):
+    self.force_cache_false = True
+
+    ci.init_baryons(True, which_baryonic_simulations)
+
+    self.set_cosmo_related()
+
+    self.force_cache_false = False
+
+    self.set_lens_related(**params_values)
+
+    self.set_source_related(**params_values)
+
+    return ci.compute_data_vector()
+
+  #def init_covariance_related_variables(self, COV):
+      #self.COV = COV
+      #self.inv_COV = np.linalg.inv(COV)  # inverse COV
+
+      # Cholesky decomposition on COV
+      #self.L_Cholesky = np.linalg.cholesky(COV)
+      #self.inv_L_Cholesky = np.linalg.inv(self.L)
