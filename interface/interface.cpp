@@ -719,9 +719,16 @@ void cpp_set_pm(std::vector<double> pm) {
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 
-arma::Col<double> cpp_get_covariance() {
+arma::Mat<double> cpp_get_covariance()
+{
    ima::RealData& instance = ima::RealData::get_instance();
   return instance.get_cov();
+}
+
+arma::Mat<double> cpp_get_squeezed_covariance()
+{
+   ima::RealData& instance = ima::RealData::get_instance();
+  return instance.get_squeezed_cov();
 }
 
 double cpp_compute_chi2(std::vector<double> datavector) {
@@ -729,18 +736,21 @@ double cpp_compute_chi2(std::vector<double> datavector) {
   return instance.get_chi2(datavector);
 }
 
-int cpp_compute_mask(const int i) {
+int cpp_compute_mask(const int i)
+{
   ima::RealData& instance = ima::RealData::get_instance();
   return instance.get_mask(i);
 }
 
 double cpp_compute_pm(const int zl, const int zs,
-const double theta) {
+const double theta)
+{
   ima::PointMass& instance = ima::PointMass::get_instance();
   return instance.get_pm(zl,zs,theta);
 }
 
-std::vector<double> cpp_compute_data_vector() {
+std::vector<double> cpp_compute_data_vector()
+{
   spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "compute_data_vector");
 #ifdef DEBUG
   if (tomo.shear_Nbin == 0) {
@@ -995,12 +1005,15 @@ void ima::RealData::set_inv_cov(std::string COV) {
   }
 #endif
   arma::Mat<double> table = ima::read_table(COV); // this reads cov!
+
   this->inv_cov_mask_.set_size(like.Ndata,like.Ndata);
   this->inv_cov_mask_.zeros();
 
   this->cov_.set_size(like.Ndata,like.Ndata);
   this->cov_.zeros();
-  switch (table.n_cols) {
+
+  switch (table.n_cols)
+  {
     case 3:
     {
       for (int i=0; i<static_cast<int>(table.n_rows); i++)
@@ -1013,7 +1026,8 @@ void ima::RealData::set_inv_cov(std::string COV) {
 
         this->inv_cov_mask_(j,k) = table(i,2);
 
-        if (j!=k) {
+        if (j!=k)
+        {
           // apply mask to off-diagonal covariance elements
           this->inv_cov_mask_(j,k) *= this->get_mask(j);
           this->inv_cov_mask_(j,k) *= this->get_mask(k);
@@ -1036,7 +1050,8 @@ void ima::RealData::set_inv_cov(std::string COV) {
 
         this->inv_cov_mask_(j,k) = table(i,2) + table(i,3);
 
-        if (j!=k) {
+        if (j!=k)
+        {
           // apply mask to off-diagonal covariance elements
           this->inv_cov_mask_(j,k) *= this->get_mask(j);
           this->inv_cov_mask_(j,k) *= this->get_mask(k);
@@ -1059,7 +1074,8 @@ void ima::RealData::set_inv_cov(std::string COV) {
 
         this->inv_cov_mask_(j,k) = table(i,8) + table(i,9);
 
-        if (j!=k) {
+        if (j!=k)
+        {
           // apply mask to off-diagonal covariance elements
           this->inv_cov_mask_(j,k) *= this->get_mask(j);
           this->inv_cov_mask_(j,k) *= this->get_mask(k);
@@ -1080,7 +1096,8 @@ void ima::RealData::set_inv_cov(std::string COV) {
   // inversion don't cause problems...
   // also, set diagonal elements corresponding to datavector elements
   // outside mask to zero, so that these elements don't contribute to chi2
-  for (int i = 0; i < like.Ndata; i++) {
+  for (int i = 0; i < like.Ndata; i++)
+  {
     this->inv_cov_mask_(i,i) *= this->get_mask(i)*this->get_mask(i);
     for (int j=0; j<i; j++) {
       this->inv_cov_mask_(i,j) *= this->get_mask(i)*this->get_mask(j);
@@ -1089,6 +1106,36 @@ void ima::RealData::set_inv_cov(std::string COV) {
   };
   this->cov_filename_ = COV;
   this->is_inv_cov_set_ = true;
+
+  // squeezed cov for baryon project
+  arma::Col<double> index(like.Ndata);
+  {
+    double j=0;
+    for(int i=0; i<like.Ndata; i++)
+    {
+      if(this->get_mask(i) > 0.99)
+      {
+        index(i) = j;
+        j++;
+      }
+      else{
+        index(i) = -1;
+      }
+    }
+  }
+
+  const int npoints_not_masked = arma::sum(this->mask_);
+  this->squeezed_cov_.set_size(npoints_not_masked,npoints_not_masked);
+  for(int i=0; i<like.Ndata; i++)
+  {
+    for(int j=0; j<like.Ndata; j++)
+    {
+      if((this->mask_(i)>0.99) && (this->mask_(j)>0.99))
+      {
+        this->squeezed_cov_(index(i),index(j)) = this->cov_(i,j);
+      }
+    }
+  }
 }
 
 arma::Col<double> ima::RealData::get_mask() const {
@@ -1137,15 +1184,23 @@ double ima::RealData::get_inv_cov(const int ci, const int cj) const {
   return this->inv_cov_mask_(ci,cj);
 }
 
-arma::Mat<double> ima::RealData::get_cov() const {
+arma::Mat<double> ima::RealData::get_cov() const
+{
   return this->cov_;
 }
 
-arma::Mat<double> ima::RealData::get_inv_cov_mask() const {
+arma::Mat<double> ima::RealData::get_squeezed_cov() const
+{
+  return this->squeezed_cov_;
+}
+
+arma::Mat<double> ima::RealData::get_inv_cov_mask() const
+{
   return this->inv_cov_mask_;
 }
 
-double ima::RealData::get_chi2(std::vector<double> datavector) const {
+double ima::RealData::get_chi2(std::vector<double> datavector) const
+{
 #ifdef DEBUG
   if (!(this->is_data_set_)) {
     spdlog::critical("\x1b[90m{}\x1b[0m: {} not set prior to this function call", "get_chi2",
@@ -1182,17 +1237,22 @@ double ima::RealData::get_chi2(std::vector<double> datavector) const {
   return chisqr;
 }
 
-bool ima::RealData::is_mask_set() const {
+bool ima::RealData::is_mask_set() const
+{
   return this->is_mask_set_;
 }
 
-bool ima::RealData::is_data_set() const {
+bool ima::RealData::is_data_set() const
+{
   return this->is_data_set_;
 }
 
-bool ima::RealData::is_inv_cov_set() const {
+
+bool ima::RealData::is_inv_cov_set() const
+{
   return this->is_inv_cov_set_;
 }
+
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -1279,6 +1339,9 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
     m.def("reset_baryionic_struct", &cpp_reset_baryionic_struct, "reset baryionic struct to original values");
 
     m.def("get_covariance", &cpp_get_covariance, "Get Covariance Matrix");
+
+    m.def("get_squeezed_covariance", &cpp_get_squeezed_covariance, "Get Covariance Matrix Reduced in Dimension not to contain masked points");
+
 }
 
 int main() {

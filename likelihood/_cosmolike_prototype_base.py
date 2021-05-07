@@ -158,8 +158,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     # FUNCTION `void init_baryons(char* scenario)`. SIMS INCLUDE
     # TNG100, HzAGN, mb2, illustris, eagle, owls_AGN_T80, owls_AGN_T85,
     # owls_AGN_T87, BAHAMAS_T76, BAHAMAS_T78, BAHAMAS_T80
-    ci.init_baryons(self.use_baryonic_simulations,
-      self.which_baryonic_simulations)
+    ci.init_baryons(self.use_baryonic_simulations, self.which_baryonic_simulations)
     # ------------------------------------------------------------------------
 
     self.do_cache_lnPL = np.zeros(
@@ -171,6 +170,15 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     self.do_cache_chi = np.zeros(len(self.z_interp_1D))
 
     self.do_cache_cosmo = np.zeros(2)
+
+    # ------------------------------------------------------------------------
+    # Baryon Project
+    self.cov = 0
+    self.inv_cov = 0
+    self.L_cholesky = 0
+    self.inv_L_cholesky = 0
+    self.Ratio = 0
+    self.Delta = 0
 
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
@@ -401,10 +409,35 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     return ci.compute_data_vector()
 
-  #def init_covariance_related_variables(self, COV):
-      #self.COV = COV
-      #self.inv_COV = np.linalg.inv(COV)  # inverse COV
+  def init_covariance_related_variables(self):
+    self.cov = ci.get_squeezed_covariance()
 
-      # Cholesky decomposition on COV
-      #self.L_Cholesky = np.linalg.cholesky(COV)
-      #self.inv_L_Cholesky = np.linalg.inv(self.L)
+    self.inv_cov = np.linalg.inv(cov)
+
+    self.L_cholesky = np.linalg.cholesky(cov)
+
+    self.inv_L_cholesky = np.linalg.inv(self.L)
+
+  #def build_Ratio(self):
+  #    '''Build the Ratio matrix
+  #        self.Ratio: ndarray (self.Ndata x self.Nscenario)
+  #    '''
+
+  #    self.Ratio = np.zeros((self.Ndata, self.Nscenario))
+  #    self.modelv_dmo = model_DMO(self.pars)
+
+  #    for j, scenario in enumerate(self.simKeys):
+  #        modelv_bary = model_bary(self.pars, scenario)
+  #        self.Ratio.T[j] = modelv_bary/self.modelv_dmo
+  #
+  #    self.Ratio -= 1.
+
+  #def build_Delta(self):
+    '''Build the difference matrix
+        self.Delta: ndarray (self.Ndata x self.Nscenario)
+    '''
+    #DeltaT = self.Ratio.T*self.modelv_dmo-self.modelv_dmo
+    #self.Delta = DeltaT.T
+
+
+

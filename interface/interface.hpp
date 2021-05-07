@@ -52,6 +52,8 @@ public:
 
   arma::Mat<double> get_cov() const;
 
+  arma::Mat<double> get_squeezed_cov() const;
+
   arma::Mat<double> get_inv_cov_mask() const;
 
   int get_mask(const int ci) const;
@@ -79,6 +81,8 @@ private:
   arma::Col<double> mask_;
   arma::Mat<double> cov_;
   arma::Mat<double> inv_cov_mask_;
+  arma::Mat<double> squeezed_cov_; // for baryon project
+
   RealData() = default;
   RealData(RealData const&) = delete;
 };
