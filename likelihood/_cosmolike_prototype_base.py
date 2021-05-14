@@ -173,12 +173,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     # ------------------------------------------------------------------------
     # Baryon Project
-    self.cov = 0
-    self.inv_cov = 0
-    self.L_cholesky = 0
-    self.inv_L_cholesky = 0
-    self.Ratio = 0
-    self.Delta = 0
+
 
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
@@ -409,35 +404,37 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     return ci.compute_data_vector()
 
-  def init_covariance_related_variables(self):
-    self.cov = ci.get_squeezed_covariance()
+  def generate_baryonic_PCA_dict(self, **params_values):
 
-    self.inv_cov = np.linalg.inv(cov)
+    sqd_cov = ci.get_not_masked_covariance()
 
-    self.L_cholesky = np.linalg.cholesky(cov)
+    cov_L_cholesky_decomposition = np.linalg.cholesky(sqd_cov)
 
-    self.inv_L_cholesky = np.linalg.inv(self.L)
+    inv_cov_L_cholesky_decomposition = np.linalg.inv(cov_L_cholesky_decomposition)
 
-  #def build_Ratio(self):
-  #    '''Build the Ratio matrix
-  #        self.Ratio: ndarray (self.Ndata x self.Nscenario)
-  #    '''
+    ndata_points = ci.get_number_data_points()
 
-  #    self.Ratio = np.zeros((self.Ndata, self.Nscenario))
-  #    self.modelv_dmo = model_DMO(self.pars)
+    nbaryons_scenario = ci.number_baryons_scenario()
 
-  #    for j, scenario in enumerate(self.simKeys):
-  #        modelv_bary = model_bary(self.pars, scenario)
-  #        self.Ratio.T[j] = modelv_bary/self.modelv_dmo
-  #
-  #    self.Ratio -= 1.
+    baryon_ratio_matrix = np.zeros((ndata_points, nbaryons_scenario))
 
-  #def build_Delta(self):
-    '''Build the difference matrix
-        self.Delta: ndarray (self.Ndata x self.Nscenario)
-    '''
-    #DeltaT = self.Ratio.T*self.modelv_dmo-self.modelv_dmo
-    #self.Delta = DeltaT.T
+    modelv_dmo = compute_dm_datavector(params_values)
 
+    for i in range(nbaryons_scenario):
+      modelv_bary = compute_barionic_datavector(i, params_values)
 
+      baryon_ratio_matrix.T[i] = modelv_bary/modelv_dmo
 
+    baryon_ratio_matrix -= 1.
+
+    baryon_diff_matrix = (baryon_ratio_matrix.T*modelv_dmo - modelv_dmo).T
+
+    baryon_weighted_diff_matrix = np.dot(inv_cov_L_cholesky_decomposition, baryon_diff_matrix)
+
+    U, Sdig, VT = np.linalg.svd(baryon_weighted_diff_matrix, full_matrices=True)
+
+    PCs = {}
+    for i in range(nbaryons_scenario):
+      PCs[i] = U.T[i]
+
+    return PCs

@@ -725,10 +725,10 @@ arma::Mat<double> cpp_get_covariance()
   return instance.get_cov();
 }
 
-arma::Mat<double> cpp_get_squeezed_covariance()
+arma::Mat<double> cpp_get_not_masked_covariance()
 {
    ima::RealData& instance = ima::RealData::get_instance();
-  return instance.get_squeezed_cov();
+  return instance.get_not_masked_cov();
 }
 
 double cpp_compute_chi2(std::vector<double> datavector) {
@@ -1107,7 +1107,7 @@ void ima::RealData::set_inv_cov(std::string COV) {
   this->cov_filename_ = COV;
   this->is_inv_cov_set_ = true;
 
-  // squeezed cov for baryon project
+  // not masked cov for baryon project
   arma::Col<double> index(like.Ndata);
   {
     double j=0;
@@ -1125,17 +1125,20 @@ void ima::RealData::set_inv_cov(std::string COV) {
   }
 
   const int npoints_not_masked = arma::sum(this->mask_);
-  this->squeezed_cov_.set_size(npoints_not_masked,npoints_not_masked);
+  this->not_masked_cov_.set_size(npoints_not_masked, npoints_not_masked);
   for(int i=0; i<like.Ndata; i++)
   {
     for(int j=0; j<like.Ndata; j++)
     {
       if((this->mask_(i)>0.99) && (this->mask_(j)>0.99))
       {
-        this->squeezed_cov_(index(i),index(j)) = this->cov_(i,j);
+        this->not_masked_cov_(index(i),index(j)) = this->cov_(i,j);
       }
     }
   }
+
+  this->ndata_ = like.Ndata;
+  this->n_not_masked_data_ = npoints_not_masked;
 }
 
 arma::Col<double> ima::RealData::get_mask() const {
@@ -1189,9 +1192,9 @@ arma::Mat<double> ima::RealData::get_cov() const
   return this->cov_;
 }
 
-arma::Mat<double> ima::RealData::get_squeezed_cov() const
+arma::Mat<double> ima::RealData::get_not_masked_cov() const
 {
-  return this->squeezed_cov_;
+  return this->not_masked_cov_;
 }
 
 arma::Mat<double> ima::RealData::get_inv_cov_mask() const
@@ -1340,11 +1343,11 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m) {
 
     m.def("get_covariance", &cpp_get_covariance, "Get Covariance Matrix");
 
-    m.def("get_squeezed_covariance", &cpp_get_squeezed_covariance, "Get Covariance Matrix Reduced in Dimension not to contain masked points");
-
+    m.def("get_not_masked_covariance", &cpp_get_not_masked_covariance, "Get Covariance Matrix Reduced in Dimension not to contain masked points");
 }
 
-int main() {
+int main()
+{
   cpp_initial_setup();
   std::cout << "GOODBYE" << std::endl;
   exit(1);

@@ -52,7 +52,7 @@ public:
 
   arma::Mat<double> get_cov() const;
 
-  arma::Mat<double> get_squeezed_cov() const;
+  arma::Mat<double> get_not_masked_cov() const;
 
   arma::Mat<double> get_inv_cov_mask() const;
 
@@ -74,6 +74,8 @@ private:
   bool is_mask_set_ = false;
   bool is_data_set_ = false;
   bool is_inv_cov_set_ = false;
+  int ndata_;
+  int n_not_masked_data_;
   std::string mask_filename_;
   std::string cov_filename_;
   std::string data_filename_;
@@ -81,7 +83,7 @@ private:
   arma::Col<double> mask_;
   arma::Mat<double> cov_;
   arma::Mat<double> inv_cov_mask_;
-  arma::Mat<double> squeezed_cov_; // for baryon project
+  arma::Mat<double> not_masked_cov_; // for baryon project
 
   RealData() = default;
   RealData(RealData const&) = delete;
