@@ -18,7 +18,7 @@ class des_clustering(_cosmolike_prototype_base):
 
 		self.set_lens_related(**params_values)
 
-		datavector = ci.compute_data_vector()
+		datavector = ci.compute_data_vector_masked()
 
 		return self.compute_logp(datavector)
 

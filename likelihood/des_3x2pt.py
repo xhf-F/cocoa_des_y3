@@ -20,7 +20,7 @@ class des_3x2pt(_cosmolike_prototype_base):
 
 		self.set_source_related(**params_values)
 
-		datavector = ci.compute_data_vector()
+		datavector = ci.compute_data_vector_masked()
 
 		return self.compute_logp(datavector)
 

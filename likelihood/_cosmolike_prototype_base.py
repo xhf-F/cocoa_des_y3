@@ -105,6 +105,14 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     self.force_cache_false = False
 
+    self.create_baryon_pca = init.bool("create_baryon_pca", default=False)
+
+    if self.create_baryon_pca:
+      self.baryon_pca_selected_simulations = ini.string(
+        "baryon_pca_select_simulations", default="", allowEmpty=False)
+    else
+      self.baryon_pca_selected_simulations = ""
+
     # ------------------------------------------------------------------------
     self.z_interp_1D = np.linspace(0,2.0,1000)
     self.z_interp_1D = np.concatenate((self.z_interp_1D,np.linspace(2.0,10.1,200)),axis=0)
@@ -158,7 +166,8 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     # FUNCTION `void init_baryons(char* scenario)`. SIMS INCLUDE
     # TNG100, HzAGN, mb2, illustris, eagle, owls_AGN_T80, owls_AGN_T85,
     # owls_AGN_T87, BAHAMAS_T76, BAHAMAS_T78, BAHAMAS_T80
-    ci.init_baryons(self.use_baryonic_simulations, self.which_baryonic_simulations)
+    ci.init_baryons_contamination(self.use_baryonic_simulations_contamination,
+      self.which_baryonic_simulations_contamination)
     # ------------------------------------------------------------------------
 
     self.do_cache_lnPL = np.zeros(
@@ -170,9 +179,6 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     self.do_cache_chi = np.zeros(len(self.z_interp_1D))
 
     self.do_cache_cosmo = np.zeros(2)
-
-    # ------------------------------------------------------------------------
-    # Baryon Project
 
 
   # ------------------------------------------------------------------------
@@ -232,7 +238,6 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
   def set_cosmo_related(self):
     h = self.provider.get_param("H0")/100.0
-
 
     # Compute linear matter power spectrum
     PKL = self.provider.get_Pk_interpolator(("delta_tot", "delta_tot"),
@@ -371,67 +376,67 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     )
 
   # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------
+  # --------------------------- baryonic PCAs ------------------------------
   # ------------------------------------------------------------------------
 
-  # Hack to create baryonic PCAs
-  def compute_dm_datavector(self, **params_values):
+  def compute_dm_datavector_masked_reduced_dim(self, **params_values):
     self.force_cache_false = True
 
     self.set_cosmo_related()
 
     self.force_cache_false = False
 
-    self.set_lens_related(**params_values)
+    if (self.probe != "xi"):
+      self.set_lens_related(**params_values)
 
-    self.set_source_related(**params_values)
+    if (self.probe != "wtheta"):
+      self.set_source_related(**params_values)
 
-    return ci.compute_data_vector()
+    return ci.compute_data_vector_masked_reduced_dim()
 
   # Hack to create baryonic PCAs
-  def compute_barionic_datavector(self, which_baryonic_simulations, **params_values):
+  def compute_barion_datavector_masked_reduced_dim(self, sim, **params_values):
     self.force_cache_false = True
 
-    ci.init_baryons(True, which_baryonic_simulations)
+    ci.init_baryons_contamination(True, sim)
 
     self.set_cosmo_related()
 
     self.force_cache_false = False
 
-    self.set_lens_related(**params_values)
+    if (self.probe != "xi"):
+      self.set_lens_related(**params_values)
 
-    self.set_source_related(**params_values)
+    if (self.probe != "wtheta"):
+      self.set_source_related(**params_values)
 
-    return ci.compute_data_vector()
+    return ci.compute_data_vector_masked_reduced_dim()
 
-  def generate_baryonic_PCA_dict(self, **params_values):
+  def generate_baryonic_PCA_dict(self, **params):
 
-    sqd_cov = ci.get_not_masked_covariance()
+    inv_cov_L_cholesky =
+      np.linalg.inv(p.linalg.cholesky(ci.get_covariance_masked_reduced_dim()))
 
-    cov_L_cholesky_decomposition = np.linalg.cholesky(sqd_cov)
+    ndata_points = ci.get_nreduced_dim()
 
-    inv_cov_L_cholesky_decomposition = np.linalg.inv(cov_L_cholesky_decomposition)
+    nbaryons_scenario = ci.nbaryons_scenario()
 
-    ndata_points = ci.get_number_data_points()
+    modelv_dmo = compute_dm_datavector_masked_reduced_dim(params)
 
-    nbaryons_scenario = ci.number_baryons_scenario()
-
-    baryon_ratio_matrix = np.zeros((ndata_points, nbaryons_scenario))
-
-    modelv_dmo = compute_dm_datavector(params_values)
+    baryon_ratio = np.zeros((ndata_points, nbaryons_scenario))
 
     for i in range(nbaryons_scenario):
-      modelv_bary = compute_barionic_datavector(i, params_values)
+      modelv_bary = compute_barion_datavector_masked_reduced_dim(i, params)
 
-      baryon_ratio_matrix.T[i] = modelv_bary/modelv_dmo
+      baryon_ratio.T[i] = modelv_bary/modelv_dmo
 
-    baryon_ratio_matrix -= 1.
+    baryon_ratio -= 1.
 
-    baryon_diff_matrix = (baryon_ratio_matrix.T*modelv_dmo - modelv_dmo).T
+    baryon_diff = (baryon_ratio.T*modelv_dmo - modelv_dmo).T
 
-    baryon_weighted_diff_matrix = np.dot(inv_cov_L_cholesky_decomposition, baryon_diff_matrix)
+    baryon_weighted_diff = np.dot(inv_cov_L_cholesky, baryon_diff)
 
-    U, Sdig, VT = np.linalg.svd(baryon_weighted_diff_matrix, full_matrices=True)
+    U, Sdig, VT = np.linalg.svd(baryon_weighted_diff, full_matrices=True)
 
     PCs = {}
     for i in range(nbaryons_scenario):

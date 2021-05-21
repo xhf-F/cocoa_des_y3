@@ -1,21 +1,26 @@
 #define ARMA_DONT_USE_WRAPPER
 #include <armadillo>
+#include <map>
 #include <carma/carma.h>
 
 #ifndef __COSMOLIKE_INTERFACE_HPP
 #define __COSMOLIKE_INTERFACE_HPP
 
 // --- Auxiliary Code ---
-namespace interface_mpp_aux {
+namespace interface_mpp_aux
+{
 
-class RandomNumber {
+class RandomNumber
+{
 // Singleton Class that holds a random number generator
 public:
-  static RandomNumber& get_instance() {
+  static RandomNumber& get_instance()
+  {
     static RandomNumber instance;
 		return instance;
   }
-  double get() {
+  double get()
+  {
     return dist_(mt_);
   }
 	~RandomNumber() = default;
@@ -32,9 +37,13 @@ private:
   RandomNumber(RandomNumber const&) = delete;
 };
 
-class RealData {
+class RealData
+{
+// Singleton Class that holds a data vector, covariance, maps...
+
 public:
-  static RealData& get_instance() {
+  static RealData& get_instance()
+  {
     static RealData instance;
     return instance;
   }
@@ -46,21 +55,28 @@ public:
 
   void set_inv_cov(std::string COV);
 
-  arma::Col<double> get_mask() const;
+  int get_ndim() const;
+  int get_nreduced_dim() const;
 
-  arma::Col<double> get_data() const;
+  int get_index_reduced_dim(const int ci) const;
 
-  arma::Mat<double> get_cov() const;
-
-  arma::Mat<double> get_not_masked_cov() const;
-
-  arma::Mat<double> get_inv_cov_mask() const;
-
+  arma::Col<int> get_mask() const;
   int get_mask(const int ci) const;
 
-  double get_data(const int ci) const;
+  arma::Col<double> get_data_masked() const;
+  double get_data_masked(const int ci) const;
 
-  double get_inv_cov(const int ci, const int cj) const;
+  arma::Col<double> get_data_masked_reduced_dim() const;
+  double get_data_masked_reduced_dim(const int ci) const;
+
+  arma::Mat<double> get_covariance_masked() const;
+  arma::Mat<double> get_covariance_masked_reduced_dim() const;
+
+  arma::Mat<double> get_inverse_covariance_masked() const;
+  double get_inverse_covariance_masked(const int ci, const int cj) const;
+
+  arma::Mat<double> get_inverse_covariance_masked_reduced_dim() const;
+  double get_inverse_covariance_masked_reduced_dim(const int ci, const int cj) const;
 
   double get_chi2(std::vector<double> datavector) const;
 
@@ -74,16 +90,24 @@ private:
   bool is_mask_set_ = false;
   bool is_data_set_ = false;
   bool is_inv_cov_set_ = false;
+
   int ndata_;
-  int n_not_masked_data_;
+  int ndata_masked_; // for baryon project, reduced dim
+
   std::string mask_filename_;
   std::string cov_filename_;
   std::string data_filename_;
-  arma::Col<double> data_;
-  arma::Col<double> mask_;
-  arma::Mat<double> cov_;
-  arma::Mat<double> inv_cov_mask_;
-  arma::Mat<double> not_masked_cov_; // for baryon project
+
+  arma::Col<int> index_reduced_dim_;
+  arma::Col<int> mask_;
+
+  arma::Col<double> data_masked_;
+  arma::Col<double> data_masked_reduced_dim_; // for baryon project, reduced dim
+
+  arma::Mat<double> cov_masked_;
+  arma::Mat<double> cov_masked_reduced_dim_; // for baryon project, reduced dim
+  arma::Mat<double> inv_cov_masked_;
+  arma::Mat<double> inv_cov_masked_reduced_dim_;
 
   RealData() = default;
   RealData(RealData const&) = delete;
@@ -102,9 +126,11 @@ typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
         || std::fabs(x-y) < std::numeric_limits<T>::min();
 }
 
-class PointMass {
+class PointMass
+{
 public:
-  static PointMass& get_instance() {
+  static PointMass& get_instance()
+  {
     static PointMass instance;
     return instance;
   }
@@ -118,6 +144,33 @@ public:
 
 private:
   std::vector<double> pm_;
+
+  PointMass() = default;
+  PointMass(PointMass const&) = delete;
+};
+
+class BaryonScenario
+{
+public:
+  static BaryonScenario& get_instance()
+  {
+    static BaryonScenario instance;
+    return instance;
+  }
+  ~BaryonScenario() = default;
+
+  int nscenarios() const;
+
+  void set_scenarios(std::string scenarios);
+
+  std::string get_scenario(const int i) const;
+
+private:
+  int nscenarios_;
+  std::map<int, std::string> scenarios_;
+
+  BaryonScenario() = default;
+  BaryonScenario(BaryonScenario const&) = delete;
 };
 
 }  // namespace interface_mpp_aux
