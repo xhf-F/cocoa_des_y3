@@ -860,6 +860,12 @@ int cpp_get_mask(const int i)
   return instance.get_mask(i);
 }
 
+int cpp_get_ndim()
+{
+  ima::RealData& instance = ima::RealData::get_instance();
+  return instance.get_ndim();
+}
+
 int cpp_get_nreduced_dim()
 {
   ima::RealData& instance = ima::RealData::get_instance();
@@ -870,6 +876,13 @@ int cpp_get_index_reduced_dim(const int i)
 {
   ima::RealData& instance = ima::RealData::get_instance();
   return instance.get_index_reduced_dim(i);
+}
+
+arma::Col<double> cpp_get_expand_dim_from_masked_reduced_dim(
+arma::Col<double> reduced_dim_vector)
+{
+  ima::RealData& instance = ima::RealData::get_instance();
+  return instance.get_expand_dim_from_masked_reduced_dim(reduced_dim_vector);
 }
 
 int cpp_get_baryon_pca_nscenarios()
@@ -1016,19 +1029,33 @@ std::vector<double> cpp_compute_data_vector_masked()
   return data_vector;
 }
 
-std::vector<double> cpp_compute_data_vector_masked_reduced_dim()
+arma::Col<double> cpp_compute_data_vector_masked_reduced_dim()
 {
   std::vector<double> data_vector_masked = cpp_compute_data_vector_masked();
 
   const int ndim = data_vector_masked.size();
   const int ndim_reduced = cpp_get_nreduced_dim();
 
-  std::vector<double> data_vector_masked_reduced_dim(ndim_reduced, 0.0);
+  arma::Col<double> data_vector_masked_reduced_dim;
+  data_vector_masked_reduced_dim.set_size(ndim_reduced);
+  data_vector_masked_reduced_dim.zeros();
 
   for(int i=0; i<ndim; i++)
   {
-    data_vector_masked_reduced_dim[cpp_get_index_reduced_dim(i)] =
-      data_vector_masked[i];
+    if(cpp_get_mask(i)>0.99)
+    {
+      if(cpp_get_index_reduced_dim(i) < 0)
+      {
+        spdlog::critical("\x1b[90m{}\x1b[0m: logical error, internal"
+          " inconsistent mask operation",
+          "cpp_compute_data_vector_masked_reduced_dim"
+        );
+        exit(1);
+      }
+
+      data_vector_masked_reduced_dim(cpp_get_index_reduced_dim(i)) =
+        data_vector_masked[i];
+    }
   }
 
   return data_vector_masked_reduced_dim;
@@ -1227,7 +1254,7 @@ void ima::RealData::set_mask(std::string MASK)
     "\x1b[90m{}\x1b[0m: mask file {} left {} non-masked elements after masking",
     "set_mask", MASK, this->ndata_masked_);
 
-  this->index_reduced_dim_.set_size(this->ndata_masked_);
+  this->index_reduced_dim_.set_size(this->ndata_);
   {
     double j=0;
     for(int i=0; i<this->ndata_; i++)
@@ -1242,7 +1269,7 @@ void ima::RealData::set_mask(std::string MASK)
         this->index_reduced_dim_(i) = -1;
       }
     }
-    if(j != this->ndata_masked_-1)
+    if(j != this->ndata_masked_)
     {
       spdlog::critical(
        "\x1b[90m{}\x1b[0m: logical error, internal inconsistent mask operation",
@@ -1279,6 +1306,13 @@ void ima::RealData::set_data(std::string DATA)
 
     if(this->get_mask(i) == 1)
     {
+      if(this->get_index_reduced_dim(i) < 0)
+      {
+        spdlog::critical("\x1b[90m{}\x1b[0m: logical error, internal"
+          " inconsistent mask operation", "set_data");
+        exit(1);
+      }
+
       this->data_masked_reduced_dim_(this->get_index_reduced_dim(i)) =
         this->data_masked_(i);
     }
@@ -1424,6 +1458,19 @@ void ima::RealData::set_inv_cov(std::string COV)
     {
       if((this->mask_(i)>0.99) && (this->mask_(j)>0.99))
       {
+        if(this->get_index_reduced_dim(i) < 0)
+        {
+          spdlog::critical("\x1b[90m{}\x1b[0m: logical error, internal"
+            " inconsistent mask operation", "set_inv_cov");
+          exit(1);
+        }
+        if(this->get_index_reduced_dim(j) < 0)
+        {
+          spdlog::critical("\x1b[90m{}\x1b[0m: logical error, internal"
+            " inconsistent mask operation", "set_inv_cov");
+          exit(1);
+        }
+
         this->cov_masked_reduced_dim_(this->get_index_reduced_dim(i),
           this->get_index_reduced_dim(j)) = this->cov_masked_(i,j);
 
@@ -1470,13 +1517,8 @@ int ima::RealData::get_index_reduced_dim(const int ci) const
 {
   if (ci > like.Ndata || ci < 0)
   {
-    spdlog::critical(
-      "\x1b[90m{}\x1b[0m: index i = {} is not valid (min = {}, max = {})",
-      "get_index_reduced_dim",
-      ci,
-      0.0,
-      like.Ndata
-    );
+    spdlog::critical("\x1b[90m{}\x1b[0m: index i = {} is not valid"
+      " (min = {}, max = {})", "get_index_reduced_dim", ci, 0.0, like.Ndata);
     exit(1);
   }
 
@@ -1550,7 +1592,7 @@ arma::Mat<double> ima::RealData::get_inverse_covariance_masked_reduced_dim() con
   return this->inv_cov_masked_reduced_dim_;
 }
 
-double get_inverse_covariance_masked_reduced_dim(const int ci,
+double ima::RealData::get_inverse_covariance_masked_reduced_dim(const int ci,
 const int cj) const
 {
   if (ci > like.Ndata || ci < 0)
@@ -1571,9 +1613,9 @@ const int cj) const
   return this->inv_cov_masked_reduced_dim_(ci, cj);
 }
 
-arma::Mat<double> ima::RealData::get_cov() const
+arma::Mat<double> ima::RealData::get_covariance_masked() const
 {
-  return this->cov_;
+  return this->cov_masked_;
 }
 
 arma::Mat<double> ima::RealData::get_covariance_masked_reduced_dim() const
@@ -1651,6 +1693,39 @@ bool ima::RealData::is_inv_cov_set() const
   return this->is_inv_cov_set_;
 }
 
+arma::Col<double> ima::RealData::get_expand_dim_from_masked_reduced_dim(
+arma::Col<double> reduced_dim_vector) const
+{
+  if (this->ndata_masked_ != reduced_dim_vector.n_elem)
+  {
+    spdlog::critical("\x1b[90m{}\x1b[0m: {} invalid input vector",
+      "get_expand_dim_from_masked_reduced_dim"
+    );
+    exit(1);
+  }
+
+  arma::Col<double> vector;
+  vector.set_size(this->ndata_);
+  vector.zeros();
+
+  for(int i=0; i<this->ndata_; i++)
+  {
+    if(this->mask_(i)>0.99)
+    {
+      if(this->get_index_reduced_dim(i) < 0)
+      {
+        spdlog::critical("\x1b[90m{}\x1b[0m: logical error, internal "
+        "inconsistent mask operation", "get_expand_dim_from_masked_reduced_dim");
+        exit(1);
+      }
+
+      vector(i) = reduced_dim_vector(this->get_index_reduced_dim(i));
+    }
+  }
+
+  return vector;
+}
+
 // ----------------------------------------------------------------------------
 // CLASS PointMass MEMBER FUNCTIONS
 // THERE ARE "C" WRAPS FOR MOST OF THESE FUNCTIONS
@@ -1718,7 +1793,7 @@ void ima::BaryonScenario::set_scenarios(std::string scenarios)
 
 std::string ima::BaryonScenario::get_scenario(const int i) const
 {
-  return this->scenarios_[i];
+  return this->scenarios_.at(i);
 }
 
 // ----------------------------------------------------------------------------
@@ -1930,25 +2005,23 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m)
     "Get Masked Covariance Matrix - it does not to contain masked dimensions"
   );
 
-  m.def("get_nreduced_dim",
-    &cpp_get_nreduced_dim,
+  m.def("get_ndim", &cpp_get_ndim, "Get number of data points");
+
+  m.def("get_nreduced_dim", &cpp_get_nreduced_dim,
     "Get number of non-masked points"
   );
 
-  m.def("get_nbaryons_scenario",
-    &cpp_get_nbaryons_scenario,
-    "Get number of selected Baryionic Scenario for PCA"
-  );
+  m.def("get_baryon_pca_scenario_name", &cpp_get_baryon_pca_scenario_name,
+    "Get jth scenario name selected to generate baryonic PCA", py::arg("i"));
 
   m.def("get_baryon_pca_nscenarios",
     &cpp_get_baryon_pca_nscenarios,
     "Get number of scenarios selected to generate baryonic PCA"
   );
 
-  m.def("get_baryon_pca_scenario_name",
-    &cpp_get_baryon_pca_scenario_name,
-    "Get jth scenario name selected to generate baryonic PCA",
-    py::arg("j")
+  m.def("get_expand_dim_from_masked_reduced_dim",
+    &cpp_get_expand_dim_from_masked_reduced_dim,
+    "Get expanded vector (w/ zeros on masked dim) from masked reduced dim vector"
   );
 
   // --------------------------------------------------------------------

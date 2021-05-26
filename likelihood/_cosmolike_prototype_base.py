@@ -105,21 +105,15 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     self.force_cache_false = False
 
-    self.create_baryon_pca = init.bool("create_baryon_pca", default=False)
-
-    if self.create_baryon_pca:
-      self.baryon_pca_selected_simulations = ini.string(
-        "baryon_pca_select_simulations", default="", allowEmpty=False)
-    else
-      self.baryon_pca_selected_simulations = ""
-
     # ------------------------------------------------------------------------
     self.z_interp_1D = np.linspace(0,2.0,1000)
-    self.z_interp_1D = np.concatenate((self.z_interp_1D,np.linspace(2.0,10.1,200)),axis=0)
+    self.z_interp_1D = np.concatenate((self.z_interp_1D,
+      np.linspace(2.0,10.1,200)),axis=0)
     self.z_interp_1D[0] = 0
 
     self.z_interp_2D = np.linspace(0,2.0,100)
-    self.z_interp_2D = np.concatenate((self.z_interp_2D,np.linspace(2.0,10.1,50)),axis=0)
+    self.z_interp_2D = np.concatenate((self.z_interp_2D,
+      np.linspace(2.0,10.1,50)),axis=0)
     self.z_interp_2D[0] = 0
 
     self.len_z_interp_2D = len(self.z_interp_2D)
@@ -166,8 +160,13 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     # FUNCTION `void init_baryons(char* scenario)`. SIMS INCLUDE
     # TNG100, HzAGN, mb2, illustris, eagle, owls_AGN_T80, owls_AGN_T85,
     # owls_AGN_T87, BAHAMAS_T76, BAHAMAS_T78, BAHAMAS_T80
-    ci.init_baryons_contamination(self.use_baryonic_simulations_contamination,
-      self.which_baryonic_simulations_contamination)
+    ci.init_baryons_contamination(
+      self.use_baryonic_simulations_for_dv_contamination,
+      self.which_baryonic_simulations_for_dv_contamination)
+
+    if self.create_baryon_pca:
+      ci.init_baryon_pca_scenarios(self.baryon_pca_select_simulations)
+
     # ------------------------------------------------------------------------
 
     self.do_cache_lnPL = np.zeros(
@@ -179,7 +178,6 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     self.do_cache_chi = np.zeros(len(self.z_interp_1D))
 
     self.do_cache_cosmo = np.zeros(2)
-
 
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
@@ -412,34 +410,45 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     return ci.compute_data_vector_masked_reduced_dim()
 
-  def generate_baryonic_PCA_dict(self, **params):
+  def generate_baryonic_PCA(self, **params_values):
 
-    inv_cov_L_cholesky =
-      np.linalg.inv(p.linalg.cholesky(ci.get_covariance_masked_reduced_dim()))
+    inv_cov_L_cholesky = np.linalg.inv(
+      np.linalg.cholesky(ci.get_covariance_masked_reduced_dim()))
 
-    ndata_points = ci.get_nreduced_dim()
+    ndata_reduced = ci.get_nreduced_dim()
 
-    nbaryons_scenario = ci.nbaryons_scenario()
+    nbaryons_scenario = ci.get_baryon_pca_nscenarios()
 
-    modelv_dmo = compute_dm_datavector_masked_reduced_dim(params)
+    modelv_dmo = self.compute_dm_datavector_masked_reduced_dim(**params_values)
 
-    baryon_ratio = np.zeros((ndata_points, nbaryons_scenario))
+    baryon_ratio = np.zeros(shape=(ndata_reduced, nbaryons_scenario))
 
     for i in range(nbaryons_scenario):
-      modelv_bary = compute_barion_datavector_masked_reduced_dim(i, params)
+      scenario = ci.get_baryon_pca_scenario_name(i)
 
-      baryon_ratio.T[i] = modelv_bary/modelv_dmo
+      modelv_bary = self.compute_barion_datavector_masked_reduced_dim(scenario,
+        **params_values)
+
+      baryon_ratio[:,i] = (modelv_bary/modelv_dmo)[:,0]
 
     baryon_ratio -= 1.
 
-    baryon_diff = (baryon_ratio.T*modelv_dmo - modelv_dmo).T
+    baryon_diff = (baryon_ratio*modelv_dmo - modelv_dmo)
 
     baryon_weighted_diff = np.dot(inv_cov_L_cholesky, baryon_diff)
 
     U, Sdig, VT = np.linalg.svd(baryon_weighted_diff, full_matrices=True)
 
-    PCs = {}
-    for i in range(nbaryons_scenario):
-      PCs[i] = U.T[i]
+    PCs = np.empty(shape=(ndata_reduced, nbaryons_scenario))
 
-    return PCs
+    for i in range(nbaryons_scenario):
+      PCs[:,i] = U.T[i]
+
+    ndata = ci.get_ndim()
+    PCS_FINAL = np.empty(shape=(ndata, nbaryons_scenario))
+
+    # Now we need to expand the number of dimensions
+    for i in range(nbaryons_scenario):
+      PCS_FINAL[:,i] = ci.get_expand_dim_from_masked_reduced_dim(PCs[:,i])[:,0]
+
+    np.savetxt(self.filename_baryon_pca, PCS_FINAL)

@@ -2,8 +2,11 @@ path: null
 data_file: DES_Y3.dataset
 acc: 1
 speed: 1
+
 print_intermediate_products: False
+
 use_baryonic_simulations: False
 which_baryonic_simulations: TNG100
+
 
 params: !defaults [params_des_3x2pt]

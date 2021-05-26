@@ -76,7 +76,8 @@ public:
   double get_inverse_covariance_masked(const int ci, const int cj) const;
 
   arma::Mat<double> get_inverse_covariance_masked_reduced_dim() const;
-  double get_inverse_covariance_masked_reduced_dim(const int ci, const int cj) const;
+  double get_inverse_covariance_masked_reduced_dim(const int ci,
+    const int cj) const;
 
   double get_chi2(std::vector<double> datavector) const;
 
@@ -85,6 +86,9 @@ public:
   bool is_data_set() const;
 
   bool is_inv_cov_set() const;
+
+  arma::Col<double> get_expand_dim_from_masked_reduced_dim(
+    arma::Col<double> reduced_dim_vector) const;
 
 private:
   bool is_mask_set_ = false;
