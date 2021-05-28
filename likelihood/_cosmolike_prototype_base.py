@@ -166,7 +166,16 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     if self.create_baryon_pca:
       ci.init_baryon_pca_scenarios(self.baryon_pca_select_simulations)
+      self.use_baryon_pca = False
+    else:
+      if ini.string('baryon_pca_file'):
+        baryon_pca_file = ini.relativeFileName('baryon_pca_file')
+        self.baryon_pcs = np.loadtxt(baryon_pca_file)
+        self.use_baryon_pca = True
+      else:
+        self.use_baryon_pca = False
 
+    self.baryon_pcs_qs = np.zeros(4)
     # ------------------------------------------------------------------------
 
     self.do_cache_lnPL = np.zeros(
@@ -376,6 +385,20 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
   # ------------------------------------------------------------------------
   # --------------------------- baryonic PCAs ------------------------------
   # ------------------------------------------------------------------------
+
+  def set_baryon_related(self, **params_values):
+    self.baryon_pcs_qs[0] = params_values.get("DES_BARYON_Q1", None)
+    self.baryon_pcs_qs[1] = params_values.get("DES_BARYON_Q2", None)
+    self.baryon_pcs_qs[2] = params_values.get("DES_BARYON_Q3", None)
+    self.baryon_pcs_qs[3] = params_values.get("DES_BARYON_Q4", None)
+    
+
+  
+  def add_baryon_pcs_to_datavector(self, datavector):    
+   return datavector[:] + self.baryon_pcs_qs[0]*self.baryon_pcs[:,0] \
+      + self.baryon_pcs_qs[1]*self.baryon_pcs[:,1] \
+      + self.baryon_pcs_qs[2]*self.baryon_pcs[:,2] \
+      + self.baryon_pcs_qs[3]*self.baryon_pcs[:,3]
 
   def compute_dm_datavector_masked_reduced_dim(self, **params_values):
     self.force_cache_false = True

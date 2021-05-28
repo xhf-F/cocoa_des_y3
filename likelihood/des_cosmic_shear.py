@@ -23,4 +23,11 @@ class des_cosmic_shear(_cosmolike_prototype_base):
 
     datavector = ci.compute_data_vector_masked()
 
+    if self.use_baryon_pca:
+      # Warning: we assume the PCs were created with the same mask
+      # We have no way of testing user enforced that
+      self.set_baryon_related(**params_values)
+
+      datavector = self.add_baryon_pcs_to_datavector(datavector)
+
     return self.compute_logp(datavector)
