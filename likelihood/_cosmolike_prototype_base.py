@@ -435,28 +435,24 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
   def generate_baryonic_PCA(self, **params_values):
 
-    inv_cov_L_cholesky = np.linalg.inv(
-      np.linalg.cholesky(ci.get_covariance_masked_reduced_dim()))
+    inv_cov_L_cholesky = np.linalg.inv(np.linalg.cholesky(
+      ci.get_covariance_masked_reduced_dim()))
 
     ndata_reduced = ci.get_nreduced_dim()
 
     nbaryons_scenario = ci.get_baryon_pca_nscenarios()
 
-    modelv_dmo = self.compute_dm_datavector_masked_reduced_dim(**params_values)
+    modelv_dm = self.compute_dm_datavector_masked_reduced_dim(**params_values)
 
-    baryon_ratio = np.zeros(shape=(ndata_reduced, nbaryons_scenario))
+    baryon_diff = np.zeros(shape=(ndata_reduced, nbaryons_scenario))
 
     for i in range(nbaryons_scenario):
       scenario = ci.get_baryon_pca_scenario_name(i)
 
-      modelv_bary = self.compute_barion_datavector_masked_reduced_dim(scenario,
-        **params_values)
+      modelv_baryon = self.compute_barion_datavector_masked_reduced_dim(
+        scenario, **params_values)
 
-      baryon_ratio[:,i] = (modelv_bary/modelv_dmo)[:,0]
-
-    baryon_ratio -= 1.
-
-    baryon_diff = (baryon_ratio*modelv_dmo - modelv_dmo)
+      baryon_diff[:,i] = (modelv_baryon-modelv_dm)[:,0]
 
     baryon_weighted_diff = np.dot(inv_cov_L_cholesky, baryon_diff)
 
@@ -465,7 +461,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     PCs = np.empty(shape=(ndata_reduced, nbaryons_scenario))
 
     for i in range(nbaryons_scenario):
-      PCs[:,i] = U.T[i]
+      PCs[:,i] = U[:,i]
 
     ndata = ci.get_ndim()
     PCS_FINAL = np.empty(shape=(ndata, nbaryons_scenario))
