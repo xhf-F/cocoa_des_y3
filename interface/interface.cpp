@@ -83,7 +83,8 @@ void cpp_initial_setup() {
   spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "initial_setup");
 }
 
-void cpp_init_probes(std::string possible_probes) {
+void cpp_init_probes(std::string possible_probes)
+{
   spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_probes");
 
   if (possible_probes.compare("xi") == 0) { // cosmolike c interface
@@ -194,6 +195,10 @@ const std::string which_baryonic_simulations_contamination)
       "which_baryonic_simulations_contamination",
        which_baryonic_simulations_contamination
     );
+  }
+  else
+  {
+    reset_bary_struct();
   }
 
   spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_baryons_contamination");

@@ -14,12 +14,16 @@ class des_cosmic_shear(_cosmolike_prototype_base):
   # ------------------------------------------------------------------------
 
   def logp(self, **params_values):
-    self.set_cosmo_related()
-
-    self.set_source_related(**params_values)
-
     if self.create_baryon_pca:
       self.generate_baryonic_PCA(**params_values)
+      self.force_cache_false = True
+
+    self.set_cosmo_related()
+
+    if self.create_baryon_pca:
+      self.force_cache_false = False
+
+    self.set_source_related(**params_values)
 
     datavector = ci.compute_data_vector_masked()
 

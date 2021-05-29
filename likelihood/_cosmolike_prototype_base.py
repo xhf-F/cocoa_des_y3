@@ -403,6 +403,8 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
   def compute_dm_datavector_masked_reduced_dim(self, **params_values):
     self.force_cache_false = True
 
+    ci.init_baryons_contamination(False, "")
+
     self.set_cosmo_related()
 
     self.force_cache_false = False
@@ -447,10 +449,8 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     baryon_diff = np.zeros(shape=(ndata_reduced, nbaryons_scenario))
 
     for i in range(nbaryons_scenario):
-      scenario = ci.get_baryon_pca_scenario_name(i)
-
       modelv_baryon = self.compute_barion_datavector_masked_reduced_dim(
-        scenario, **params_values)
+        ci.get_baryon_pca_scenario_name(i), **params_values)
 
       baryon_diff[:,i] = (modelv_baryon-modelv_dm)[:,0]
 
@@ -458,16 +458,22 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     U, Sdig, VT = np.linalg.svd(baryon_weighted_diff, full_matrices=True)
 
+    # MAKE SURE WHATEVER VERSION OF NP HAVE U IN THE RIGHT ORDER
+    if(np.all(np.diff(Sdig) <= 0) != True):
+      raise LoggedError(self.log, "LOGICAL ERROR WITH NUMPY FUNCTION GEN PCA")
+
     PCs = np.empty(shape=(ndata_reduced, nbaryons_scenario))
 
     for i in range(nbaryons_scenario):
       PCs[:,i] = U[:,i]
 
+    # Now we need to expand the number of dimensions
     ndata = ci.get_ndim()
     PCS_FINAL = np.empty(shape=(ndata, nbaryons_scenario))
 
-    # Now we need to expand the number of dimensions
     for i in range(nbaryons_scenario):
       PCS_FINAL[:,i] = ci.get_expand_dim_from_masked_reduced_dim(PCs[:,i])[:,0]
 
     np.savetxt(self.filename_baryon_pca, PCS_FINAL)
+
+    ci.init_baryons_contamination(False,"")
