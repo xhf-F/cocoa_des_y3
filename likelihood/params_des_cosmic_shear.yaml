@@ -6,45 +6,45 @@
     prior:
       dist: norm
       loc: 0.0
-      scale: 0.018
+      scale: 0.005
     ref:
       dist: norm
       loc: 0.0
-      scale: 0.036
-    proposal: 0.018
+      scale: 0.005
+    proposal: 0.005
     latex: \Delta z_\mathrm{s,DES}^1
   DES_DZ_S2:
     prior:
       dist: norm
       loc: 0.0
-      scale: 0.013
+      scale: 0.005
     ref:
       dist: norm
       loc: 0.0
-      scale: 0.03
-    proposal: 0.015
+      scale: 0.005
+    proposal: 0.005
     latex: \Delta z_\mathrm{s,DES}^2
   DES_DZ_S3:
     prior:
       dist: norm
       loc: 0.0
-      scale: 0.006
+      scale: 0.005
     ref:
       dist: norm
       loc: 0.0
-      scale: 0.022
-    proposal: 0.011
+      scale: 0.005
+    proposal: 0.005
     latex: \Delta z_\mathrm{s,DES}^3
   DES_DZ_S4:
     prior:
       dist: norm
       loc: 0.0
-      scale: 0.013
+      scale: 0.005
     ref:
       dist: norm
       loc: 0.0
-      scale: 0.034
-    proposal: 0.017
+      scale: 0.005
+    proposal: 0.005
     latex: \Delta z_\mathrm{s,DES}^4
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
@@ -134,79 +134,60 @@
   DES_M1:
     prior:
       dist: norm
-      loc: -0.0063
-      scale: 0.0091
+      loc: 0.0
+      scale: 0.005
     ref:
       dist: norm
-      loc: -0.0063
-      scale: 0.0182
-    proposal: 0.0091
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
     latex: m_\mathrm{DES}^1
   DES_M2:
     prior:
       dist: norm
-      loc: -0.0198
-      scale: 0.0078
+      loc: 0.0
+      scale: 0.005
     ref:
       dist: norm
-      loc: -0.0198
-      scale: 0.0156
-    proposal: 0.0078
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
     latex: m_\mathrm{DES}^2
   DES_M3:
     prior:
       dist: norm
-      loc: -0.0241
-      scale: 0.0076
+      loc: 0.0
+      scale: 0.005
     ref:
       dist: norm
-      loc: -0.0241
-      scale: 0.0156
-    proposal: 0.0076
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
     latex: m_\mathrm{DES}^3
   DES_M4:
     prior:
       dist: norm
-      loc: -0.0369
-      scale: 0.0076
+      loc: 0.0
+      scale: 0.005
     ref:
       dist: norm
-      loc: -0.0369
-      scale: 0.0152
-    proposal: 0.0076
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
     latex: m_\mathrm{DES}^4
-  # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------
-  # ------------------------------------------------------------------------
-  # Point Mass parameters
-  DES_PM1:
-    value: 0.0
-    latex: PM_\mathrm{DES}^1
-  DES_PM2:
-    value: 0.0
-    latex: PM_\mathrm{DES}^2
-  DES_PM3:
-    value: 0.0
-    latex: PM_\mathrm{DES}^3
-  DES_PM4:
-    value: 0.0
-    latex: PM_\mathrm{DES}^4
-  DES_PM5:
-    value: 0.0
-    latex: PM_\mathrm{DES}^5
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
   # WL photo-z errors
   DES_BARYON_Q1:
     value: 0.0
-    latex: PM_\mathrm{DES}^1
+    latex: BQ1_\mathrm{DES}^1
   DES_BARYON_Q2:
     value: 0.0
-    latex: PM_\mathrm{DES}^2
+    latex: BQ2_\mathrm{DES}^2
   DES_BARYON_Q3:
     value: 0.0
-    latex: PM_\mathrm{DES}^3
+    latex: BQ3_\mathrm{DES}^3
   DES_BARYON_Q4:
     value: 0.0
-    latex: PM_\mathrm{DES}^4
+    latex: BQ4_\mathrm{DES}^4

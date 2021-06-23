@@ -1,5 +1,6 @@
 from cobaya.likelihoods.des_y3._cosmolike_prototype_base import _cosmolike_prototype_base
 import cosmolike_des_y3_interface as ci
+import numpy as np
 
 class des_cosmic_shear(_cosmolike_prototype_base):
   # ------------------------------------------------------------------------
@@ -14,6 +15,7 @@ class des_cosmic_shear(_cosmolike_prototype_base):
   # ------------------------------------------------------------------------
 
   def logp(self, **params_values):
+
     if self.create_baryon_pca:
       self.generate_baryonic_PCA(**params_values)
       self.force_cache_false = True
@@ -25,13 +27,13 @@ class des_cosmic_shear(_cosmolike_prototype_base):
 
     self.set_source_related(**params_values)
 
-    datavector = ci.compute_data_vector_masked()
+    # datavector C++ returns a list (not numpy array)
+    datavector = np.array(ci.compute_data_vector_masked())
 
     if self.use_baryon_pca:
       # Warning: we assume the PCs were created with the same mask
       # We have no way of testing user enforced that
       self.set_baryon_related(**params_values)
-
       datavector = self.add_baryon_pcs_to_datavector(datavector)
 
     return self.compute_logp(datavector)

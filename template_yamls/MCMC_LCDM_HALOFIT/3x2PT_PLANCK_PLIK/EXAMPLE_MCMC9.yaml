@@ -166,6 +166,7 @@ params:
     value: 0.0
     latex: \Omega_k
 
+
 theory:
   camb:
     path: ./external_modules/code/CAMB

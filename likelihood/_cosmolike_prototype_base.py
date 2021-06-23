@@ -392,15 +392,14 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     self.baryon_pcs_qs[2] = params_values.get("DES_BARYON_Q3", None)
     self.baryon_pcs_qs[3] = params_values.get("DES_BARYON_Q4", None)
     
-
-  
   def add_baryon_pcs_to_datavector(self, datavector):    
-   return datavector[:] + self.baryon_pcs_qs[0]*self.baryon_pcs[:,0] \
+    return datavector[:] + self.baryon_pcs_qs[0]*self.baryon_pcs[:,0] \
       + self.baryon_pcs_qs[1]*self.baryon_pcs[:,1] \
       + self.baryon_pcs_qs[2]*self.baryon_pcs[:,2] \
       + self.baryon_pcs_qs[3]*self.baryon_pcs[:,3]
 
   def compute_dm_datavector_masked_reduced_dim(self, **params_values):
+
     self.force_cache_false = True
 
     ci.init_baryons_contamination(False, "")
@@ -415,10 +414,12 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     if (self.probe != "wtheta"):
       self.set_source_related(**params_values)
 
-    return ci.compute_data_vector_masked_reduced_dim()
+    # datavector C++ returns a list (not numpy array)
+    return np.array(ci.compute_data_vector_masked_reduced_dim())
 
   # Hack to create baryonic PCAs
   def compute_barion_datavector_masked_reduced_dim(self, sim, **params_values):
+
     self.force_cache_false = True
 
     ci.init_baryons_contamination(True, sim)
@@ -433,12 +434,15 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     if (self.probe != "wtheta"):
       self.set_source_related(**params_values)
 
-    return ci.compute_data_vector_masked_reduced_dim()
+    # datavector C++ returns a list (not numpy array)
+    return np.array(ci.compute_data_vector_masked_reduced_dim())
 
   def generate_baryonic_PCA(self, **params_values):
 
-    inv_cov_L_cholesky = np.linalg.inv(np.linalg.cholesky(
-      ci.get_covariance_masked_reduced_dim()))
+    cov_L_cholesky = np.linalg.cholesky(
+      ci.get_covariance_masked_reduced_dim())
+
+    inv_cov_L_cholesky = np.linalg.inv(cov_L_cholesky)
 
     ndata_reduced = ci.get_nreduced_dim()
 
@@ -452,7 +456,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
       modelv_baryon = self.compute_barion_datavector_masked_reduced_dim(
         ci.get_baryon_pca_scenario_name(i), **params_values)
 
-      baryon_diff[:,i] = (modelv_baryon-modelv_dm)[:,0]
+      baryon_diff[:,i] = (modelv_baryon-modelv_dm)
 
     baryon_weighted_diff = np.dot(inv_cov_L_cholesky, baryon_diff)
 
@@ -467,12 +471,14 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     for i in range(nbaryons_scenario):
       PCs[:,i] = U[:,i]
 
+    PCs = np.dot(cov_L_cholesky, PCs)
+
     # Now we need to expand the number of dimensions
     ndata = ci.get_ndim()
     PCS_FINAL = np.empty(shape=(ndata, nbaryons_scenario))
 
     for i in range(nbaryons_scenario):
-      PCS_FINAL[:,i] = ci.get_expand_dim_from_masked_reduced_dim(PCs[:,i])[:,0]
+      PCS_FINAL[:,i] = ci.get_expand_dim_from_masked_reduced_dim(PCs[:,i])
 
     np.savetxt(self.filename_baryon_pca, PCS_FINAL)
 
