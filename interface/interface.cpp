@@ -272,8 +272,7 @@ const double theta_max_arcmin)
   spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_binning");
 }
 
-void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo,
-const double ggl_cut)
+void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo, const double ggl_cut)
 {
   spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_lens_sample");
 
@@ -303,8 +302,7 @@ const double ggl_cut)
     exit(1);
   }
 
-  memcpy(redshift.clustering_REDSHIFT_FILE, multihisto_file.c_str(),
-    multihisto_file.size()+1);
+  memcpy(redshift.clustering_REDSHIFT_FILE, multihisto_file.c_str(), multihisto_file.size()+1);
 
   redshift.clustering_photoz = 4;
   tomo.clustering_Nbin = Ntomo;
@@ -343,7 +341,6 @@ const double ggl_cut)
     spdlog::debug("\x1b[90m{}\x1b[0m: tomo.ggl_Npowerspectra = {}",
       "init_lens_sample", tomo.ggl_Npowerspectra);
   }
-
   spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_lens_sample");
 }
 
@@ -372,17 +369,16 @@ void cpp_init_source_sample(std::string multihisto_file, const int Ntomo)
   }
 
   // convert std::string to char*
-  memcpy(redshift.shear_REDSHIFT_FILE, multihisto_file.c_str(),
-    multihisto_file.size()+1);
+  memcpy(redshift.shear_REDSHIFT_FILE, multihisto_file.c_str(), multihisto_file.size() + 1);
 
   redshift.shear_photoz = 4;
   tomo.shear_Nbin = Ntomo;
   tomo.shear_Npowerspectra = tomo.shear_Nbin * (tomo.shear_Nbin + 1) / 2;
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: tomo.shear_Npowerspectra = {}",
+  spdlog::debug("\x1b[90m{}\x1b[0m: tomo.shear_Npowerspectra = {}", 
     "init_source_sample", tomo.shear_Npowerspectra);
 
-  for (int i = 0; i < tomo.shear_Nbin; i++)
+  for (int i=0; i<tomo.shear_Nbin; i++)
   {
     nuisance.bias_zphot_shear[i] = 0.0;
 
@@ -559,8 +555,7 @@ void cpp_init_growth(std::vector<double> io_z, std::vector<double> io_G)
     }
     if (debug_fail)
     {
-      spdlog::critical(
-        "\x1b[90m{}\x1b[0m: incompatible input w/ z.size = {} and G.size = {}",
+      spdlog::critical("\x1b[90m{}\x1b[0m: incompatible input w/ z.size = {} and G.size = {}",
         "init_growth", io_z.size(), io_G.size());
       exit(1);
     }
@@ -653,6 +648,7 @@ void cpp_init_baryon_pca_scenarios(std::string scenarios)
 
   return;
 }
+
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -1001,7 +997,7 @@ std::vector<double> reduced_dim_vector)
     arma::Col<double>(reduced_dim_vector));
 
   std::vector<double> result(tmp.n_elem, 0.0);
-  for(int i=0; i<tmp.n_elem; i++)
+  for(int i=0; i<static_cast<int>(tmp.n_elem); i++)
   {
     result[i] = tmp(i);
   }
@@ -1315,7 +1311,7 @@ std::vector<double> ima::convert_arma_col_to_stl_vector(arma::Col<double> in)
 {
   std::vector<double> out(in.n_elem, 0.0);
 
-  for(int i=0; i<in.n_elem; i++)
+  for(int i=0; i<static_cast<int>(in.n_elem); i++)
   {
     out[i] = in(i);
   }
@@ -1366,8 +1362,7 @@ void ima::RealData::set_mask(std::string MASK)
   }
   if (like.pos_pos == 0)
   {
-    const int N = like.Ntheta*(2*tomo.shear_Npowerspectra +
-      tomo.ggl_Npowerspectra);
+    const int N = like.Ntheta*(2*tomo.shear_Npowerspectra + tomo.ggl_Npowerspectra);
     const int M = N + like.Ntheta*tomo.clustering_Npowerspectra;
     for (int i=N; i<M; i++)
     {
@@ -1823,7 +1818,7 @@ bool ima::RealData::is_inv_cov_set() const
 arma::Col<double> ima::RealData::get_expand_dim_from_masked_reduced_dim(
 arma::Col<double> reduced_dim_vector) const
 {
-  if (this->ndata_masked_ != reduced_dim_vector.n_elem)
+  if (this->ndata_masked_ != static_cast<int>(reduced_dim_vector.n_elem))
   {
     spdlog::critical("\x1b[90m{}\x1b[0m: {} invalid input vector",
       "get_expand_dim_from_masked_reduced_dim"

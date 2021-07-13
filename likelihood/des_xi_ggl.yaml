@@ -5,8 +5,8 @@ speed: 2
 
 print_intermediate_products: False
 
-use_baryonic_simulations: False
-which_baryonic_simulations: TNG100
+use_baryonic_simulations_for_dv_contamination: False
+which_baryonic_simulations_for_dv_contamination: TNG100
 
 create_baryon_pca: False
 baryon_pca_select_simulations: TNG100/HzAGN/mb2/illustris/eagle/owls_AGN_T80/owls_AGN_T85/owls_AGN_T87/BAHAMAS_T76/BAHAMAS_T78/BAHAMAS_T80

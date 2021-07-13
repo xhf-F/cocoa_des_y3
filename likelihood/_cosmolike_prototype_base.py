@@ -112,8 +112,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     self.z_interp_1D[0] = 0
 
     self.z_interp_2D = np.linspace(0,2.0,100)
-    self.z_interp_2D = np.concatenate((self.z_interp_2D,
-      np.linspace(2.0,10.1,50)),axis=0)
+    self.z_interp_2D = np.concatenate((self.z_interp_2D, np.linspace(2.0,10.1,50)),axis=0)
     self.z_interp_2D[0] = 0
 
     self.len_z_interp_2D = len(self.z_interp_2D)
@@ -137,11 +136,8 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     ci.init_cosmo_runmode(is_linear=False)
 
     # to set lens tomo bins, we need a default \chi(z)
-    ci.set_cosmological_parameters(
-      omega_matter = default_omega_matter,
-      hubble = default_hubble,
-      is_cached = False
-    )
+    ci.set_cosmological_parameters(omega_matter = default_omega_matter,
+      hubble = default_hubble, is_cached = False)
 
     # convert chi to Mpc/h
     ci.init_distances(default_z, default_chi*default_hubble/100.0)
