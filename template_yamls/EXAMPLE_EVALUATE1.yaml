@@ -137,8 +137,8 @@ theory:
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.0
-      lens_potential_accuracy: 1.0
+      AccuracyBoost: 1.15
+      lens_potential_accuracy: 1.15
       num_massive_neutrinos: 1
       nnu: 3.046
       dark_energy_model: ppf
@@ -171,4 +171,4 @@ sampler:
       w: -0.9
       wa: 0.0
 
-output: ./projects/kids/chains/EXAMPLE_EVALUATE1
+output: ./projects/des_y3/chains/EXAMPLE_EVALUATE1
