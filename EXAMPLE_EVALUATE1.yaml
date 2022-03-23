@@ -5,12 +5,8 @@ stop_at_error: True
 likelihood:
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
-    data_file: DES_Y3.dataset
-    use_baryonic_simulations_for_dv_contamination: False
-    which_baryonic_simulations_for_dv_contamination: TNG100
-    create_baryon_pca: False
-    baryon_pca_select_simulations: TNG100/HzAGN/mb2/illustris/eagle/owls_AGN_T80/owls_AGN_T85/owls_AGN_T87/BAHAMAS_T76/BAHAMAS_T78/BAHAMAS_T80
-    filename_baryon_pca: "./project/des_y3"
+    print_datavector: False
+    print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
 
 params:
   As_1e9:
@@ -22,7 +18,7 @@ params:
       loc: 2.1
       scale: 0.65
     proposal: 0.4
-    latex: 10^9 A_\mathrm{s})
+    latex: 10^9 A_\mathrm{s}
     drop: true
     renames: A
   As:
@@ -79,10 +75,21 @@ params:
       loc: 0.25
       scale: 0.1
     proposal: 0.05
+  w0pwa:
+    prior:
+      min: -5 
+      max: -0.01
+    ref:
+      dist: norm
+      loc: -0.99
+      scale: 0.05
+    proposal: 0.05
+    latex: w_{0,\mathrm{DE}}+w_{a,\mathrm{DE}}
+    drop: true
   w:
     prior:
       min: -3
-      max: 1
+      max: -0.01
     ref:
       dist: norm
       loc: -0.99
@@ -90,197 +97,8 @@ params:
     proposal: 0.05
     latex: w_{0,\mathrm{DE}}
   wa:
-    prior:
-      min: -3
-      max: 2
-    ref:
-      dist: norm
-      loc: 0
-      scale: 0.35
-    proposal: 0.2
+    value: 'lambda w0pwa, w: w0pwa - w'
     latex: w_{a,\mathrm{DE}}
-  # ------------------------------------------------------------------------
-  # WL photo-z errors
-  DES_DZ_S1:
-    prior:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    ref:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    proposal: 0.005
-    latex: \Delta z_\mathrm{s,DES}^1
-  DES_DZ_S2:
-    prior:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    ref:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    proposal: 0.005
-    latex: \Delta z_\mathrm{s,DES}^2
-  DES_DZ_S3:
-    prior:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    ref:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    proposal: 0.005
-    latex: \Delta z_\mathrm{s,DES}^3
-  DES_DZ_S4:
-    prior:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    ref:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    proposal: 0.005
-    latex: \Delta z_\mathrm{s,DES}^4
-  # ------------------------------------------------------------------------
-  # Intrinsic alignment
-  DES_A1_1:
-    prior:
-      min: -5
-      max:  5
-    ref:
-      dist: norm
-      loc: 0.7
-      scale: 0.5
-    proposal: 0.5
-    latex: A_\mathrm{1-IA,DES}^1
-  DES_A1_2:
-    prior:
-      min: -5
-      max:  5
-    ref:
-      dist: norm
-      loc: -1.7
-      scale: 0.5
-    proposal: 0.5
-    latex: A_\mathrm{1-IA,DES}^2
-  DES_A1_3:
-    value: 0
-    latex: A_\mathrm{1-IA,DES}^3
-  DES_A1_4:
-    value: 0
-    latex: A_\mathrm{1-IA,DES}^4
-  # ------------------------------------------------------------------------
-  DES_A2_1:
-    prior:
-      min: -5
-      max:  5
-    ref:
-      dist: norm
-      loc: -1.36
-      scale: 0.5
-    proposal: 0.5
-    latex: A_\mathrm{2-IA,DES}^1
-  DES_A2_2:
-    prior:
-      min: -5
-      max:  5
-    ref:
-      dist: norm
-      loc: -2.5
-      scale: 0.5
-    proposal: 0.5
-    latex: A_\mathrm{2-IA,DES}^2
-  DES_A2_3:
-    value: 0
-    latex: A_\mathrm{2-IA,DES}^3
-  DES_A2_4:
-    value: 0
-    latex: A_\mathrm{2-IA,DES}^4
-  # ------------------------------------------------------------------------
-  DES_BTA_1:
-    prior:
-      min: 0
-      max: 2
-    ref:
-      dist: norm
-      loc: 1
-      scale: 0.15
-    proposal: 0.1
-    latex: A_\mathrm{BTA-IA,DES}^1
-  DES_BTA_2:
-    value: 0
-    latex: A_\mathrm{BTA-IA,DES}^2
-  DES_BTA_3:
-    value: 0
-    latex: A_\mathrm{BTA-IA,DES}^3
-  DES_BTA_4:
-    value: 0
-    latex: A_\mathrm{BTA-IA,DES}^4
-  # ------------------------------------------------------------------------
-  # Shear calibration parameters
-  DES_M1:
-    prior:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    ref:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    proposal: 0.005
-    latex: m_\mathrm{DES}^1
-  DES_M2:
-    prior:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    ref:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    proposal: 0.005
-    latex: m_\mathrm{DES}^2
-  DES_M3:
-    prior:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    ref:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    proposal: 0.005
-    latex: m_\mathrm{DES}^3
-  DES_M4:
-    prior:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    ref:
-      dist: norm
-      loc: 0.0
-      scale: 0.005
-    proposal: 0.005
-    latex: m_\mathrm{DES}^4
-  # ------------------------------------------------------------------------
-  # BARYON PCA
-  DES_BARYON_Q1:
-    value: 0.0
-    latex: BQ1_\mathrm{DES}^1
-  DES_BARYON_Q2:
-    value: 0.0
-    latex: BQ2_\mathrm{DES}^2
-  DES_BARYON_Q3:
-    value: 0.0
-    latex: BQ3_\mathrm{DES}^3
-  DES_BARYON_Q4:
-    value: 0.0
-    latex: BQ4_\mathrm{DES}^4
-  # ------------------------------------------------------------------------
   omegabh2:
     value: 'lambda omegab, H0: omegab*(H0/100)**2'
     latex: \Omega_\mathrm{b} h^2
@@ -290,38 +108,18 @@ params:
   tau:
     value: 0.0697186
     latex: \tau_\mathrm{reio}
-  omegal:
-    latex: \Omega_\Lambda
-  omegamh2:
-    derived: 'lambda omegam, H0: omegam*(H0/100)**2'
-    latex: \Omega_\mathrm{m} h^2
   sigma8:
     latex: \sigma_8
-  s8h5:
-    derived: 'lambda sigma8, H0: sigma8*(H0*1e-2)**(-0.5)'
-    latex: \sigma_8/h^{0.5}
-  s8omegamp5:
-    derived: 'lambda sigma8, omegam: sigma8*omegam**0.5'
-    latex: \sigma_8 \Omega_\mathrm{m}^{0.5}
-  s8omegamp25:
-    derived: 'lambda sigma8, omegam: sigma8*omegam**0.25'
-    latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
-  age:
-    latex: '{\rm{Age}}/\mathrm{Gyr}'
-  omegan2:
-    latex: \Omega_\mathrm{\\nu} h^2
-  omegan:
-    derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
-    latex: \Omega_\mathrm{\\nu}
+  DES_BARYON_Q1:
+    value: 0.0
 
 theory:
   camb:
     path: ./external_modules/code/CAMB
-    stop_at_error: True
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.1
+      AccuracyBoost: 1.15
       lens_potential_accuracy: 1.1
       num_massive_neutrinos: 1
       nnu: 3.046
@@ -349,10 +147,10 @@ sampler:
       DES_M4: -0.0158096
       DES_A1_1: 0.606102
       DES_A1_2: -1.51541
-      DES_A2_1: -1.73583
-      DES_A2_2: -2.91558
-      DES_BTA_1: 0.930588
+      DES_A2_1: -1.7938938475734911 
+      DES_A2_2: -1.5448080290038528
+      DES_BTA_1: 0.8154011496506723
+      w0pwa: -0.9
       w: -0.9
-      wa: 0.0
 
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE1

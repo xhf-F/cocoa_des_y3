@@ -10,4 +10,4 @@ n_theta = 20
 IA_model = 6
 theta_min_arcmin = 2.5
 theta_max_arcmin = 250.
-baryon_pca_file = pca.txt
+#baryon_pca_file = pca.txt

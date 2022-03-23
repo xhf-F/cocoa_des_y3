@@ -15,7 +15,6 @@ class des_cosmic_shear(_cosmolike_prototype_base):
   # ------------------------------------------------------------------------
 
   def logp(self, **params_values):
-
     if self.create_baryon_pca:
       self.generate_baryonic_PCA(**params_values)
       self.force_cache_false = True
@@ -36,4 +35,13 @@ class des_cosmic_shear(_cosmolike_prototype_base):
       self.set_baryon_related(**params_values)
       datavector = self.add_baryon_pcs_to_datavector(datavector)
 
+    if self.print_datavector:
+      size = len(datavector)
+      out = np.zeros(shape=(size, 2))
+      out[:,0] = np.arange(0, size)
+      out[:,1] = datavector
+      fmt = '%d', '%1.8e'
+      np.savetxt(self.print_datavector_file, out, fmt = fmt)
+      
     return self.compute_logp(datavector)
+    

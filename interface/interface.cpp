@@ -59,6 +59,10 @@ void cpp_initial_setup()
   like.shear_pos = 0;
   like.pos_pos = 0;
 
+  like.gk = 0;
+  like.kk = 0;
+  like.ks = 0;
+  
   // bias
   gbias.b1_function = &b1_per_bin;
 
@@ -84,32 +88,68 @@ void cpp_initial_setup()
     nuisance.b_ta_z[i] = 0.0;
   }
 
+  // use_flat_sky
+  like.use_full_sky_shear = 1;
+  like.use_full_sky_ggl = 1;
+  like.use_full_sky_clustering = 1;
+  like.use_full_sky_gk = 1;
+  like.use_full_sky_sk = 1;
+
+  // nonlimber ?
+  like.adopt_limber_gg = 0;
+  like.adopt_limber_gammat = 1;
+
+  like.high_def_integration = 0;
+
   spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "initial_setup");
+}
+
+void cpp_init_accuracy_boost(const double accuracy_boost, const double sampling_boost,
+const int integration_accuracy)
+{
+  Ntable.N_a = static_cast<int>(ceil(Ntable.N_a*accuracy_boost));
+  Ntable.N_ell_TATT = static_cast<int>(ceil(Ntable.N_ell_TATT*accuracy_boost));
+  
+  Ntable.N_k_lin = static_cast<int>(ceil(Ntable.N_k_lin*sampling_boost));
+  Ntable.N_k_nlin = static_cast<int>(ceil(Ntable.N_k_nlin*sampling_boost));
+  Ntable.N_ell = static_cast<int>(ceil(Ntable.N_ell*sampling_boost));
+  
+  Ntable.N_theta  = static_cast<int>(ceil(Ntable.N_theta*sampling_boost));
+
+  Ntable.N_S2 = static_cast<int>(ceil(Ntable.N_S2*sampling_boost));
+  Ntable.N_DS = static_cast<int>(ceil(Ntable.N_DS*sampling_boost));
+
+  precision.low /= accuracy_boost;
+  precision.medium /= accuracy_boost;
+  precision.high /= accuracy_boost;
+  precision.insane /= accuracy_boost; 
+
+  like.high_def_integration = integration_accuracy;
 }
 
 void cpp_init_probes(std::string possible_probes)
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_probes");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_probes");
 
   if (possible_probes.compare("xi") == 0)
   { // cosmolike c interface
     like.shear_shear = 1;
 
-    spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
+    spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
       "possible_probes", "xi");
   }
   else if (possible_probes.compare("wtheta") == 0)
   {
     like.pos_pos = 1;
 
-    spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
+    spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
       "possible_probes", "wtheta");
   }
   else if (possible_probes.compare("gammat") == 0)
   {
     like.shear_pos = 1;
 
-    spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
+    spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
       "possible_probes", "gammat");
   }
   else if (possible_probes.compare("2x2pt") == 0)
@@ -117,7 +157,7 @@ void cpp_init_probes(std::string possible_probes)
     like.shear_pos = 1;
     like.pos_pos = 1;
 
-    spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
+    spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
       "possible_probes", "2x2pt");
   }
   else if (possible_probes.compare("3x2pt") == 0)
@@ -126,7 +166,7 @@ void cpp_init_probes(std::string possible_probes)
     like.shear_pos = 1;
     like.pos_pos = 1;
 
-    spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
+    spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
       "possible_probes", "3x2pt");
   }
   else if (possible_probes.compare("xi_ggl") == 0)
@@ -134,9 +174,32 @@ void cpp_init_probes(std::string possible_probes)
     like.shear_shear = 1;
     like.shear_pos = 1;
 
-    spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
+    spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
       "possible_probes", "xi + ggl (2x2pt)");
   }
+/*
+  else if (possible_probes.compare("5x2pt") == 0)
+  {
+    like.shear_shear = 1;
+    like.shear_pos = 1;
+    like.pos_pos = 1;
+    like.gk = 1;
+    like.ks = 1;
+    spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
+      "possible_probes", "5x2pt");
+  }
+  else if (possible_probes.compare("6x2pt") == 0)
+  {
+    like.shear_shear = 1;
+    like.shear_pos = 1;
+    like.pos_pos = 1;
+    like.gk = 1;
+    like.ks = 1;
+    like.kk = 1;
+    spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
+       "possible_probes", "6x2pt");
+  }
+*/
   else
   {
     spdlog::critical("\x1b[90m{}\x1b[0m: {} = {} probe not supported",
@@ -144,12 +207,12 @@ void cpp_init_probes(std::string possible_probes)
     exit(1);
   }
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_probes");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_probes");
 }
 
 void cpp_init_survey(std::string surveyname, double area, double sigma_e)
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_survey");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_survey");
 
   if (surveyname.size() > CHAR_MAX_SIZE - 1)
   {
@@ -165,28 +228,28 @@ void cpp_init_survey(std::string surveyname, double area, double sigma_e)
   survey.area = area;
   survey.sigma_e = sigma_e;
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_survey");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_survey");
 }
 
 void cpp_init_cosmo_runmode(const bool is_linear)
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_cosmo_runmode");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_cosmo_runmode");
 
   std::string mode = is_linear ? "linear" : "Halofit";
   const size_t size = mode.size();
   memcpy(pdeltaparams.runmode, mode.c_str(), size + 1);
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected",
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected",
     "init_cosmo_runmode", "runmode", mode);
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_cosmo_runmode");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_cosmo_runmode");
 }
 
 void cpp_init_IA(int N)
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_IA");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_IA");
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_IA", "IA", N);
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_IA", "IA", N);
 
   if (N == 3 || N == 4 || N == 5 || N == 6)
   {
@@ -198,14 +261,30 @@ void cpp_init_IA(int N)
     exit(1);
   }
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_IA");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_IA");
 }
+
+/*
+void cpp_init_cmb(const double lmin_kappa_cmb, const double lmax_kappa_cmb, const double fwhm) 
+{
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_cmb");
+
+  like.lmin_kappacmb = lmin_kappa_cmb;
+  like.lmax_kappacmb = lmax_kappa_cmb;
+
+  // fwhm = beam size in arcmin
+  // cmb.fwhm = beam size in rad
+  cmb.fwhm = fwhm*2.90888208665721580e-4;
+  
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_cmb");
+}
+*/
 
 void cpp_init_baryons_contamination(
 const bool use_baryonic_simulations_contamination,
 const std::string which_baryonic_simulations_contamination)
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_baryons_contamination");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_baryons_contamination");
 
   spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected",
     "init_baryons_contamination", "use_baryonic_simulations",
@@ -224,13 +303,46 @@ const std::string which_baryonic_simulations_contamination)
     reset_bary_struct();
   }
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_baryons_contamination");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_baryons_contamination");
 }
+
+/*
+void cpp_init_binning_fourier(const int Ncl, const double lmin, const double lmax)
+{
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_binning_fourier");
+
+  if (!(Ncl > 0))
+  {
+    spdlog::critical("\x1b[90m{}\x1b[0m: {} = {} not supported", "init_binning", "like.Ncl", Ncl);
+    exit(1);
+  }
+
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_binning", "Ncl", Ncl);
+
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_binning", "l_min", lmin);
+
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_binning", "l_max", lmax);
+
+  like.Ncl = Ncl;
+  like.lmin = lmin;
+  like.lmax = lmax;
+  const double logdl = (std::log(like.lmax) - std::log(like.lmin))/like.Ncl;
+  like.ell = (double*) malloc(sizeof(double)*like.Ncl);
+  for (int i = 0; i < like.Ncl; i++)
+  {
+    like.ell[i] = std::exp(std::log(like.lmin)+(i+0.5)*logdl);
+    spdlog::debug("\x1b[90m{}\x1b[0m: Bin {:d} - {} = {:.4e}, {} = {:.4e} and {} = {:.4e}",
+     "init_binning", i, "lmin", lmin, "ell", like.ell[i], "lmax", lmax);
+  }
+
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_binning_fourier");
+}
+*/
 
 void cpp_init_binning(const int Ntheta, const double theta_min_arcmin,
 const double theta_max_arcmin)
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_binning");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_binning");
 
   if (!(Ntheta > 0))
   {
@@ -239,18 +351,17 @@ const double theta_max_arcmin)
     exit(1);
   }
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected.",
-    "init_binning", "Ntheta", Ntheta);
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_binning", "Ntheta", Ntheta);
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected.",
-    "init_binning", "theta_min_arcmin", theta_min_arcmin);
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_binning", "theta_min_arcmin", 
+    theta_min_arcmin);
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected.",
-    "init_binning", "theta_max_arcmin", theta_max_arcmin);
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_binning", "theta_max_arcmin", 
+    theta_max_arcmin);
 
   like.Ntheta = Ntheta;
-  like.vtmin = theta_min_arcmin * constants.arcmin;
-  like.vtmax = theta_max_arcmin * constants.arcmin;
+  like.vtmin = theta_min_arcmin * 2.90888208665721580e-4; // arcmin to rad conversion
+  like.vtmax = theta_max_arcmin * 2.90888208665721580e-4; // arcmin to rad conversion
   const double logdt = (std::log(like.vtmax)-std::log(like.vtmin))/like.Ntheta;
   like.theta = (double*) calloc(like.Ntheta, sizeof(double));
 
@@ -269,12 +380,12 @@ const double theta_max_arcmin)
       like.theta[i], "theta_max [rad]", thetamax);
   }
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_binning");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_binning");
 }
 
 void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo, const double ggl_cut)
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_lens_sample");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_lens_sample");
 
   if (tomo.shear_Nbin == 0)
   {
@@ -308,10 +419,10 @@ void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo, const do
   tomo.clustering_Nbin = Ntomo;
   tomo.clustering_Npowerspectra = tomo.clustering_Nbin;
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_lens_sample",
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_lens_sample",
     "clustering_REDSHIFT_FILE", multihisto_file);
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_lens_sample",
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_lens_sample",
     "clustering_Nbin", Ntomo);
 
   if (ggl_cut > 0)
@@ -323,7 +434,7 @@ void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo, const do
     survey.ggl_overlap_cut = 0.0;
   }
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_lens_sample",
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_lens_sample",
     "survey.ggl_overlap_cut", survey.ggl_overlap_cut);
 
   pf_photoz(0.1, 0);
@@ -338,15 +449,15 @@ void cpp_init_lens_sample(std::string multihisto_file, const int Ntomo, const do
     }
     tomo.ggl_Npowerspectra = n;
 
-    spdlog::debug("\x1b[90m{}\x1b[0m: tomo.ggl_Npowerspectra = {}",
+    spdlog::info("\x1b[90m{}\x1b[0m: tomo.ggl_Npowerspectra = {}",
       "init_lens_sample", tomo.ggl_Npowerspectra);
   }
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_lens_sample");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_lens_sample");
 }
 
 void cpp_init_source_sample(std::string multihisto_file, const int Ntomo)
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_source_sample");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_source_sample");
 
   if (multihisto_file.size() > CHAR_MAX_SIZE - 1)
   {
@@ -375,7 +486,7 @@ void cpp_init_source_sample(std::string multihisto_file, const int Ntomo)
   tomo.shear_Nbin = Ntomo;
   tomo.shear_Npowerspectra = tomo.shear_Nbin * (tomo.shear_Nbin + 1) / 2;
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: tomo.shear_Npowerspectra = {}", 
+  spdlog::info("\x1b[90m{}\x1b[0m: tomo.shear_Npowerspectra = {}", 
     "init_source_sample", tomo.shear_Npowerspectra);
 
   for (int i=0; i<tomo.shear_Nbin; i++)
@@ -386,33 +497,30 @@ void cpp_init_source_sample(std::string multihisto_file, const int Ntomo)
       "init_source_sample", i, "<z_s>", zmean_source(i));
   }
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_source_sample",
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_source_sample",
     "shear_REDSHIFT_FILE", multihisto_file);
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_source_sample",
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_source_sample",
     "shear_Nbin", Ntomo);
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_source_sample");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_source_sample");
 }
 
 void cpp_init_size_data_vector()
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_size_data_vector");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_size_data_vector");
 
   if (tomo.shear_Nbin == 0)
   {
-    spdlog::critical("{}: {} not set prior to this function call",
+    spdlog::debug("{}: {} not set prior to this function call",
       "init_size_data_vector", "tomo.shear_Nbin");
-    exit(1);
   }
   if (tomo.clustering_Nbin == 0)
   {
-    spdlog::critical("{}: {} not set prior to this function call",
+    spdlog::debug("{}: {} not set prior to this function call",
       "init_size_data_vector", "tomo.clustering_Nbin");
-    exit(1);
   }
-  if (like.Ntheta == 0)
-  {
+  if (like.Ntheta == 0) {
     spdlog::critical("{}: {} not set prior to this function call",
       "init_size_data_vector", "like.Ntheta");
     exit(1);
@@ -421,10 +529,10 @@ void cpp_init_size_data_vector()
   like.Ndata = like.Ntheta*(2*tomo.shear_Npowerspectra +
                         tomo.ggl_Npowerspectra + tomo.clustering_Npowerspectra);
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: {} = {} selected.",
-    "init_size_data_vector", "Ndata", like.Ndata);
+  spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected.", "init_size_data_vector", "Ndata",
+    like.Ndata);
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_size_data_vector");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_size_data_vector");
 }
 
 void cpp_init_linear_power_spectrum(std::vector<double> io_log10k,
@@ -621,30 +729,33 @@ void cpp_init_distances(std::vector<double> io_z, std::vector<double> io_chi)
   return;
 }
 
-void cpp_init_data_real(std::string COV, std::string MASK, std::string DATA)
+void cpp_init_data(std::string COV, std::string MASK, std::string DATA)
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_data_real");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_data");
 
   ima::RealData& instance = ima::RealData::get_instance();
 
   instance.set_mask(MASK); // set_mask must be called first
+  spdlog::info("\x1b[90m{}\x1b[0m: cpp_init_data", "set mask ok");
   instance.set_data(DATA);
+  spdlog::info("\x1b[90m{}\x1b[0m: cpp_init_data", "set data vector ok");
   instance.set_inv_cov(COV);
+  spdlog::info("\x1b[90m{}\x1b[0m: cpp_init_data", "set inv covariance ok");
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_data_real");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_data");
 
   return;
 }
 
 void cpp_init_baryon_pca_scenarios(std::string scenarios)
 {
-  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_baryon_pca_scenarios");
+  spdlog::info("\x1b[90m{}\x1b[0m: Begins", "init_baryon_pca_scenarios");
 
   ima::BaryonScenario& instance = ima::BaryonScenario::get_instance();
 
   instance.set_scenarios(scenarios);
 
-  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_baryon_pca_scenarios");
+  spdlog::info("\x1b[90m{}\x1b[0m: Ends", "init_baryon_pca_scenarios");
 
   return;
 }
@@ -1048,12 +1159,6 @@ std::vector<double> cpp_compute_data_vector_masked()
       "compute_data_vector_masked", "shear_Nbin");
     exit(1);
   }
-  if (tomo.clustering_Nbin == 0)
-  {
-    spdlog::critical("\x1b[90m{}\x1b[0m: {} = 0 is invalid",
-      "compute_data_vector_masked", "clustering_Nbin");
-    exit(1);
-  }
   if (like.Ntheta == 0)
   {
     spdlog::critical("\x1b[90m{}\x1b[0m: {} = 0 is invalid",
@@ -1091,21 +1196,41 @@ std::vector<double> cpp_compute_data_vector_masked()
     {
       const int z1 = Z1(nz);
       const int z2 = Z2(nz);
-      for (int i = 0; i<like.Ntheta; i++)
+      for (int i=0; i<like.Ntheta; i++)
       {
-        if (cpp_get_mask(like.Ntheta*nz+i))
         {
-          data_vector[like.Ntheta*nz+i] =
-            xi_pm_tomo(1, i, z1, z2, 1 /* limber option = 1 -> limber */)*
-            (1.0 + nuisance.shear_calibration_m[z1])*
-            (1.0 + nuisance.shear_calibration_m[z2]);
+          const int index = like.Ntheta*nz + i;
+          if (cpp_get_mask(index))
+          {
+            if(like.use_full_sky_shear == 1)
+            {
+              data_vector[index] = xi_pm_tomo(1, i, z1, z2, 1)*
+                (1.0 + nuisance.shear_calibration_m[z1])*(1.0 + nuisance.shear_calibration_m[z2]);
+            }
+            else
+            {
+              const double theta = like.theta[i];
+              data_vector[index] = xi_pm_tomo_flatsky(1, theta, z1, z2, 1)*
+                (1.0 + nuisance.shear_calibration_m[z1])*(1.0 + nuisance.shear_calibration_m[z2]);
+            }
+          }
         }
-        if (cpp_get_mask(like.Ntheta*(tomo.shear_Npowerspectra+nz)+i))
         {
-          data_vector[like.Ntheta*(tomo.shear_Npowerspectra+nz)+i] =
-            xi_pm_tomo(-1, i, z1, z2, 1 /*limber*/)*
-            (1. + nuisance.shear_calibration_m[z1])*
-            (1. + nuisance.shear_calibration_m[z2]);
+          const int index = like.Ntheta*(tomo.shear_Npowerspectra + nz) + i;
+          if (cpp_get_mask(index))
+          {
+            if(like.use_full_sky_shear == 1)
+            {
+              data_vector[index] = xi_pm_tomo(-1, i, z1, z2, 1)*
+                (1.0 + nuisance.shear_calibration_m[z1])*(1.0 + nuisance.shear_calibration_m[z2]);
+            }
+            else
+            {
+              const double theta = like.theta[i];
+              data_vector[index] = xi_pm_tomo_flatsky(-1, theta, z1, z2, 1)*
+                (1.0 + nuisance.shear_calibration_m[z1])*(1.0 + nuisance.shear_calibration_m[z2]);
+            }
+          }
         }
       }
     }
@@ -1120,12 +1245,20 @@ std::vector<double> cpp_compute_data_vector_masked()
       const int zs = ZS(nz);
       for (int i=0; i<like.Ntheta; i++)
       {
-        if (cpp_get_mask(start+(like.Ntheta*nz)+i))
+        const int index = start + like.Ntheta*nz + i;
+        if (cpp_get_mask(index))
         {
           const double theta = like.theta[i];
-          data_vector[start+(like.Ntheta*nz)+i] = (
-            w_gammat_tomo(i, zl, zs, 1 /* limber option=1 -> limber */) +
-            cpp_compute_pm(zl, zs, theta))*(1.0+nuisance.shear_calibration_m[zs]);
+          if(like.use_full_sky_ggl == 1)
+          {
+            data_vector[index] =  (w_gammat_tomo(i, zl, zs, like.adopt_limber_gammat) + 
+              cpp_compute_pm(zl, zs, theta))*(1.0+nuisance.shear_calibration_m[zs]);
+          }
+          else
+          {
+            data_vector[index] = (w_gammat_tomo_flatsky(theta, zl, zs, like.adopt_limber_gammat) + 
+              cpp_compute_pm(zl, zs, theta))*(1.0+nuisance.shear_calibration_m[zs]);
+          }
         }
       }
     }
@@ -1138,15 +1271,85 @@ std::vector<double> cpp_compute_data_vector_masked()
     {
       for (int i=0; i<like.Ntheta; i++)
       {
-        if (cpp_get_mask(start+(like.Ntheta*nz)+i))
+        const int index = start + like.Ntheta*nz + i;
+        if (cpp_get_mask(index))
         {
-          data_vector[start+(like.Ntheta*nz)+i] =
-            w_gg_tomo(i, nz, nz, 0 /* limber option = 0 -> nonlimber */);
+          if(like.use_full_sky_clustering == 1)
+          {
+            data_vector[index] = w_gg_tomo(i, nz, nz, like.adopt_limber_gg);
+          }
+          else
+          {
+            const double theta = like.theta[i];
+            data_vector[index] = w_gg_tomo_flatsky(theta, nz, nz, like.adopt_limber_gg);
+          }
+        }
+      }
+    }
+  }
+/*
+  start = start + like.Ntheta*tomo.clustering_Npowerspectra;
+  if (like.gk == 1)
+  {
+    for (int nz=0; nz<tomo.clustering_Nbin; nz++)
+    {
+      for (int i=0; i<like.Ntheta; i++) 
+      {
+        const int index = start + like.Ntheta*nz + i;
+        if (cpp_get_mask(index))
+        {
+          if(like.use_full_sky_gk == 1)
+          {
+            data_vector[index] = w_gk_tomo(i, nz, 1);
+          }
+          else
+          {
+            const double theta = like.theta[i];
+            data_vector[index] = w_gk_tomo_flatsky(theta, nz, 1);
+          }
         }
       }
     }
   }
 
+  start = start + like.Ntheta*tomo.clustering_Nbin;
+  if (like.ks == 1) 
+  {
+    for (int nz=0; nz<tomo.shear_Nbin; nz++)
+    {
+      for (int i=0; i<like.Ntheta; i++)
+      {
+        const int index = start + like.Ntheta*nz + i; 
+        if (cpp_get_mask(index))
+        {
+          if(like.use_full_sky_sk == 1)
+          {
+            data_vector[index] = w_ks_tomo(i, nz, 1)*(1.0 + nuisance.shear_calibration_m[nz]);
+          }
+          else
+          {
+            const double theta = like.theta[i];
+            data_vector[index] = 
+              w_ks_tomo_flatsky(theta, nz, 1)*(1.0 + nuisance.shear_calibration_m[nz]);
+          }
+        }
+      }
+    }
+  }
+  
+  start = start + like.Ntheta*tomo.shear_Nbin;
+  if (like.kk == 1)
+  {
+    for (int i=0; i<like.Ncl; i++)
+    {
+      const int index = start + i; 
+      if (cpp_get_mask(index))
+      {
+        data_vector[index] = C_kk_limber(like.ell[i]);
+      }
+    }
+  }
+*/ 
   spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "compute_data_vector_masked");
 
   return data_vector;
@@ -1369,6 +1572,40 @@ void ima::RealData::set_mask(std::string MASK)
       this->mask_(i) = 0;
     }
   }
+/*
+  if (like.gk == 0) 
+  {
+    const int N = like.Ntheta*(2*tomo.shear_Npowerspectra +
+      tomo.ggl_Npowerspectra+tomo.clustering_Npowerspectra);
+    const int M = N + like.Ntheta*tomo.clustering_Nbin;
+    for (int i=N; i<M; i++) 
+    {
+      this->mask_(i) = 0.0;
+    }
+  }
+  if (like.ks == 0) 
+  {
+    const int N = like.Ntheta*(2*tomo.shear_Npowerspectra +
+      tomo.ggl_Npowerspectra+tomo.clustering_Npowerspectra +
+      tomo.clustering_Nbin);
+    const int M = N + like.Ntheta*tomo.shear_Nbin;
+    for (int i=N; i<M; i++) 
+    {
+      this->mask_(i) = 0.0;
+    }
+  }
+  if (like.kk == 0) 
+  {
+    const int N = like.Ntheta*(2*tomo.shear_Npowerspectra +
+      tomo.ggl_Npowerspectra+tomo.clustering_Npowerspectra +
+      tomo.clustering_Nbin+tomo.shear_Nbin);
+    const int M = N + like.Ncl;
+    for (int i=N; i<M; i++) 
+    {
+      this->mask_(i) = 0.0;
+    }
+  }
+*/
 
   this->mask_filename_ = MASK;
   this->ndata_masked_ = arma::accu(this->mask_);
@@ -1944,7 +2181,6 @@ std::string ima::BaryonScenario::get_scenario(const int i) const
 // ---------------------------- PYTHON WRAPPER --------------------------------
 // ----------------------------------------------------------------------------
 
-
 PYBIND11_MODULE(cosmolike_des_y3_interface, m)
 {
   m.doc() = "CosmoLike Interface for DES-Y3 3x2 Module";
@@ -1974,6 +2210,16 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m)
     py::arg("sigma_e")
   );
 
+/*
+  m.def("init_cmb",
+    &cpp_init_cmb,
+    "Init CMB l_max",
+    py::arg("lmin_kappa_cmb"),
+    py::arg("lmax_kappa_cmb"),
+    py::arg("fwhm")
+  );
+*/
+
   m.def("init_cosmo_runmode",
     &cpp_init_cosmo_runmode,
     "Init Run Mode",
@@ -1993,6 +2239,16 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m)
     py::arg("ia_model")
   );
 
+/*
+  m.def("init_binning_fourier",
+    &cpp_init_binning_fourier,
+    "Init Bining related variables (in fourier space)",
+    py::arg("Ncl"),
+    py::arg("l_min"),
+    py::arg("l_max")
+  );
+*/
+  
   m.def("init_binning",
     &cpp_init_binning,
     "Init Bining related variables",
@@ -2001,8 +2257,8 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m)
     py::arg("theta_max_arcmin")
   );
 
-  m.def("init_data_real",
-    &cpp_init_data_real,
+  m.def("init_data",
+    &cpp_init_data,
     "Init covariance, mask and data vector by providing the file names that"
     "hold their values",
     py::arg("COV"),
@@ -2064,6 +2320,14 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m)
     &cpp_init_baryon_pca_scenarios,
     "Init scenario selection to generate baryonic PCA",
     py::arg("scenarios")
+  );
+
+  m.def("init_accuracy_boost",
+    &cpp_init_accuracy_boost,
+    "Init Accuracy and Sampling Boost (can slow down Cosmolike a lot)",
+    py::arg("accuracy_boost"),
+    py::arg("sampling_boost"),
+    py::arg("integration_accuracy")
   );
 
   // --------------------------------------------------------------------

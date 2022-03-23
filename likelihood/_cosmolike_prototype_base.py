@@ -87,15 +87,15 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     self.mask_file = ini.relativeFileName('mask_file')
 
-    self.lens_file = ini.relativeFileName('nz_lens_file')
+    #self.lmax_kappa_cmb = ini.float("lmax_kappa_cmb", default = -1)
 
-    self.source_file = ini.relativeFileName('nz_source_file')
+    #self.lmin_kappa_cmb = ini.float("lmin_kappa_cmb", default = -1)
 
-    self.ggl_olap_cut = ini.float("lensing_overlap_cut")
-
-    self.lens_ntomo = ini.int("lens_ntomo") #5
+    self.lens_ntomo = ini.int("lens_ntomo", default = -1) #5
 
     self.source_ntomo = ini.int("source_ntomo") #4
+
+    self.source_file = ini.relativeFileName('nz_source_file')
 
     self.ntheta = ini.int("n_theta")
 
@@ -109,10 +109,12 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     self.z_interp_1D = np.linspace(0,2.0,1000)
     self.z_interp_1D = np.concatenate((self.z_interp_1D,
       np.linspace(2.0,10.1,200)),axis=0)
+    self.z_interp_1D = np.concatenate((self.z_interp_1D,
+      np.linspace(1080,2000,20)),axis=0) #CMB 6x2pt g_CMB
     self.z_interp_1D[0] = 0
 
     self.z_interp_2D = np.linspace(0,2.0,100)
-    self.z_interp_2D = np.concatenate((self.z_interp_2D, np.linspace(2.0,10.1,50)),axis=0)
+    self.z_interp_2D = np.concatenate((self.z_interp_2D,np.linspace(2.0,10.1,50)),axis=0)
     self.z_interp_2D[0] = 0
 
     self.len_z_interp_2D = len(self.z_interp_2D)
@@ -123,12 +125,13 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     self.k_interp_2D = np.power(10.0,self.log10k_interp_2D)
     self.len_k_interp_2D = len(self.k_interp_2D)
     self.len_pkz_interp_2D = self.len_log10k_interp_2D*self.len_z_interp_2D
-    self.extrap_kmax = 2.5e2 * self.acc
+    self.extrap_kmax = 2.5e2 * self.accuracyboost
 
     # ------------------------------------------------------------------------
 
     ci.initial_setup()
-
+    ci.init_accuracy_boost(self.accuracyboost, self.samplingboost, self.integration_accuracy)
+    
     ci.init_probes(possible_probes=self.probe)
 
     ci.init_binning(self.ntheta, self.theta_min_arcmin, self.theta_max_arcmin)
@@ -146,11 +149,28 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     ci.init_source_sample(self.source_file, self.source_ntomo)
 
-    ci.init_lens_sample(self.lens_file, self.lens_ntomo, self.ggl_olap_cut)
+    if (self.lens_ntomo > 0):
+      self.lens_file = ini.relativeFileName('nz_lens_file')
+      self.ggl_olap_cut = ini.float("lensing_overlap_cut")
+      ci.init_lens_sample(self.lens_file, self.lens_ntomo, self.ggl_olap_cut)
+    else:
+      self.lens_ntomo = 0
+
+    #if (self.lmax_kappa_cmb > 0):
+    #  self.ncl = ini.int("n_cl")
+    #  self.l_min = ini.float("l_min")
+    #  self.l_max = ini.float("l_max")
+    #  self.fwhm  = ini.float("fwhm")
+    #  ci.init_binning_fourier(self.ncl, self.l_min, self.l_max)
+    #  ci.init_cmb(self.lmin_kappa_cmb, self.lmax_kappa_cmb, self.fwhm)
+    #else:
+    #  self.lmax_kappa_cmb = 0
 
     ci.init_size_data_vector()
 
-    ci.init_data_real(self.cov_file, self.mask_file, self.data_vector_file)
+    ci.init_data(self.cov_file, self.mask_file, self.data_vector_file)
+
+    # ------------------------------------------------------------------------
 
     # FOR ALLOWED OPTIONS FOR `which_baryonic_simulations`, SEE BARYONS.C
     # FUNCTION `void init_baryons(char* scenario)`. SIMS INCLUDE
@@ -164,7 +184,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
       ci.init_baryon_pca_scenarios(self.baryon_pca_select_simulations)
       self.use_baryon_pca = False
     else:
-      if ini.string('baryon_pca_file'):
+      if ini.string('baryon_pca_file', default=''):
         baryon_pca_file = ini.relativeFileName('baryon_pca_file')
         self.baryon_pcs = np.loadtxt(baryon_pca_file)
         self.use_baryon_pca = True
@@ -172,6 +192,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
         self.use_baryon_pca = False
 
     self.baryon_pcs_qs = np.zeros(4)
+
     # ------------------------------------------------------------------------
 
     self.do_cache_lnPL = np.zeros(
@@ -194,7 +215,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
       "omegam": None,
       "Pk_interpolator": {
         "z": self.z_interp_2D,
-        "k_max": 20 * self.acc,
+        "k_max": self.kmax_boltzmann * self.accuracyboost,
         "nonlinear": (True,False),
         "vars_pairs": ([("delta_tot", "delta_tot")])
       },
@@ -475,7 +496,6 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     for i in range(nbaryons_scenario):
       PCS_FINAL[:,i] = ci.get_expand_dim_from_masked_reduced_dim(PCs[:,i])
-
     np.savetxt(self.filename_baryon_pca, PCS_FINAL)
 
     ci.init_baryons_contamination(False,"")
