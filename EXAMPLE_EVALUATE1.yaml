@@ -5,6 +5,7 @@ stop_at_error: True
 likelihood:
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
+    data_file: DES_Y3.dataset
     print_datavector: False
     print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
 
