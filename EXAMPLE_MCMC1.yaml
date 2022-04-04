@@ -3,6 +3,13 @@ debug: False
 stop_at_error: False
 
 likelihood:
+  sn.pantheon:
+    path: ./external_modules/data/sn_data
+  planck_2018_highl_plik.TTTEEE:
+    path: ./external_modules/
+    clik_file: plc_3.0/hi_l/plik/plik_rd12_HM_v22b_TTTEEE_35_1296.clik
+  planck_2018_lowl.EE:
+    path: ./external_modules/
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
     data_file: DES_Y3.dataset
@@ -38,8 +45,8 @@ params:
     latex: n_\mathrm{s}
   H0:
     prior:
-      min: 55
-      max: 91
+      min: 60
+      max: 81
     ref:
       dist: norm
       loc: 67.32
@@ -70,6 +77,21 @@ params:
     drop: true
   mnu:
     value: 0.06
+  tau:
+    prior:
+      min: 0.01
+      max: 0.2
+    ref:
+      dist: norm
+      loc: 0.055
+      scale: 0.006
+    proposal: 0.003
+    latex: \tau_\mathrm{reio}
+  omegal:
+    latex: \Omega_\Lambda
+  omegamh2:
+    derived: 'lambda omegam, H0: omegam*(H0/100)**2'
+    latex: \Omega_\mathrm{m} h^2
   omegabh2:
     value: 'lambda omegab, H0: omegab*(H0/100)**2'
     latex: \Omega_\mathrm{b} h^2
@@ -92,11 +114,6 @@ params:
   s8omegamp25:
     derived: 'lambda sigma8, omegam: sigma8*omegam**0.25'
     latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
-  omegal:
-    latex: \Omega_\Lambda
-  tau:
-    value: 0.0697186
-    latex: \tau_\mathrm{reio}
   sigma8:
     latex: \sigma_8
   DES_BARYON_Q1:
@@ -116,7 +133,7 @@ params:
   omegam_growth:
     prior:
       min: 0.1
-      max: 0.5
+      max: 0.4
     ref:
       dist: norm
       loc: 0.3
@@ -173,12 +190,12 @@ sampler:
     # ---------------------------------------------------------------------
     measure_speeds: False
     drag: False
-    oversample_power: 1.0
+    oversample_power: 0.6
     oversample_thin: True
     blocking:
       - [1,
           [
-            As_1e9, ns, H0, omegab, omegam
+            As_1e9, ns, H0, omegab, omegam, tau
           ]
         ]
       - [10,
@@ -190,6 +207,15 @@ sampler:
       - [25,
           [
             DES_M1, DES_M2, DES_M3, DES_M4
+          ]
+        ]
+      - [300,
+          [
+            A_cib_217, gal545_A_217, calib_217T, galf_TE_A_217, ps_A_100_100,
+            galf_TE_A_100_143, ps_A_217_217, ksz_norm, A_planck, calib_100T,
+            ps_A_143_217, ps_A_143_143, gal545_A_100, galf_TE_A_143_217,
+            gal545_A_143_217, galf_TE_A_100_217, galf_TE_A_143, gal545_A_143,
+            xi_sz_cib, galf_TE_A_100, A_sz
           ]
         ]
     # ---------------------------------------------------------------------
