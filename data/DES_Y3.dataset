@@ -1,4 +1,5 @@
-data_file = Y3_unblinded_11_13_20.txt
+#data_file = Y3_unblinded_11_13_20.txt
+data_file = des_y3_theory_cosmic_shear.modelvector
 cov_file = cov_unblinded_11_13_20.txt
 mask_file = 3x2pt_baseline.mask
 nz_lens_file = nz_lens_Y3_unblinded_11_13_20.txt

@@ -3,10 +3,18 @@ debug: True
 stop_at_error: True
 
 likelihood:
+  sn.pantheon:
+    path: ./external_modules/data/sn_data
+  planck_2018_highl_plik.TTTEEE:
+    path: ./external_modules/
+    clik_file: plc_3.0/hi_l/plik/plik_rd12_HM_v22b_TTTEEE_35_1296.clik
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
-    data_file: DES_Y3.dataset
-    print_datavector: False
+    data_file: DES_Y1.dataset
+    #print_datavector_file: "./projects/des_y3/chains/des_y1_theory_cosmic_shear.modelvector"
+    #data_file: DES_Y3.dataset
+    #print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
+    #print_datavector: True
     non_linear_emul: 1
     kmax_boltzmann: 1.0
 

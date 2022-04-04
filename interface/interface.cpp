@@ -1355,6 +1355,137 @@ std::vector<double> cpp_compute_data_vector_masked()
   return data_vector;
 }
 
+std::vector<double> cpp_compute_data_vector_unmasked()
+{
+  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "compute_data_vector_unmasked");
+
+  if (tomo.shear_Nbin == 0)
+  {
+    spdlog::critical("\x1b[90m{}\x1b[0m: {} = 0 is invalid",
+      "compute_data_vector_unmasked", "shear_Nbin");
+    exit(1);
+  }
+  if (like.Ntheta == 0)
+  {
+    spdlog::critical("\x1b[90m{}\x1b[0m: {} = 0 is invalid",
+      "compute_data_vector_unmasked", "Ntheta");
+    exit(1);
+  }
+  if (!ima::RealData::get_instance().is_mask_set())
+  {
+    spdlog::critical(
+      "\x1b[90m{}\x1b[0m: {} not set prior to this function call",
+      "compute_data_vector_unmasked", "mask");
+    exit(1);
+  }
+  if (!ima::RealData::get_instance().is_data_set())
+  {
+    spdlog::critical(
+      "\x1b[90m{}\x1b[0m: {} not set prior to this function call",
+      "compute_data_vector_unmasked", "data_vector");
+    exit(1);
+  }
+  if (!ima::RealData::get_instance().is_inv_cov_set())
+  {
+    spdlog::critical(
+      "\x1b[90m{}\x1b[0m: {} not set prior to this function call",
+      "compute_data_vector_unmasked", "inv_cov");
+    exit(1);
+  }
+
+  std::vector<double> data_vector(like.Ndata, 0.0);
+
+  int start = 0;
+  if (like.shear_shear == 1)
+  {
+    for (int nz=0; nz<tomo.shear_Npowerspectra; nz++)
+    {
+      const int z1 = Z1(nz);
+      const int z2 = Z2(nz);
+      for (int i=0; i<like.Ntheta; i++)
+      {
+        {
+          const int index = like.Ntheta*nz + i;
+          if(like.use_full_sky_shear == 1)
+          {
+            data_vector[index] = xi_pm_tomo(1, i, z1, z2, 1)*
+              (1.0 + nuisance.shear_calibration_m[z1])*(1.0 + nuisance.shear_calibration_m[z2]);
+          }
+          else
+          {
+            const double theta = like.theta[i];
+            data_vector[index] = xi_pm_tomo_flatsky(1, theta, z1, z2, 1)*
+              (1.0 + nuisance.shear_calibration_m[z1])*(1.0 + nuisance.shear_calibration_m[z2]);
+          }
+        }
+        {
+          const int index = like.Ntheta*(tomo.shear_Npowerspectra + nz) + i;
+          if(like.use_full_sky_shear == 1)
+          {
+            data_vector[index] = xi_pm_tomo(-1, i, z1, z2, 1)*
+              (1.0 + nuisance.shear_calibration_m[z1])*(1.0 + nuisance.shear_calibration_m[z2]);
+          }
+          else
+          {
+            const double theta = like.theta[i];
+            data_vector[index] = xi_pm_tomo_flatsky(-1, theta, z1, z2, 1)*
+              (1.0 + nuisance.shear_calibration_m[z1])*(1.0 + nuisance.shear_calibration_m[z2]);
+          }
+        }
+      }
+    }
+  }
+
+  start = start + 2*like.Ntheta*tomo.shear_Npowerspectra;
+  if (like.shear_pos == 1)
+  {
+    for (int nz=0; nz<tomo.ggl_Npowerspectra; nz++)
+    {
+      const int zl = ZL(nz);
+      const int zs = ZS(nz);
+      for (int i=0; i<like.Ntheta; i++)
+      {
+        const int index = start + like.Ntheta*nz + i;
+        const double theta = like.theta[i];
+        if(like.use_full_sky_ggl == 1)
+        {
+          data_vector[index] =  (w_gammat_tomo(i, zl, zs, like.adopt_limber_gammat) + 
+            cpp_compute_pm(zl, zs, theta))*(1.0+nuisance.shear_calibration_m[zs]);
+        }
+        else
+        {
+          data_vector[index] = (w_gammat_tomo_flatsky(theta, zl, zs, like.adopt_limber_gammat) + 
+            cpp_compute_pm(zl, zs, theta))*(1.0+nuisance.shear_calibration_m[zs]);
+        }
+      }
+    }
+  }
+
+  start = start + like.Ntheta*tomo.ggl_Npowerspectra;
+  if (like.pos_pos == 1)
+  {
+    for (int nz=0; nz<tomo.clustering_Npowerspectra; nz++)
+    {
+      for (int i=0; i<like.Ntheta; i++)
+      {
+        const int index = start + like.Ntheta*nz + i;
+        if(like.use_full_sky_clustering == 1)
+        {
+          data_vector[index] = w_gg_tomo(i, nz, nz, like.adopt_limber_gg);
+        }
+        else
+        {
+          const double theta = like.theta[i];
+          data_vector[index] = w_gg_tomo_flatsky(theta, nz, nz, like.adopt_limber_gg);
+        }
+      }
+    }
+  }
+  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "compute_data_vector_unmasked");
+
+  return data_vector;
+}
+
 std::vector<double> cpp_compute_data_vector_masked_reduced_dim()
 {
   std::vector<double> data_vector_masked = cpp_compute_data_vector_masked();
@@ -2427,6 +2558,11 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m)
   m.def("compute_data_vector_masked",
     &cpp_compute_data_vector_masked,
     "Get theoretical data vector - masked dimensions are filled w/ zeros"
+  );
+
+  m.def("compute_data_vector_unmasked",
+    &cpp_compute_data_vector_unmasked, 
+    "Get theoretical data vector"
   );
 
   m.def("compute_data_vector_masked_reduced_dim",
