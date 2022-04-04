@@ -3,14 +3,20 @@ from __future__ import absolute_import, division, print_function
 import os
 import numpy as np
 import scipy
-from scipy.interpolate import UnivariateSpline
+from scipy.interpolate import CubicSpline, interp1d
 import sys
 import time
+from scipy.integrate import odeint
 
 # Local
-from cobaya.likelihoods._base_classes import _DataSetLikelihood
+from cobaya.likelihoods.base_classes import DataSetLikelihood
 from cobaya.log import LoggedError
 from getdist import IniFile
+
+#Growth-Split (gs) BEGINS:
+import euclidemu2
+import math
+#Growth-Split (gs) ENDS:
 
 import cosmolike_des_y3_interface as ci
 
@@ -67,7 +73,7 @@ default_chi = np.array([
    9533.114299897283,9554.700147330219,9575.985713926271
  ])
 
-class _cosmolike_prototype_base(_DataSetLikelihood):
+class _cosmolike_prototype_base(DataSetLikelihood):
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
@@ -76,6 +82,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     # ------------------------------------------------------------------------
     ini = IniFile(os.path.normpath(os.path.join(self.path, self.data_file)))
+
     self.probe = probe
 
     self.IA_type = ini.int('IA_model')
@@ -109,16 +116,19 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     self.z_interp_1D = np.concatenate((self.z_interp_1D,
       np.linspace(2.0,10.1,200)),axis=0)
     self.z_interp_1D = np.concatenate((self.z_interp_1D,
-      np.linspace(1080,2000,20)),axis=0) #CMB 6x2pt g_CMB
+      np.linspace(1080,2000,20)),axis=0) #CMB 6x2pt g_CMB (possible in the future)
     self.z_interp_1D[0] = 0
 
-    self.z_interp_2D = np.linspace(0,2.0,100)
-    self.z_interp_2D = np.concatenate((self.z_interp_2D,np.linspace(2.0,10.1,50)),axis=0)
+    #Growth-Split (gs) BEGINS:
+    self.z_interp_2D = np.linspace(0,2.0,95)
+    self.z_interp_2D = np.concatenate((self.z_interp_2D, np.linspace(2.0,10.0,5)),axis=0)
     self.z_interp_2D[0] = 0
-
+    #Growth-Split (gs) ENDS:
     self.len_z_interp_2D = len(self.z_interp_2D)
+    #Growth-Split (gs) BEGINS:
     self.len_log10k_interp_2D = 1200
     self.log10k_interp_2D = np.linspace(-4.2,2.0,self.len_log10k_interp_2D)
+    #Growth-Split (gs) ENDS:
 
     # Cobaya wants k in 1/Mpc
     self.k_interp_2D = np.power(10.0,self.log10k_interp_2D)
@@ -130,7 +140,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
 
     ci.initial_setup()
     ci.init_accuracy_boost(self.accuracyboost, self.samplingboost, self.integration_accuracy)
-    
+
     ci.init_probes(possible_probes=self.probe)
 
     ci.init_binning(self.ntheta, self.theta_min_arcmin, self.theta_max_arcmin)
@@ -138,8 +148,8 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     ci.init_cosmo_runmode(is_linear=False)
 
     # to set lens tomo bins, we need a default \chi(z)
-    ci.set_cosmological_parameters(omega_matter = default_omega_matter,
-      hubble = default_hubble, is_cached = False)
+    ci.set_cosmological_parameters(omega_matter = default_omega_matter, hubble = default_hubble, 
+      is_cached = False)
 
     # convert chi to Mpc/h
     ci.init_distances(default_z, default_chi*default_hubble/100.0)
@@ -175,8 +185,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     # FUNCTION `void init_baryons(char* scenario)`. SIMS INCLUDE
     # TNG100, HzAGN, mb2, illustris, eagle, owls_AGN_T80, owls_AGN_T85,
     # owls_AGN_T87, BAHAMAS_T76, BAHAMAS_T78, BAHAMAS_T80
-    ci.init_baryons_contamination(
-      self.use_baryonic_simulations_for_dv_contamination,
+    ci.init_baryons_contamination(self.use_baryonic_simulations_for_dv_contamination,
       self.which_baryonic_simulations_for_dv_contamination)
 
     if self.create_baryon_pca:
@@ -194,19 +203,19 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
         self.use_baryon_pca = False
 
     self.baryon_pcs_qs = np.zeros(4)
-
     # ------------------------------------------------------------------------
 
-    self.do_cache_lnPL = np.zeros(
-      self.len_log10k_interp_2D*self.len_z_interp_2D)
+    self.do_cache_lnPL = np.zeros(self.len_log10k_interp_2D*self.len_z_interp_2D)
 
-    self.do_cache_lnPNL = np.zeros(
-      self.len_log10k_interp_2D*self.len_z_interp_2D)
+    self.do_cache_lnPNL = np.zeros(self.len_log10k_interp_2D*self.len_z_interp_2D)
 
     self.do_cache_chi = np.zeros(len(self.z_interp_1D))
 
     self.do_cache_cosmo = np.zeros(2)
 
+    # ------------------------------------------------------------------------
+    if self.non_linear_emul == 1:
+      self.emulator = ee2=euclidemu2.PyEuclidEmulator()
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
   # ------------------------------------------------------------------------
@@ -215,6 +224,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     return {
       "H0": None,
       "omegam": None,
+      "omegam_growth": None,
       "Pk_interpolator": {
         "z": self.z_interp_2D,
         "k_max": self.kmax_boltzmann * self.accuracyboost,
@@ -266,28 +276,107 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     h = self.provider.get_param("H0")/100.0
 
     # Compute linear matter power spectrum
-    PKL = self.provider.get_Pk_interpolator(("delta_tot", "delta_tot"),
-      nonlinear=False, extrap_kmax = self.extrap_kmax)
+    PKL = self.provider.get_Pk_interpolator(("delta_tot", "delta_tot"), nonlinear=False, 
+      extrap_kmax = self.extrap_kmax)
 
     # Compute non-linear matter power spectrum
-    PKNL = self.provider.get_Pk_interpolator(("delta_tot", "delta_tot"),
-      nonlinear=True, extrap_kmax = self.extrap_kmax)
+    PKNL = self.provider.get_Pk_interpolator(("delta_tot", "delta_tot"), nonlinear=True, 
+        extrap_kmax = self.extrap_kmax)
 
-    lnPL = np.empty(self.len_pkz_interp_2D)
+    #Growth-Split (gs) BEGINS:
+    zgs  = np.flip(np.concatenate((self.z_interp_2D, np.linspace(10.1,1000,3000)),axis=0)) 
+
+    def G_GROWTH_ODE(y, N):
+      OMG   = self.provider.get_param("omegam_growth")
+      WG    = self.provider.get_param("w_growth")
+      z     = 1.0/np.exp(N) - 1.0 
+      OLG   = (1.0 - OMG)
+      H2    = OMG*(1.0 + z)*(1.0 + z)*(1.0 + z) + OLG*(1.0 + z)**(3*(1.0 + WG)) # H^2(z)
+      OMG_A = OMG*(1.0 + z)*(1.0 + z)*(1.0 + z) / H2                       # Omega_m(z)
+      OLG_A = OLG*(1.0 + z)**(3.0*(1.0 + WG)) / H2                         # Omega_DE(z)
+      HPH   =  -1.5*OMG_A -1.5*OLG_A*(1.0 + WG)                            # dlnH/dlna
+      return [y[1], - (4 + HPH)*y[1] - (3.0 + HPH - 1.5 * OMG_A)*y[0]]     # [dG/dlna, d^2G/dlna^2]
+
+    def G_GEO_ODE(y, N):
+      OMG   = self.provider.get_param("omegam")
+      WG    = self.provider.get_param("w")
+      z     = 1.0/np.exp(N) - 1.0 
+      OLG   = (1.0 - OMG)
+      H2    = OMG*(1.0 + z)*(1.0 + z)*(1.0 + z) + OLG*(1.0 + z)**(3*(1.0 + WG)) # H^2(z)
+      OMG_A = OMG*(1.0 + z)*(1.0 + z)*(1.0 + z) / H2                       # Omega_m(z)
+      OLG_A = OLG*(1.0 + z)**(3.0*(1.0 + WG)) / H2                         # Omega_DE(z)
+      HPH   =  -1.5*OMG_A -1.5*OLG_A*(1.0 + WG)                            # dlnH/dlna
+      return [y[1], - (4 + HPH)*y[1] - (3.0 + HPH - 1.5 * OMG_A)*y[0]]     # [dG/dlna, d^2G/dlna^2]
+
+    def G_ODE_IC(z):
+      OMG   = self.provider.get_param("omegam_growth")
+      WG    = self.provider.get_param("w_growth")
+      OLG   = (1.0 - OMG)
+      H2    = OMG*(1.0 + z)*(1.0 + z)*(1.0 + z) + OLG*(1.0 + z)**(3.0*(1.0 + WG)) # H^2(z)
+      OLG_A = OLG*(1.0 + z)**(3.0*(1.0 + WG))/H2                                  # Omega_DE(z)
+      return [1.0, -0.6*(1.0 - WG)*OLG_A]
+
+    sol      = odeint(G_GROWTH_ODE, G_ODE_IC(zgs[0]), np.log(1.0/(1.0 + zgs)))[:,0]
+    G_growth = np.flip(sol)[0:len(self.z_interp_2D)]
+    G_growth = G_growth/G_growth[len(G_growth)-1]
+
+    sol2  = odeint(G_GEO_ODE, G_ODE_IC(zgs[0]), np.log(1.0/(1.0 + zgs)))[:,0]
+    G_geo = np.flip(sol)[0:len(self.z_interp_2D)]
+    G_geo = G_growth/G_growth[len(G_growth)-1]
+
+    G_geo_camb = np.sqrt(PKL.P(self.z_interp_2D, 0.0005)/PKL.P(0, 0.0005))*(1 + self.z_interp_2D)
+    G_geo_camb = G_geo_camb/G_geo_camb[len(G_geo)-1] 
+    
+    G_growth_camb = G_geo_camb * (G_growth/G_geo) # This way minimizes the impact of the small diff 
+                                                  # between CAMB growth factor and the ODE above
+    lnPL  = np.empty(self.len_pkz_interp_2D)
     lnPNL = np.empty(self.len_pkz_interp_2D)
-    #for i in range(self.len_k_interp_2D) :
-    #  lnPNL[i*self.len_z_interp_2D:(i+1)*self.len_z_interp_2D] = PKNL.logP(self.z_interp_2D, self.k_interp_2D[i])[0:self.len_z_interp_2D]
-    #  lnPL[i*self.len_z_interp_2D:(i+1)*self.len_z_interp_2D] = PKL.logP(self.z_interp_2D, self.k_interp_2D[i])[0:self.len_z_interp_2D]
-    tmp1 = PKNL.logP(self.z_interp_2D, self.k_interp_2D).flatten()
-    tmp2 = PKL.logP(self.z_interp_2D, self.k_interp_2D).flatten()
-    for i in range(self.len_z_interp_2D):
-      lnPNL[i::self.len_z_interp_2D] = tmp1[i*self.len_k_interp_2D:(i+1)*self.len_k_interp_2D]
-      lnPL[i::self.len_z_interp_2D] = tmp2[i*self.len_k_interp_2D:(i+1)*self.len_k_interp_2D]
+    t1 = PKNL.logP(self.z_interp_2D, self.k_interp_2D).flatten()
+    t2 = PKL.logP(self.z_interp_2D, self.k_interp_2D).flatten()
+    t3 = 2.0*np.log(G_growth_camb/G_geo_camb)
+    log10k_interp_2D = self.log10k_interp_2D - np.log10(h) # Cosmolike (and emuls): h/Mpc Units
 
-    # Cosmolike wants k in h/Mpc
-    log10k_interp_2D = self.log10k_interp_2D - np.log10(h)
-    lnPNL += np.log((h**3))
-    lnPL += np.log((h**3))
+    for i in range(self.len_z_interp_2D):
+      lnPL[i::self.len_z_interp_2D]  = t2[i*self.len_k_interp_2D:(i+1)*self.len_k_interp_2D]
+      lnPL[i::self.len_z_interp_2D] += t3[i]
+    lnPL += np.log((h**3)) 
+  
+    if self.non_linear_emul == 1:
+      params = {
+        'Omm'  : self.provider.get_param("omegam_growth"),
+        'As'   : self.provider.get_param("As"),
+        'Omb'  : self.provider.get_param("omegab"),
+        'ns'   : self.provider.get_param("ns"),
+        'h'    : h,
+        'mnu'  : self.provider.get_param("mnu"), 
+        'w'    : self.provider.get_param("w"),
+        'wa'   : 0.0
+      }
+
+      kbt = np.power(10.0, np.linspace(-2.0589, 0.973, self.len_k_interp_2D))
+      kbt, tmp_bt = self.emulator.get_boost(params, self.z_interp_2D, kbt)
+      logkbt = np.log10(kbt)
+
+      for i in range(self.len_z_interp_2D):    
+        interp = interp1d(logkbt, np.log(tmp_bt[i]), kind='linear', 
+          fill_value='extrapolate', assume_sorted=True)
+
+        lnbt = interp(log10k_interp_2D)
+        lnbt[np.power(10,log10k_interp_2D) < 8.73e-3] = 0.0
+
+        lnPNL[i::self.len_z_interp_2D] = lnPL[i::self.len_z_interp_2D] + lnbt
+    
+    elif self.non_linear_emul == 2:      
+      
+      for i in range(self.len_z_interp_2D):
+        lnPNL[i::self.len_z_interp_2D]  = t1[i*self.len_k_interp_2D:(i+1)*self.len_k_interp_2D]  
+        lnPNL[i::self.len_z_interp_2D] += t3[i]
+      lnPNL += np.log((h**3))   
+    
+    else:
+      raise LoggedError(self.log, "non_linear_emul = %d is an invalid option", non_linear_emul)
+    
+    #Growth-Split (gs) ENDS:
 
     # Compute chi(z) - convert to Mpc/h
     chi = self.provider.get_comoving_radial_distance(self.z_interp_1D) * h
@@ -295,7 +384,7 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
     cache_alert = self.set_cache_alert(chi, lnPL, lnPNL)
 
     ci.set_cosmological_parameters(
-      omega_matter = self.provider.get_param("omegam"),
+      omega_matter = self.provider.get_param("omegam"), #Intrinsic Aligment - growth of geometry?
       hubble = self.provider.get_param("H0"),
       is_cached = cache_alert
     )
@@ -312,16 +401,13 @@ class _cosmolike_prototype_base(_DataSetLikelihood):
         self.provider.get_param("H0")
       ])
 
-      ci.init_linear_power_spectrum(log10k = log10k_interp_2D,
-        z = self.z_interp_2D, lnP = lnPL)
+      ci.init_linear_power_spectrum(log10k=log10k_interp_2D, z=self.z_interp_2D, lnP=lnPL)
 
-      ci.init_non_linear_power_spectrum(log10k = log10k_interp_2D,
-        z = self.z_interp_2D, lnP = lnPNL)
+      ci.init_non_linear_power_spectrum(log10k=log10k_interp_2D, z=self.z_interp_2D, lnP=lnPNL)
 
-      G_growth = np.sqrt(PKL.P(self.z_interp_2D,0.0005)/PKL.P(0,0.0005))
-      G_growth = G_growth*(1 + self.z_interp_2D)/G_growth[len(G_growth)-1]
-
-      ci.init_growth(z = self.z_interp_2D, G = G_growth)
+      #Growth-Split (gs) BEGINS:
+      ci.init_growth(z = self.z_interp_2D, G = G_growth_camb)
+      #Growth-Split (gs) ENDS:
 
       ci.init_distances(z = self.z_interp_1D, chi = chi)
 

@@ -5,8 +5,10 @@ stop_at_error: False
 likelihood:
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
+    data_file: DES_Y3.dataset
     print_datavector: False
-    print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
+    non_linear_emul: 1
+    kmax_boltzmann: 10.0
 
 params:
   As_1e9:
@@ -67,44 +69,31 @@ params:
     latex: \Omega_\mathrm{m}
     drop: true
   mnu:
-    prior:
-      min: 0.06
-      max: 0.6
-    ref:
-      dist: norm
-      loc: 0.25
-      scale: 0.1
-    proposal: 0.05
-  w0pwa:
-    prior:
-      min: -5 
-      max: -0.01
-    ref:
-      dist: norm
-      loc: -0.99
-      scale: 0.05
-    proposal: 0.05
-    latex: w_{0,\mathrm{DE}}+w_{a,\mathrm{DE}}
-    drop: true
-  w:
-    prior:
-      min: -3
-      max: -0.01
-    ref:
-      dist: norm
-      loc: -0.99
-      scale: 0.05
-    proposal: 0.05
-    latex: w_{0,\mathrm{DE}}
-  wa:
-    value: 'lambda w0pwa, w: w0pwa - w'
-    latex: w_{a,\mathrm{DE}}
+    value: 0.06
   omegabh2:
     value: 'lambda omegab, H0: omegab*(H0/100)**2'
     latex: \Omega_\mathrm{b} h^2
   omegach2:
     value: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)*(H0/100)**2-(mnu*(3.046/3)**0.75)/94.0708'
     latex: \Omega_\mathrm{c} h^2
+  omegan2:
+    latex: \Omega_\mathrm{\\nu} h^2
+  omegan:
+    derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
+    latex: \Omega_\mathrm{\\nu}
+  sigma8:
+    latex: \sigma_8
+  s8h5:
+    derived: 'lambda sigma8, H0: sigma8*(H0*1e-2)**(-0.5)'
+    latex: \sigma_8/h^{0.5}
+  s8omegamp5:
+    derived: 'lambda sigma8, omegam: sigma8*omegam**0.5'
+    latex: \sigma_8 \Omega_\mathrm{m}^{0.5}
+  s8omegamp25:
+    derived: 'lambda sigma8, omegam: sigma8*omegam**0.25'
+    latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
+  omegal:
+    latex: \Omega_\Lambda
   tau:
     value: 0.0697186
     latex: \tau_\mathrm{reio}
@@ -112,6 +101,28 @@ params:
     latex: \sigma_8
   DES_BARYON_Q1:
     value: 0.0
+  DES_BARYON_Q2:
+    value: 0.0
+  DES_BARYON_Q3:
+    value: 0.0
+  DES_BARYON_Q4:
+    value: 0.0
+  w:
+    value: -1
+    latex: w0
+  w_growth:
+    value: -1
+    latex: w_\mathrm{growth}
+  omegam_growth:
+    prior:
+      min: 0.1
+      max: 0.4
+    ref:
+      dist: norm
+      loc: 0.3
+      scale: 0.01
+    proposal: 0.01
+    latex: \Omega_\mathrm{m}^\mathrm{growth}
 
 theory:
   camb:
@@ -119,8 +130,8 @@ theory:
     use_renames: True
     extra_args:
       halofit_version: takahashi
-      AccuracyBoost: 1.15
-      lens_potential_accuracy: 1.1
+      AccuracyBoost: 1.05
+      lens_potential_accuracy: 1.05
       num_massive_neutrinos: 1
       nnu: 3.046
       dark_energy_model: ppf
@@ -167,7 +178,7 @@ sampler:
     blocking:
       - [1,
           [
-            As_1e9, ns, H0, omegab, omegam, mnu, w0pwa, w
+            As_1e9, ns, H0, omegab, omegam, omegam_growth
           ]
         ]
       - [10,
