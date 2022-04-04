@@ -338,7 +338,7 @@ class _cosmolike_prototype_base(DataSetLikelihood):
 
     for i in range(self.len_z_interp_2D):
       lnPL[i::self.len_z_interp_2D]  = t2[i*self.len_k_interp_2D:(i+1)*self.len_k_interp_2D]
-      lnPL[i::self.len_z_interp_2D] += t3[i]
+      #lnPL[i::self.len_z_interp_2D] += t3[i]
     lnPL += np.log((h**3)) 
   
     if self.non_linear_emul == 1:
@@ -358,12 +358,11 @@ class _cosmolike_prototype_base(DataSetLikelihood):
       logkbt = np.log10(kbt)
 
       for i in range(self.len_z_interp_2D):    
-        interp = interp1d(logkbt, np.log(tmp_bt[i]), kind='linear', 
-          fill_value='extrapolate', assume_sorted=True)
+        interp = interp1d(logkbt, np.log(tmp_bt[i]), kind='linear', fill_value='extrapolate', assume_sorted=True)
 
         lnbt = interp(log10k_interp_2D)
         lnbt[np.power(10,log10k_interp_2D) < 8.73e-3] = 0.0
-
+    
         lnPNL[i::self.len_z_interp_2D] = lnPL[i::self.len_z_interp_2D] + lnbt
     
     elif self.non_linear_emul == 2:      

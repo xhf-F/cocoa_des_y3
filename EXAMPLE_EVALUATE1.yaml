@@ -108,7 +108,7 @@ params:
   DES_BARYON_Q4:
     value: 0.0
   w:
-    value: -1
+    value: -1.0
     latex: w0
   w_growth:
     value: -1
