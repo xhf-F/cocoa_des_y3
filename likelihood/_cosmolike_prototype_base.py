@@ -1,4 +1,4 @@
-# Python 2/3 compatibility - must be first line
+o # Python 2/3 compatibility - must be first line
 from __future__ import absolute_import, division, print_function
 import os
 import numpy as np
