@@ -1,5 +1,5 @@
-timing: True
-debug: True
+timing: False
+debug: False
 stop_at_error: True
 
 likelihood:

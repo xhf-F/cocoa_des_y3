@@ -8,7 +8,7 @@ likelihood:
     data_file: DES_Y3.dataset
     print_datavector: False
     non_linear_emul: 1
-    kmax_boltzmann: 10.0
+    kmax_boltzmann: 1.0
 
 params:
   As_1e9:
