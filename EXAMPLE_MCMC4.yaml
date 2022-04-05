@@ -5,14 +5,44 @@ stop_at_error: False
 likelihood:
   sn.pantheon:
     path: ./external_modules/data/sn_data
-  planck_2018_highl_plik.TTTEEE:
-    path: ./external_modules/
-    clik_file: plc_3.0/hi_l/plik/plik_rd12_HM_v22b_TTTEEE_35_900.clik
+  mflike.MFLike:
+    input_file: data_sacc_00044.fits
+    cov_Bbl_file: data_sacc_w_covar_and_Bbl.fits
+    defaults:
+      # Which spectra?
+      polarizations: ['TT', 'TE', 'ET', 'EE']
+      # Scale cuts (in ell) for each spectrum
+      scales:
+        TT: [50, 900]
+        TE: [50, 900]
+        ET: [50, 900]
+        EE: [50, 900]
+      symmetrize: False
+    data:
+      experiments:
+        LAT:
+          frequencies: [93, 145, 225] 
+      spectra:
+        - experiments: ['LAT', 'LAT']
+          frequencies: [93, 93]
+          polarizations: ['TT','TE','EE']
+        - experiments: ['LAT', 'LAT']
+          frequencies: [93, 145]
+        - experiments: ['LAT', 'LAT']
+          frequencies: [93, 225]
+        - experiments: ['LAT', 'LAT']
+          frequencies: [145, 145]
+          polarizations: ['TT','TE','EE']
+        - experiments: ['LAT', 'LAT']
+          frequencies: [145, 225]
+        - experiments: ['LAT', 'LAT']
+          frequencies: [225, 225]
+          polarizations: ['TT','TE','EE']
   planck_2018_lowl.EE:
     path: ./external_modules/
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
-    data_file: DES_Y1.dataset
+    data_file: DES_Y3.dataset
     print_datavector: False
     non_linear_emul: 1
     kmax_boltzmann: 1.0
@@ -211,11 +241,8 @@ sampler:
         ]
       - [50,
           [
-            A_cib_217, gal545_A_217, calib_217T, galf_TE_A_217, ps_A_100_100,
-            galf_TE_A_100_143, ps_A_217_217, ksz_norm, A_planck, calib_100T,
-            ps_A_143_217, ps_A_143_143, gal545_A_100, galf_TE_A_143_217,
-            gal545_A_143_217, galf_TE_A_100_217, galf_TE_A_143, gal545_A_143,
-            xi_sz_cib, galf_TE_A_100, A_sz
+            a_tSZ, a_kSZ, a_p, beta_p, a_c, beta_c, a_s, a_gtt, a_gte, a_gee,
+            a_psee, a_pste, xi, T_d, A_planck
           ]
         ]
     # ---------------------------------------------------------------------
@@ -233,4 +260,4 @@ sampler:
     Rminus1_single_split: 4
 
 
-output: ./projects/des_y3/chains/EXAMPLE_MCMC1
+output: ./projects/des_y3/chains/EXAMPLE_MCMC4
