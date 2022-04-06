@@ -358,8 +358,12 @@ class _cosmolike_prototype_base(DataSetLikelihood):
       logkbt = np.log10(kbt)
 
       for i in range(self.len_z_interp_2D):    
-        interp = interp1d(logkbt, np.log(tmp_bt[i]), kind='linear', fill_value='extrapolate', 
-          assume_sorted=True)
+        interp = interp1d(logkbt, 
+            np.log(tmp_bt[i]), 
+            kind = 'linear', 
+            fill_value = 'extrapolate', 
+            assume_sorted = True
+          )
 
         lnbt = interp(log10k_interp_2D)
         lnbt[np.power(10,log10k_interp_2D) < 8.73e-3] = 0.0
