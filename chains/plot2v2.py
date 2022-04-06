@@ -54,6 +54,6 @@ plot_3d_with_param=param_3d,line_args=[
 {'lw': 1.9,'ls': 'dashed', 'color':'black'}],
 contour_colors=['royalblue','firebrick','black'],
 filled=True,shaded=False,
-legend_labels=['SO + SN + DES-Y3', 'SO + SN + DES-Y1'],legend_loc=(0.5,0.825),
+legend_labels=['SO (50-900) + SN + DES-Y3', 'SO + SN + DES-Y1'],legend_loc=(0.5,0.825),
 imax_shaded=0)
 g.export()
