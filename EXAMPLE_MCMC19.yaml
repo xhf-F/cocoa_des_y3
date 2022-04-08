@@ -2,9 +2,6 @@ timing: True
 debug: False
 stop_at_error: False
 
-# TODO: TO INCLUDE MASSIVE NEUTRINO, WE NEED TO CHANGE THE GROWTH FACTOR EQUATION
-# SEE https://arxiv.org/pdf/0709.0253.pdf
-
 likelihood:
   sn.pantheon:
     path: ./external_modules/data/sn_data
@@ -79,14 +76,7 @@ params:
     latex: \Omega_\mathrm{m}
     drop: true
   mnu:
-    prior:
-      min: 0.06
-      max: 0.8
-    ref:
-      dist: norm
-      loc: 0.15
-      scale: 0.03
-    proposal: 0.03
+    value: 0.06
   tau:
     prior:
       min: 0.01
@@ -135,20 +125,20 @@ params:
   DES_BARYON_Q4:
     value: 0.0
   w:
-    value: -1
-    latex: w0
-  w_growth:
-    value: -1
-    latex: w_\mathrm{growth}
-  omegam_growth:
     prior:
-      min: 0.1
-      max: 0.4
+      min: -3
+      max: -0.01
     ref:
       dist: norm
-      loc: 0.3
-      scale: 0.01
-    proposal: 0.01
+      loc: -0.99
+      scale: 0.05
+    proposal: 0.05
+    latex: w_{0,\mathrm{DE}}
+  w_growth:
+    value: 'lambda w: w'
+    latex: w_\mathrm{growth}
+  omegam_growth:
+    value: 'lambda omegam: omegam'
     latex: \Omega_\mathrm{m}^\mathrm{growth}
 
 theory:
@@ -205,13 +195,13 @@ sampler:
     blocking:
       - [1,
           [
-            As_1e9, ns, H0, omegab, omegam, tau, mnu
+            As_1e9, ns, H0, omegab, omegam, tau, w
           ]
         ]
-      - [10,
+      - [3,
           [
             DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1, DES_A1_2,
-            DES_A2_1, DES_A2_2, DES_BTA_1, omegam_growth
+            DES_A2_1, DES_A2_2, DES_BTA_1
           ]
         ]
       - [25,
