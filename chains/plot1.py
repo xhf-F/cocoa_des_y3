@@ -36,7 +36,7 @@ analysissettings={'smooth_scale_1D':0.45,'smooth_scale_2D':0.45,'ignore_rows': u
 
 #GET DIST PLOT SETUP
 g=gplot.getSubplotPlotter(chain_dir=chaindir,
-analysis_settings=analysissettings,width_inch=10.0)
+analysis_settings=analysissettings,width_inch=7.)
 g.settings.lw_contour = 1.2
 g.settings.legend_rect_border = False
 g.settings.figure_legend_frame = False
@@ -54,6 +54,9 @@ plot_3d_with_param=param_3d,line_args=[
 {'lw': 1.9,'ls': 'dashed', 'color':'black'}],
 contour_colors=['royalblue','firebrick','black'],
 filled=True,shaded=False,
-legend_labels=['Planck low$\\ell_{\\mathrm{EE}}$ + highlTTTEEE (35 < $\\ell$ < 900) + SN + DES-Y3', 'Planck + SN + DES-Y1'],legend_loc=(0.5,0.825),
+legend_labels=[
+'Planck low-$\\ell_{\\mathrm{EE}}$ + high-$\\ell_{\\mathrm{TTTEEE}}$ (35 < $\\ell$ < 900) + SN (JLA) + DES-Y3', 
+'Planck low-$\\ell_{\\mathrm{EE}}$ + high-$\\ell_{\\mathrm{TTTEEE}}$ (35 < $\\ell$ < 900) + SN (JLA) + DES-Y1'],
+legend_loc=(0.25,0.875),
 imax_shaded=0)
 g.export()
