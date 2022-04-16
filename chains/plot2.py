@@ -47,7 +47,7 @@ g.settings.lab_fontsize=15
 g.legend_labels=False
 
 param_3d = None
-g.triangle_plot(['EXAMPLE_MCMC2', 'EXAMPLE_MCMC1'],parameter,
+g.triangle_plot(['EXAMPLE_MCMC4', 'EXAMPLE_MCMC3'],parameter,
 plot_3d_with_param=param_3d,line_args=[
 {'lw': 1.0,'ls': 'solid', 'color':'royalblue'},
 {'lw': 1.6,'ls': 'solid', 'color':'firebrick'},
@@ -55,8 +55,8 @@ plot_3d_with_param=param_3d,line_args=[
 contour_colors=['royalblue','firebrick','black'],
 filled=True,shaded=False,
 legend_labels=[
-'Planck low-$\\ell_{\\mathrm{EE}}$ + Planck high-$\\ell_{\\mathrm{TTTEEE}}$ (35 < $\\ell$ < 900) + SN (JLA) + DES-Y3', 
-'Planck low-$\\ell_{\\mathrm{EE}}$ + Planck high-$\\ell_{\\mathrm{TTTEEE}}$ (35 < $\\ell$ < 900) + SN (JLA) + DES-Y1'],
-legend_loc=(0.25,0.875),
+'Planck low-$\\ell_{\\mathrm{EE}}$ + SO high-$\\ell_{\\mathrm{TTTEEE}}$ (35 < $\\ell$ < 900) + SN (JLA) + DES-Y3', 
+'Planck low-$\\ell_{\\mathrm{EE}}$ + SO high-$\\ell_{\\mathrm{TTTEEE}}$ (35 < $\\ell$ < 900) + SN (JLA) + DES-Y1'
+],legend_loc=(0.25,0.875),
 imax_shaded=0)
 g.export()
