@@ -4,7 +4,7 @@ stop_at_error: False
 
 likelihood:
   sn.pantheon:
-    path: ./external_modules/data/sn_data
+    path: ./external_modules/data/sn_data  
   planck_2018_highl_plik.TTTEEE:
     path: ./external_modules/
     clik_file: plc_3.0/hi_l/plik/plik_rd12_HM_v22b_TTTEEE_35_900.clik
@@ -12,7 +12,7 @@ likelihood:
     path: ./external_modules/
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
-    data_file: DES_Y1.dataset
+    data_file: DES_Y3.dataset
     print_datavector: False
     non_linear_emul: 1
     kmax_boltzmann: 1.0
@@ -134,24 +134,10 @@ params:
   DES_BARYON_Q4:
     value: 0.0
   w:
-    prior:
-      min: -3
-      max: -0.01
-    ref:
-      dist: norm
-      loc: -0.99
-      scale: 0.05
-    proposal: 0.05
-    latex: w_{0,\mathrm{DE}}
+    value: -1
+    latex: w0
   w_growth:
-    prior:
-      min: -3
-      max: -0.01
-    ref:
-      dist: norm
-      loc: -0.99
-      scale: 0.05
-    proposal: 0.05
+    value: -1
     latex: w_\mathrm{growth}
   omegam_growth:
     prior:
@@ -218,21 +204,21 @@ sampler:
     blocking:
       - [1,
           [
-            logA, ns, theta_MC_100, omegabh2, omegach2, tau, w
+            logA, ns, theta_MC_100, omegabh2, omegach2, tau
           ]
         ]
       - [3,
           [
             DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1, DES_A1_2,
-            DES_A2_1, DES_A2_2, DES_BTA_1, omegam_growth, w_growth
+            DES_A2_1, DES_A2_2, DES_BTA_1, omegam_growth
           ]
         ]
-      - [20,
+      - [25,
           [
             DES_M1, DES_M2, DES_M3, DES_M4
           ]
         ]
-      - [40,
+      - [50,
           [
             A_cib_217, gal545_A_217, calib_217T, galf_TE_A_217, ps_A_100_100,
             galf_TE_A_100_143, ps_A_217_217, ksz_norm, A_planck, calib_100T,
@@ -256,4 +242,4 @@ sampler:
     Rminus1_single_split: 4
 
 
-output: ./projects/des_y3/chains/EXAMPLE_MCMC23
+output: ./projects/des_y3/chains/EXAMPLE_MCMC2
