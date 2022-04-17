@@ -28,7 +28,7 @@ matplotlib.rcParams['savefig.bbox'] = 'tight'
 matplotlib.rcParams['savefig.format'] = 'pdf'
 
 # ADDING NEFF AS DERIVED PARAMETER
-parameter = [u'As_1e9',u'tau',u'H0',u's8omegamp5',u'omegabh2',u'omegam',u'omegam_growth']
+parameter = [u'As_1e9',u'tau',u'H0',u's8omegamp5',u'omegam',u'omegam_growth']
 chaindir=r'.'
 
 analysissettings={'smooth_scale_1D':0.45,'smooth_scale_2D':0.45,'ignore_rows': u'0.3',
@@ -55,8 +55,8 @@ plot_3d_with_param=param_3d,line_args=[
 contour_colors=['royalblue','firebrick','black'],
 filled=True,shaded=False,
 legend_labels=[
-'Planck low-$\\ell_{\\mathrm{EE}}$ + SO high-$\\ell_{\\mathrm{TTTEEE}}$ (35 < $\\ell$ < 900) + SN (JLA) + DES-Y3', 
-'Planck low-$\\ell_{\\mathrm{EE}}$ + SO high-$\\ell_{\\mathrm{TTTEEE}}$ (35 < $\\ell$ < 900) + SN (JLA) + DES-Y1'
+'Planck low-$\\ell_{\\mathrm{EE}}$ + SO high-$\\ell_{\\mathrm{TTTEEE}}$ (50 < $\\ell$ < 900) + SN (JLA) + DES-Y3', 
+'Planck low-$\\ell_{\\mathrm{EE}}$ + SO high-$\\ell_{\\mathrm{TTTEEE}}$ (50 < $\\ell$ < 900) + SN (JLA) + DES-Y1'
 ],legend_loc=(0.25,0.875),
 imax_shaded=0)
 g.export()

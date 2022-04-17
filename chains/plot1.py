@@ -28,7 +28,7 @@ matplotlib.rcParams['savefig.bbox'] = 'tight'
 matplotlib.rcParams['savefig.format'] = 'pdf'
 
 # ADDING NEFF AS DERIVED PARAMETER
-parameter = [u'As_1e9',u'tau',u'H0',u's8omegamp5',u'omegabh2',u'omegam',u'omegam_growth']
+parameter = [u'As_1e9',u'tau',u'H0',u's8omegamp5',u'omegam',u'omegam_growth']
 chaindir=r'.'
 
 analysissettings={'smooth_scale_1D':0.45,'smooth_scale_2D':0.45,'ignore_rows': u'0.3',
