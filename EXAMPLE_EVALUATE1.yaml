@@ -3,18 +3,13 @@ debug: True
 stop_at_error: True
 
 likelihood:
-  sn.pantheon:
-    path: ./external_modules/data/sn_data
-  planck_2018_highl_plik.TTTEEE:
-    path: ./external_modules/
-    clik_file: plc_3.0/hi_l/plik/plik_rd12_HM_v22b_TTTEEE_35_1296.clik
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
-    data_file: DES_Y1.dataset
+    print_datavector: True
+    #data_file: DES_Y1.dataset
     #print_datavector_file: "./projects/des_y3/chains/des_y1_theory_cosmic_shear.modelvector"
-    #data_file: DES_Y3.dataset
-    #print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
-    #print_datavector: True
+    data_file: DES_Y3.dataset
+    print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
     non_linear_emul: 1
     kmax_boltzmann: 1.0
 
@@ -131,6 +126,8 @@ params:
       scale: 0.01
     proposal: 0.01
     latex: \Omega_\mathrm{m}^\mathrm{growth}
+  thetastar:
+    latex: 100\theta_*
 
 theory:
   camb:
@@ -150,11 +147,12 @@ sampler:
   evaluate:
     N: 1
     override:
+      # COMPATIBLE WITH PLANCK
       As_1e9: 2.1
       ns: 0.96605
       H0: 67.32
-      omegab: 0.04
-      omegam: 0.3
+      omegab: 0.04744
+      omegam: 0.317
       DES_DZ_S1: 0.0414632
       DES_DZ_S2: 0.00147332
       DES_DZ_S3: 0.0237035

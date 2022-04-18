@@ -6,6 +6,7 @@
 chains/
 chains2/
 chains3/
+old_chains3_yaml
 #EXAMPLE_EVALUATE1.yaml
 #EXAMPLE_EVALUATE2.yaml
 #EXAMPLE_MCMC1_UOFA.sbatch
