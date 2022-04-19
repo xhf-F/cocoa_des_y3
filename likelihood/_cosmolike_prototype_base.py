@@ -151,6 +151,8 @@ class _cosmolike_prototype_base(DataSetLikelihood):
     ci.set_cosmological_parameters(omega_matter = default_omega_matter, 
       omega_matter_growth = default_omega_matter, hubble = default_hubble, is_cached = False)
 
+    print("what?", default_omega_matter)
+
     # convert chi to Mpc/h
     ci.init_distances(default_z, default_chi*default_hubble/100.0)
 

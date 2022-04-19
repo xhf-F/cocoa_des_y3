@@ -6,9 +6,9 @@ likelihood:
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
     print_datavector: True
-    #data_file: DES_Y1.dataset
+    data_file: DES_Y1.dataset
     #print_datavector_file: "./projects/des_y3/chains/des_y1_theory_cosmic_shear.modelvector"
-    data_file: DES_Y3.dataset
+    #data_file: DES_Y3.dataset
     #print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
     non_linear_emul: 1
     kmax_boltzmann: 1.0
