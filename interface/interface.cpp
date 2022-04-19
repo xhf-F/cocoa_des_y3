@@ -769,7 +769,7 @@ void cpp_init_baryon_pca_scenarios(std::string scenarios)
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 
-void cpp_set_cosmological_parameters(const double omega_matter,
+void cpp_set_cosmological_parameters(const double omega_matter, const double omega_matter_growth,
 const double hubble, const bool is_cached_cosmology)
 {
   spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "set_cosmological_parameters");
@@ -788,6 +788,8 @@ const double hubble, const bool is_cached_cosmology)
     cosmology.h0 = hubble/100.0; // assuming H0 in km/s/Mpc
     cosmology.MGSigma = 0.0;
     cosmology.MGmu = 0.0;
+
+    cosmology.Omega_m_growth = omega_matter_growth;
 
     // Technical Problem: we want Cosmolike to calculate the data vector when
     // Cobaya request (no cache). To avoid cache in Cosmolike, we use a
@@ -2505,6 +2507,7 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m)
     &cpp_set_cosmological_parameters,
     "Set Cosmological Parameters",
     py::arg("omega_matter"),
+    py::arg("omega_matter_growth"),
     py::arg("hubble"),
     py::arg("is_cached")
   );

@@ -148,8 +148,8 @@ class _cosmolike_prototype_base(DataSetLikelihood):
     ci.init_cosmo_runmode(is_linear=False)
 
     # to set lens tomo bins, we need a default \chi(z)
-    ci.set_cosmological_parameters(omega_matter = default_omega_matter, hubble = default_hubble, 
-      is_cached = False)
+    ci.set_cosmological_parameters(omega_matter = default_omega_matter, 
+      omega_matter_growth = default_omega_matter, hubble = default_hubble, is_cached = False)
 
     # convert chi to Mpc/h
     ci.init_distances(default_z, default_chi*default_hubble/100.0)
@@ -211,7 +211,7 @@ class _cosmolike_prototype_base(DataSetLikelihood):
 
     self.do_cache_chi = np.zeros(len(self.z_interp_1D))
 
-    self.do_cache_cosmo = np.zeros(2)
+    self.do_cache_cosmo = np.zeros(3)
 
     # ------------------------------------------------------------------------
     if self.non_linear_emul == 1:
@@ -264,6 +264,7 @@ class _cosmolike_prototype_base(DataSetLikelihood):
       self.do_cache_cosmo,
       np.array([
         self.provider.get_param("omegam"),
+        self.provider.get_param("omegam_growth"),
         self.provider.get_param("H0")
       ])
     )
@@ -406,7 +407,8 @@ class _cosmolike_prototype_base(DataSetLikelihood):
     cache_alert = self.set_cache_alert(chi, lnPL, lnPNL)
 
     ci.set_cosmological_parameters(
-      omega_matter = self.provider.get_param("omegam"), #Intrinsic Aligment - growth of geometry?
+      omega_matter = self.provider.get_param("omegam"),
+      omega_matter_growth = OM_GROWTH,
       hubble = self.provider.get_param("H0"),
       is_cached = cache_alert
     )
@@ -419,7 +421,8 @@ class _cosmolike_prototype_base(DataSetLikelihood):
       self.do_cache_lnPNL = np.copy(lnPNL)
 
       self.do_cache_cosmo = np.array([
-        self.provider.get_param("omegam"),
+        self.provider.get_param("omegam"), 
+        self.provider.get_param("omegam_growth"), 
         self.provider.get_param("H0")
       ])
 
