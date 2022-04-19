@@ -6,9 +6,9 @@ likelihood:
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
     print_datavector: True
-    data_file: DES_Y1.dataset
+    #data_file: DES_Y1.dataset
     #print_datavector_file: "./projects/des_y3/chains/des_y1_theory_cosmic_shear.modelvector"
-    #data_file: DES_Y3.dataset
+    data_file: DES_Y3.dataset
     #print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
     non_linear_emul: 1
     kmax_boltzmann: 1.0
@@ -117,15 +117,7 @@ params:
     value: -1
     latex: w_\mathrm{growth}
   omegam_growth:
-    prior:
-      min: 0.1
-      max: 0.4
-    ref:
-      dist: norm
-      loc: 0.3
-      scale: 0.01
-    proposal: 0.01
-    latex: \Omega_\mathrm{m}^\mathrm{growth}
+    value: -100
   thetastar:
     latex: 100\theta_*
 
@@ -166,6 +158,5 @@ sampler:
       DES_A2_1: -1.7938938475734911 
       DES_A2_2: -1.5448080290038528
       DES_BTA_1: 0.8154011496506723
-      omegam_growth: 0.317
 
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE1

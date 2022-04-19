@@ -10,10 +10,11 @@ likelihood:
     path: ./external_modules/
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
-    data_file: DES_Y3.dataset
+    data_file: DES_Y1.dataset
     print_datavector: False
-    non_linear_emul: 1
-    kmax_boltzmann: 1.0
+    # TEST HALOFIT
+    non_linear_emul: 2
+    kmax_boltzmann: 20.0
 
 params:
   logA:
@@ -138,14 +139,8 @@ params:
     value: -1
     latex: w_\mathrm{growth}
   omegam_growth:
-    prior:
-      min: 0.1
-      max: 0.4
-    ref:
-      dist: norm
-      loc: 0.3
-      scale: 0.01
-    proposal: 0.01
+    # -100 is a flag that implies omegam_growth = omegam_m
+    value: -100
     latex: \Omega_\mathrm{m}^\mathrm{growth}
 
 theory:
@@ -168,7 +163,7 @@ sampler:
     # File (w/ path) or matrix defining a covariance matrix for the proposal:
     # - null (default): will be generated from params info (prior and proposal)
     # - matrix: remember to set `covmat_params` to the parameters in the matrix
-    covmat: "./projects/des_y3/OLD_EXAMPLE_MCMC1.covmat"
+    covmat:
     covmat_params:
     # ---------------------------------------------------------------------
     # ---------------------------------------------------------------------
@@ -208,7 +203,7 @@ sampler:
       - [3,
           [
             DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1, DES_A1_2,
-            DES_A2_1, DES_A2_2, DES_BTA_1, omegam_growth
+            DES_A2_1, DES_A2_2, DES_BTA_1
           ]
         ]
       - [25,
@@ -240,4 +235,4 @@ sampler:
     Rminus1_single_split: 4
 
 
-output: ./projects/des_y3/chains/EXAMPLE_MCMC3
+output: ./projects/des_y3/chains/EXAMPLE_MCMC8
