@@ -6,12 +6,12 @@ likelihood:
   des_y3.des_cosmic_shear:
     path: ./external_modules/data/des_y3
     print_datavector: True
-    #data_file: DES_Y1.dataset
-    #print_datavector_file: "./projects/des_y3/chains/des_y1_theory_cosmic_shear.modelvector"
-    data_file: DES_Y3.dataset
+    data_file: DES_Y1.dataset
+    print_datavector_file: "./projects/des_y3/chains/des_y1_theory_cosmic_shear.modelvector"
+    #data_file: DES_Y3.dataset
     #print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
     non_linear_emul: 1
-    kmax_boltzmann: 1.0
+    kmax_boltzmann: 5.0
 
 params:
   As_1e9:
@@ -95,6 +95,9 @@ params:
   s8omegamp25:
     derived: 'lambda sigma8, omegam: sigma8*omegam**0.25'
     latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
+  s8:
+    derived: 'lambda sigma8, omegam: sigma8*(omegam/0.3)**0.5'
+    latex: \sigma_8 \Omega_\mathrm{m}^{0.5}
   omegal:
     latex: \Omega_\Lambda
   tau:
@@ -140,11 +143,11 @@ sampler:
     N: 1
     override:
       # COMPATIBLE WITH PLANCK
-      As_1e9: 2.1
-      ns: 0.96605
+      As_1e9: 2.101
+      ns: 0.9649
       H0: 67.32
-      omegab: 0.04744
-      omegam: 0.317
+      omegab: 0.0493382322
+      omegam: 0.3166
       DES_DZ_S1: 0.0414632
       DES_DZ_S2: 0.00147332
       DES_DZ_S3: 0.0237035

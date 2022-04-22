@@ -3,35 +3,31 @@ debug: True
 stop_at_error: True
 
 likelihood:
-  sn.pantheon:
-    path: ./external_modules/data/sn_data
-  planck_2018_highl_plik.TTTEEE:
-    path: ./external_modules/
-    clik_file: plc_3.0/hi_l/plik/plik_rd12_HM_v22b_TTTEEE_35_1296.clik
-  des_y3.des_cosmic_shear:
+  des_y3.des_3x2pt:
     path: ./external_modules/data/des_y3
-    data_file: DES_Y1.dataset
-    #print_datavector_file: "./projects/des_y3/chains/des_y1_theory_cosmic_shear.modelvector"
-    #data_file: DES_Y3.dataset
-    #print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
-    #print_datavector: True
+    print_datavector: True
+    #data_file: DES_Y1.dataset
+    #print_datavector_file: "./projects/des_y3/chains/des_y1_theory_3x2pt.modelvector"
+    data_file: DES_Y3.dataset
+    print_datavector_file: "./projects/des_y3/chains/des_y3_theory_3x2pt.modelvector"
     non_linear_emul: 1
-    kmax_boltzmann: 1.0
+    kmax_boltzmann: 5.0
 
 params:
-  logA:
+  As_1e9:
     prior:
-      min: 1.61
-      max: 3.91
+      min: 0.5
+      max: 5
     ref:
       dist: norm
-      loc: 3.0448
-      scale: 0.05
-    proposal: 0.05
-    latex: \log(10^{10} A_\mathrm{s})
+      loc: 2.1
+      scale: 0.65
+    proposal: 0.4
+    latex: 10^9 A_\mathrm{s}
     drop: true
+    renames: A
   As:
-    value: 'lambda logA: 1e-10*np.exp(logA)'
+    value: 'lambda As_1e9: 1e-9 * As_1e9'
     latex: A_\mathrm{s}
   ns:
     prior:
@@ -43,63 +39,46 @@ params:
       scale: 0.01
     proposal: 0.01
     latex: n_\mathrm{s}
-  theta_MC_100:
-    prior:
-      min: 0.5
-      max: 10
-    ref:
-      dist: norm
-      loc: 1.04109
-      scale: 0.001
-    proposal: 0.001
-    latex: 100\theta_\mathrm{MC}
-    drop: true
-    renames: theta
-  cosmomc_theta:
-    value: 'lambda theta_MC_100: 1.e-2*theta_MC_100'
-    derived: false
   H0:
+    prior:
+      min: 55
+      max: 91
+    ref:
+      dist: norm
+      loc: 67.32
+      scale: 5
+    proposal: 3
     latex: H_0
-    min: 20
-    max: 100
-  omegabh2:
+  omegab:
     prior:
-      min: 0.01
-      max: 0.04
+      min: 0.03
+      max: 0.07
     ref:
       dist: norm
-      loc: 0.022383
-      scale: 0.005
-    proposal: 0.005
-    latex: \Omega_\mathrm{b} h^2
-  omegach2:
+      loc: 0.0495
+      scale: 0.004
+    proposal: 0.004
+    latex: \Omega_\mathrm{b}
+    drop: true
+  omegam:
     prior:
-      min: 0.06
-      max: 0.2
+      min: 0.1
+      max: 0.9
     ref:
       dist: norm
-      loc: 0.12011
-      scale: 0.03
-    proposal: 0.03
-    latex: \Omega_\mathrm{c} h^2
+      loc: 0.316
+      scale: 0.02
+    proposal: 0.02
+    latex: \Omega_\mathrm{m}
+    drop: true
   mnu:
     value: 0.06
-  omegal:
-    latex: \Omega_\Lambda
-  As_1e9:
-    derived: 'lambda As: 1e9*As'
-    latex: 10^9 A_\mathrm{s}
-  omegam:
-    latex: \Omega_\mathrm{m}
-  omegamh2:
-    derived: 'lambda omegam, H0: omegam*(H0/100)**2'
-    latex: \Omega_\mathrm{m} h^2
-  omegab:
-    derived: 'lambda omegabh2, H0: omegabh2/((H0/100)**2)'
-    latex: \Omega_\mathrm{b}
-  omegac:
-    derived: 'lambda omegach2, H0: omegach2/((H0/100)**2)'
-    latex: \Omega_\mathrm{c}
+  omegabh2:
+    value: 'lambda omegab, H0: omegab*(H0/100)**2'
+    latex: \Omega_\mathrm{b} h^2
+  omegach2:
+    value: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)*(H0/100)**2-(mnu*(3.046/3)**0.75)/94.0708'
+    latex: \Omega_\mathrm{c} h^2
   omegan2:
     latex: \Omega_\mathrm{\\nu} h^2
   omegan:
@@ -118,6 +97,9 @@ params:
     latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
   omegal:
     latex: \Omega_\Lambda
+  s8:
+    derived: 'lambda sigma8, omegam: sigma8*(omegam/0.3)**0.5'
+    latex: \sigma_8 \Omega_\mathrm{m}^{0.5}
   tau:
     value: 0.0697186
     latex: \tau_\mathrm{reio}
@@ -138,15 +120,9 @@ params:
     value: -1
     latex: w_\mathrm{growth}
   omegam_growth:
-    prior:
-      min: 0.1
-      max: 0.4
-    ref:
-      dist: norm
-      loc: 0.3
-      scale: 0.01
-    proposal: 0.01
-    latex: \Omega_\mathrm{m}^\mathrm{growth}
+    value: -100
+  thetastar:
+    latex: 100\theta_*
 
 theory:
   camb:
@@ -166,11 +142,12 @@ sampler:
   evaluate:
     N: 1
     override:
-      logA: 3.0448
-      ns: 0.96605
-      theta_MC_100: 1.04088
-      omegabh2: 0.022383
-      omegach2: 0.12011
+      # COMPATIBLE WITH PLANCK
+      As_1e9: 2.101
+      ns: 0.9649
+      H0: 67.32
+      omegab: 0.0493382322
+      omegam: 0.3166
       DES_DZ_S1: 0.0414632
       DES_DZ_S2: 0.00147332
       DES_DZ_S3: 0.0237035
@@ -184,6 +161,24 @@ sampler:
       DES_A2_1: -1.7938938475734911 
       DES_A2_2: -1.5448080290038528
       DES_BTA_1: 0.8154011496506723
-      omegam_growth: 0.3
+      DES_DZ_L1: 0.001288
+      DES_DZ_L2: -0.00466655
+      DES_DZ_L3: 0.00409565
+      DES_DZ_L4: 0.00162103
+      DES_DZ_L5: -0.0075703
+      DES_B1_1: 1.77326
+      DES_B1_2: 1.83487
+      DES_B1_3: 1.50726
+      DES_B1_4: 2.01987
+      DES_B1_5: 1.99772
+      DES_M1: 0.0191832
+      DES_M2: -0.0431752
+      DES_M3: -0.034961
+      DES_M4: -0.0158096
+      DES_PM1: -1.05465
+      DES_PM2: 0.47537
+      DES_PM3: 0.000378694
+      DES_PM4: 0.558129
+      DES_PM5: -0.531747
 
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE2

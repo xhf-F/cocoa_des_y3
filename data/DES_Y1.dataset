@@ -1,5 +1,5 @@
 #data_file = 2pt_NG_mcal_1101.txt
-data_file = des_y1_theory_cosmic_shear.modelvector
+data_file = des_y1_theory_3x2pt.modelvector
 cov_file = COV2_Y1_mcal_v04.17_3column_rr
 mask_file = mask_Y1_mcal
 nz_lens_file = lens.nz
@@ -11,3 +11,53 @@ IA_model = 4
 n_theta = 20
 theta_min_arcmin = 2.5
 theta_max_arcmin = 250.
+
+#As_1e9: 2.101
+#ns: 0.9649
+#H0: 67.32
+#omegab: 0.0493382322
+#omegam: 0.3166
+#DES_DZ_S1: 0.0414632
+#DES_DZ_S2: 0.00147332
+#DES_DZ_S3: 0.0237035
+#DES_DZ_S4: -0.0773436
+#DES_M1: 0.0191832
+#DES_M2: -0.0431752
+#DES_M3: -0.034961
+#DES_M4: -0.0158096
+#DES_A1_1: 0.606102
+#DES_A1_2: -1.51541
+#DES_A2_1: -1.7938938475734911 
+#DES_A2_2: -1.5448080290038528
+#DES_BTA_1: 0.8154011496506723
+#DES_DZ_L1: 0.001288
+#DES_DZ_L2: -0.00466655
+#DES_DZ_L3: 0.00409565
+#DES_DZ_L4: 0.00162103
+#DES_DZ_L5: -0.0075703
+#DES_B1_1: 1.77326
+#DES_B1_2: 1.83487
+#DES_B1_3: 1.50726
+#DES_B1_4: 2.01987
+#DES_B1_5: 1.99772
+#DES_M1: 0.0191832
+#DES_M2: -0.0431752
+#DES_M3: -0.034961
+#DES_M4: -0.0158096
+#DES_PM1: -1.05465
+#DES_PM2: 0.47537
+#DES_PM3: 0.000378694
+#DES_PM4: 0.558129
+#DES_PM5: -0.531747
+#[evaluate]    As = 2.101e-09
+#[evaluate]    omegabh2 = 0.02236
+#[evaluate]    omegach2 = 0.120477
+#[evaluate]    omegan2 = 0.000645138
+#[evaluate]    omegan = 0.00142352
+#[evaluate]    sigma8 = 0.81337
+#[evaluate]    s8h5 = 0.991325
+#[evaluate]    s8omegamp5 = 0.45766
+#[evaluate]    s8omegamp25 = 0.610121
+#[evaluate]    omegal = 0.68332
+#[evaluate]    s8 = 0.83557
+#[evaluate]    thetastar = 1.04154

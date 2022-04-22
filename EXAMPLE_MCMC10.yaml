@@ -9,22 +9,23 @@ likelihood:
     data_file: DES_Y1.dataset
     print_datavector: False
     non_linear_emul: 2
-    kmax_boltzmann: 1.0
+    kmax_boltzmann: 2.0
 
 params:
-  logA:
+  As_1e9:
     prior:
-      min: 1.61
-      max: 3.91
+      min: 0.5
+      max: 5
     ref:
       dist: norm
-      loc: 3.0448
-      scale: 0.05
-    proposal: 0.05
-    latex: \log(10^{10} A_\mathrm{s})
+      loc: 2.1
+      scale: 0.65
+    proposal: 0.4
+    latex: 10^9 A_\mathrm{s})
     drop: true
+    renames: A
   As:
-    value: 'lambda logA: 1e-10*np.exp(logA)'
+    value: 'lambda As_1e9: 1e-9 * As_1e9'
     latex: A_\mathrm{s}
   ns:
     prior:
@@ -36,71 +37,52 @@ params:
       scale: 0.01
     proposal: 0.01
     latex: n_\mathrm{s}
-  theta_MC_100:
+  H0:
     prior:
-      min: 0.5
-      max: 10
+      min: 55
+      max: 91
     ref:
       dist: norm
-      loc: 1.04109
-      scale: 0.2
-    proposal: 0.2
-    latex: 100\theta_\mathrm{MC}
-    drop: true
-    renames: theta
-  cosmomc_theta:
-    value: 'lambda theta_MC_100: 1.e-2*theta_MC_100'
-    derived: false
-  H0:
+      loc: 67.32
+      scale: 5
+    proposal: 3
     latex: H_0
-    min: 40
-    max: 100
-  omegabh2:
+  omegab:
     prior:
-      min: 0.01
+      min: 0.03
       max: 0.07
     ref:
       dist: norm
-      loc: 0.022383
-      scale: 0.05
-    proposal: 0.05
-    latex: \Omega_\mathrm{b} h^2
-  omegach2:
+      loc: 0.0495
+      scale: 0.004
+    proposal: 0.004
+    latex: \Omega_\mathrm{b}
+    drop: true
+  omegam:
     prior:
-      min: 0.06
-      max: 0.5
+      min: 0.1
+      max: 0.9
     ref:
       dist: norm
-      loc: 0.12011
-      scale: 0.3
-    proposal: 0.3
-    latex: \Omega_\mathrm{c} h^2
-  mnu:
-    value: 0.06
-  tau:
-    value: 0.055
-    latex: \tau_\mathrm{reio}
-  omegal:
-    latex: \Omega_\Lambda
-  As_1e9:
-    derived: 'lambda As: 1e9*As'
-    latex: 10^9 A_\mathrm{s}
-  omegam:
+      loc: 0.316
+      scale: 0.02
+    proposal: 0.02
     latex: \Omega_\mathrm{m}
+    drop: true
+  mnu:
+   value: 0.06 
+  omegabh2:
+    value: 'lambda omegab, H0: omegab*(H0/100)**2'
+    latex: \Omega_\mathrm{b} h^2
+  omegach2:
+    value: 'lambda omegam, omegab, mnu, H0: (omegam-omegab)*(H0/100)**2-(mnu*(3.046/3)**0.75)/94.0708'
+    latex: \Omega_\mathrm{c} h^2
+  tau:
+    value: 0.0697186
+    latex: \tau_\mathrm{reio}
   omegamh2:
     derived: 'lambda omegam, H0: omegam*(H0/100)**2'
     latex: \Omega_\mathrm{m} h^2
-  omegab:
-    derived: 'lambda omegabh2, H0: omegabh2/((H0/100)**2)'
-    latex: \Omega_\mathrm{b}
-  omegac:
-    derived: 'lambda omegach2, H0: omegach2/((H0/100)**2)'
-    latex: \Omega_\mathrm{c}
-  omegan2:
-    latex: \Omega_\mathrm{\\nu} h^2
-  omegan:
-    derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
-    latex: \Omega_\mathrm{\\nu}
   sigma8:
     latex: \sigma_8
   s8h5:
@@ -112,6 +94,20 @@ params:
   s8omegamp25:
     derived: 'lambda sigma8, omegam: sigma8*omegam**0.25'
     latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
+  s8:
+    derived: 'lambda sigma8, omegam: sigma8*(omegam/0.3)**0.5'
+    latex: \sigma_8 \Omega_\mathrm{m/0.3}^{0.5}
+  age:
+    latex: '{\rm{Age}}/\mathrm{Gyr}'
+  rdrag:
+    latex: r_\mathrm{drag}
+  yheused:
+    latex: Y_P^\mathrm{BBN}
+  omegan2:
+    latex: \Omega_\mathrm{\\nu} h^2
+  omegan:
+    derived: 'lambda omegan2, H0: omegan2/((H0/100)**2)'
+    latex: \Omega_\mathrm{\\nu}
   DES_BARYON_Q1:
     value: 0.0
   DES_BARYON_Q2:
@@ -130,7 +126,104 @@ params:
     # -100 is a flag that implies omegam_growth = omegam_m
     value: -100
     latex: \Omega_\mathrm{m}^\mathrm{growth}
-
+  DES_DZ_S1:
+    prior:
+      dist: norm
+      loc: 0.0414632
+      scale: 0.005
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
+    latex: \Delta z_\mathrm{s,DES}^1
+  DES_DZ_S2:
+    prior:
+      dist: norm
+      loc: 0.00147332
+      scale: 0.005
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
+    latex: \Delta z_\mathrm{s,DES}^2
+  DES_DZ_S3:
+    prior:
+      dist: norm
+      loc: 0.0237035
+      scale: 0.005
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
+    latex: \Delta z_\mathrm{s,DES}^3
+  DES_DZ_S4:
+    prior:
+      dist: norm
+      loc: -0.0773436
+      scale: 0.005
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
+    latex: \Delta z_\mathrm{s,DES}^4
+  DES_M1:
+    prior:
+      dist: norm
+      loc: 0.0191832
+      scale: 0.005
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
+    latex: m_\mathrm{DES}^1
+  DES_M2:
+    prior:
+      dist: norm
+      loc: -0.0431752
+      scale: 0.005
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
+    latex: m_\mathrm{DES}^2
+  DES_M3:
+    prior:
+      dist: norm
+      loc: -0.034961
+      scale: 0.005
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
+    latex: m_\mathrm{DES}^3
+  DES_M4:
+    prior:
+      dist: norm
+      loc: -0.0158096
+      scale: 0.005
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.005
+    proposal: 0.005
+    latex: m_\mathrm{DES}^4
+  DES_A2_1:
+    value: -1.7938938475734911 
+    latex: A_\mathrm{2-IA,DES}^1
+  DES_A2_2:
+    value: -1.5448080290038528
+    latex: A_\mathrm{2-IA,DES}^2
+  DES_BTA_1:
+    value: 0.8154011496506723
+    latex: A_\mathrm{BTA-IA,DES}^1
+        
 theory:
   camb:
     path: ./external_modules/code/CAMB
@@ -151,7 +244,7 @@ sampler:
     # File (w/ path) or matrix defining a covariance matrix for the proposal:
     # - null (default): will be generated from params info (prior and proposal)
     # - matrix: remember to set `covmat_params` to the parameters in the matrix
-    covmat: "./projects/des_y3/OLD_EXAMPLE_MCMC13.covmat"
+    covmat:
     covmat_params:
     # ---------------------------------------------------------------------
     # ---------------------------------------------------------------------
@@ -185,13 +278,12 @@ sampler:
     blocking:
       - [1,
           [
-            logA, ns, theta_MC_100, omegabh2, omegach2
+            As_1e9, H0, omegab, omegam, ns
           ]
         ]
       - [3,
           [
-            DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1, DES_A1_2,
-            DES_A2_1, DES_A2_2, DES_BTA_1
+            DES_DZ_S1, DES_DZ_S2, DES_DZ_S3, DES_DZ_S4, DES_A1_1, DES_A1_2
           ]
         ]
       - [25,
