@@ -6,11 +6,13 @@
 #SBATCH --ntasks-per-node=4
 #SBATCH --ntasks-per-socket=2
 #SBATCH --cpus-per-task=11
-#SBATCH --partition=high_priority
-#SBATCH --qos=user_qos_timeifler
-#SBATCH --account=timeifler
-#SBATCH --time=36:00:00
+#SBATCH --time=80:00:00
+#SBATCH --partition=standard
+#SBATCH --account=cosmolike
 
+####XXX_SBATCH --partition=high_priority
+####XXX_SBATCH --qos=user_qos_timeifler
+####XXX_SBATCH --account=timeifler
 # Clear the environment from any previously loaded modules
 module purge > /dev/null 2>&1
 module load anaconda
