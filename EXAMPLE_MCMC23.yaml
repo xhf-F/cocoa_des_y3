@@ -251,11 +251,11 @@ params:
   DES_DZ_L4:
     prior:
       dist: norm
-      loc: 0.0
+      loc: 0.00162103
       scale: 0.005
     ref:
       dist: norm
-      loc: 0.00162103
+      loc: 0.0
       scale: 0.005
     proposal: 0.005
     latex: \Delta z_\mathrm{l,DES}^4
