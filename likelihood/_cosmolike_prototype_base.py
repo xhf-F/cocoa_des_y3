@@ -7,6 +7,7 @@ from scipy.interpolate import CubicSpline, interp1d
 import sys
 import time
 from scipy.integrate import odeint
+import os.path
 
 # Local
 from cobaya.likelihoods.base_classes import DataSetLikelihood
@@ -196,10 +197,14 @@ class _cosmolike_prototype_base(DataSetLikelihood):
     else:
       if ini.string('baryon_pca_file', default=''):
         baryon_pca_file = ini.relativeFileName('baryon_pca_file')
-        self.baryon_pcs = np.loadtxt(baryon_pca_file)
-        self.log.info('use_baryon_pca = True')
-        self.log.info('baryon_pca_file = %s loaded', baryon_pca_file)
-        self.use_baryon_pca = True
+        if os.path.isfile(baryon_pca_file):
+          self.baryon_pcs = np.loadtxt(baryon_pca_file)
+          self.log.info('use_baryon_pca = True')
+          self.log.info('baryon_pca_file = %s loaded', baryon_pca_file)
+          self.use_baryon_pca = True
+        else:
+          self.log.info('use_baryon_pca = False')
+          self.use_baryon_pca = False
       else:
         self.log.info('use_baryon_pca = False')
         self.use_baryon_pca = False

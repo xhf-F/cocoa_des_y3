@@ -163,3 +163,55 @@ sampler:
       DES_BTA_1: 0.8154011496506723
 
 output: ./projects/des_y3/chains/EXAMPLE_EVALUATE1
+
+# RESULTS (TO TEST AGAINST ANY CHANGE)
+
+# data_file = Y3_unblinded_11_13_20.txt
+# cov_file = cov_unblinded_11_13_20.txt
+# mask_file = 3x2pt_baseline.mask
+# nz_lens_file = nz_lens_Y3_unblinded_11_13_20.txt
+# nz_source_file = nz_source_Y3_unblinded_11_13_20.txt
+# lensing_overlap_cut = 0.0015
+# lens_ntomo = 5
+# source_ntomo = 4
+# n_theta = 20
+# IA_model = 6
+# theta_min_arcmin = 2.5
+# theta_max_arcmin = 250.
+# baryon_pca_file = pca.txt
+
+# As_1e9 = 2.1
+# ns = 0.96605
+# H0 = 67.32
+# omegab = 0.04
+# omegam = 0.3
+# mnu = 0.06
+# w0pwa = -0.9
+# w = -0.9
+# DES_DZ_S1 = 0.0414632
+# DES_DZ_S2 = 0.00147332
+# DES_DZ_S3 = 0.0237035
+# DES_DZ_S4 = -0.0773436
+# DES_A1_1 = 0.606102
+# DES_A1_2 = -1.51541
+# DES_A2_1 = -1.79389
+# DES_A2_2 = -1.54481
+# DES_BTA_1 = 0.815401
+# DES_M1 = 0.0191832
+# DES_M2 = -0.0431752
+# DES_M3 = -0.034961
+# DES_M4 = -0.0158096
+
+# [evaluate] Evaluating prior and likelihoods...
+# [evaluate] log-posterior  = -483.587
+# [evaluate] log-prior      = -216.382
+# [evaluate]    logprior_0 = -216.382
+# [evaluate] log-likelihood = -267.205
+# [evaluate]    chi2_des_y3.des_cosmic_shear = 534.41
+# [evaluate] Derived params:
+# [evaluate]    As = 2.1e-09
+# [evaluate]    wa = 0
+# [evaluate]    omegabh2 = 0.0181279
+# [evaluate]    omegach2 = 0.117186
+# [evaluate]    sigma8 = 0.804158
+
