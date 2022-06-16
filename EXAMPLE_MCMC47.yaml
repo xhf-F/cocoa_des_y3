@@ -11,7 +11,7 @@ likelihood:
     path: ./external_modules/data/
   bao.sdss_dr12_consensus_bao:
     path: ./external_modules/data/
-  des_y3.des_3x2pt:
+  des_y3.des_xi_ggl:
     path: ./external_modules/data/des_y3
     data_file: DES_Y3.dataset
     print_datavector: False
@@ -313,7 +313,7 @@ sampler:
     # File (w/ path) or matrix defining a covariance matrix for the proposal:
     # - null (default): will be generated from params info (prior and proposal)
     # - matrix: remember to set `covmat_params` to the parameters in the matrix
-    covmat: "./projects/des_y3/EXAMPLE_MCMC13.covmat"
+    covmat: "./projects/des_y3/EXAMPLE_MCMC3.covmat"
     covmat_params:
     # ---------------------------------------------------------------------
     # ---------------------------------------------------------------------
@@ -378,4 +378,4 @@ sampler:
     Rminus1_single_split: 4
 
 
-output: ./projects/des_y3/chains/EXAMPLE_MCMC41
+output: ./projects/des_y3/chains/EXAMPLE_MCMC47

@@ -176,6 +176,14 @@ void cpp_init_probes(std::string possible_probes)
     spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
       "possible_probes", "xi + ggl (2x2pt)");
   }
+  else if (possible_probes.compare("xi_gg") == 0)
+  {
+    like.shear_shear = 1;
+    like.pos_pos = 1;
+
+    spdlog::info("\x1b[90m{}\x1b[0m: {} = {} selected", "init_probes",
+      "possible_probes", "xi + gg (2x2pt)");
+  }
 /*
   else if (possible_probes.compare("5x2pt") == 0)
   {
