@@ -642,6 +642,120 @@ std::vector<double> io_z, std::vector<double> io_lnP)
   return;
 }
 
+////KZ begin
+
+void cpp_init_non_linear_power_spectrum_weyl_matter(std::vector<double> io_log10k,
+std::vector<double> io_z, std::vector<double> io_lnP)
+{
+  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_non_linear_power_spectrum_weyl_matter");
+
+  {
+    bool debug_fail = false;
+    if (io_z.size()*io_log10k.size() != io_lnP.size())
+    {
+      debug_fail = true;
+    }
+    else
+    {
+      if (io_z.size() == 0)
+      {
+        debug_fail = true;
+      }
+    }
+    if (debug_fail)
+    {
+      spdlog::critical(
+        "\x1b[90m{}\x1b[0m: incompatible input w/ k.size = {}, z.size = {}, "
+        "and lnP.size = {}", "init_non_linear_power_spectrum_weyl_matter", io_log10k.size(),
+        io_z.size(), io_lnP.size());
+      exit(1);
+    }
+
+    if(io_z.size() < 5 || io_log10k.size() < 5)
+    {
+      spdlog::critical(
+        "\x1b[90m{}\x1b[0m: bad input w/ k.size = {}, z.size = {}, "
+        "and lnP.size = {}", "init_non_linear_power_spectrum_weyl_matter", io_log10k.size(),
+        io_z.size(), io_lnP.size());
+      exit(1);
+    }
+  }
+
+  int nlog10k = static_cast<int>(io_log10k.size());
+  int nz = static_cast<int>(io_z.size());
+  double* log10k = io_log10k.data();
+  double* z = io_z.data();
+  double* lnP = io_lnP.data();
+  setup_p_nonlin(&nlog10k, &nz, &log10k, &z, &lnP, 1);
+
+  // force initialization - imp to avoid seg fault when openmp is on
+  const double io_a = 1.0;
+  const double io_k = 0.1*cosmology.coverH0;
+  p_nonlin(io_k, io_a);
+
+  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_non_linear_power_spectrum_weyl_matter");
+
+  return;
+}
+
+void cpp_init_non_linear_power_spectrum_weyl_weyl(std::vector<double> io_log10k,
+std::vector<double> io_z, std::vector<double> io_lnP)
+{
+  spdlog::debug("\x1b[90m{}\x1b[0m: Begins", "init_non_linear_power_spectrum_weyl_weyl");
+
+  {
+    bool debug_fail = false;
+    if (io_z.size()*io_log10k.size() != io_lnP.size())
+    {
+      debug_fail = true;
+    }
+    else
+    {
+      if (io_z.size() == 0)
+      {
+        debug_fail = true;
+      }
+    }
+    if (debug_fail)
+    {
+      spdlog::critical(
+        "\x1b[90m{}\x1b[0m: incompatible input w/ k.size = {}, z.size = {}, "
+        "and lnP.size = {}", "init_non_linear_power_spectrum_weyl_weyl", io_log10k.size(),
+        io_z.size(), io_lnP.size());
+      exit(1);
+    }
+
+    if(io_z.size() < 5 || io_log10k.size() < 5)
+    {
+      spdlog::critical(
+        "\x1b[90m{}\x1b[0m: bad input w/ k.size = {}, z.size = {}, "
+        "and lnP.size = {}", "init_non_linear_power_spectrum_weyl_weyl", io_log10k.size(),
+        io_z.size(), io_lnP.size());
+      exit(1);
+    }
+  }
+
+  int nlog10k = static_cast<int>(io_log10k.size());
+  int nz = static_cast<int>(io_z.size());
+  double* log10k = io_log10k.data();
+  double* z = io_z.data();
+  double* lnP = io_lnP.data();
+  setup_p_nonlin(&nlog10k, &nz, &log10k, &z, &lnP, 1);
+
+  // force initialization - imp to avoid seg fault when openmp is on
+  const double io_a = 1.0;
+  const double io_k = 0.1*cosmology.coverH0;
+  p_nonlin(io_k, io_a);
+
+  spdlog::debug("\x1b[90m{}\x1b[0m: Ends", "init_non_linear_power_spectrum_weyl_weyl");
+
+  return;
+}
+
+
+
+////KZ end
+
 // Growth: D = G * a
 void cpp_init_growth(std::vector<double> io_z, std::vector<double> io_G)
 {
@@ -2300,6 +2414,27 @@ PYBIND11_MODULE(cosmolike_des_y3_interface, m)
     py::arg("z"),
     py::arg("lnP")
   );
+
+  ////KZ begin
+  m.def("init_non_linear_power_spectrum_weyl_matter",
+    &cpp_init_non_linear_power_spectrum_weyl_matter,
+    "Load weyl-matter Power Spectrum from Cobaya to Cosmolike",
+    py::arg("log10k"),
+    py::arg("z"),
+    py::arg("lnP")
+  );
+
+  m.def("init_non_linear_power_spectrum_weyl_weyl",
+    &cpp_init_non_linear_power_spectrum_weyl_weyl,
+    "Load Weyl-Weyl Power Spectrum from Cobaya to Cosmolike",
+    py::arg("log10k"),
+    py::arg("z"),
+    py::arg("lnP")
+  );
+
+
+  ////KZ end
+
 
   m.def("init_growth",
     &cpp_init_growth,
