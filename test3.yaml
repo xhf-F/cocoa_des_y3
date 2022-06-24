@@ -21,7 +21,7 @@ params:
     proposal: 0.02
     latex: g0_{ppf}
   c_g_ppf:
-    value: 0.003
+    value: 0.0
     latex: cg_{ppf}
   c_Gamma_ppf:
     value: 1.0
@@ -173,4 +173,4 @@ sampler:
       w0pwa: -0.9
       w: -0.9
 
-output: ./projects/des_y3/chains/test2
+output: ./projects/des_y3/chains/test3

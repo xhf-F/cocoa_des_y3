@@ -10,22 +10,6 @@ likelihood:
     print_datavector_file: "./projects/des_y3/chains/des_y3_theory_cosmic_shear.modelvector"
 
 params:
-  g0_ppf:
-    prior:
-      min: -1.0
-      max: 1.0
-    ref:
-      dist: norm
-      loc: 0.0
-      scale: 0.05
-    proposal: 0.02
-    latex: g0_{ppf}
-  c_g_ppf:
-    value: 0.003
-    latex: cg_{ppf}
-  c_Gamma_ppf:
-    value: 1.0
-    latex: c_{\Gamma}_{ppf}
   As_1e9:
     prior:
       min: 0.5
@@ -132,7 +116,7 @@ params:
 
 theory:
   camb:
-    path: ./external_modules/code/CAMB-AS
+    path: ./external_modules/code/CAMB
     extra_args:
       halofit_version: takahashi
       dark_energy_model: ppf
@@ -150,7 +134,6 @@ sampler:
   evaluate:
     N: 1
     override:
-      g0_ppf: -0.5
       As_1e9: 2.1
       ns: 0.96605
       H0: 67.32
@@ -173,4 +156,4 @@ sampler:
       w0pwa: -0.9
       w: -0.9
 
-output: ./projects/des_y3/chains/test2
+output: ./projects/des_y3/chains/test0

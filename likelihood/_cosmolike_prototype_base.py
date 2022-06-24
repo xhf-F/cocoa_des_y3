@@ -380,7 +380,7 @@ class _cosmolike_prototype_base(DataSetLikelihood):
     for i in range(self.len_z_interp_2D):
       lnPNL_WM[i::self.len_z_interp_2D] = lnPNL_WM[i::self.len_z_interp_2D] + factor_wm[i]
     for i in range(self.len_z_interp_2D):
-      lnPNL_WW[i::self.len_z_interp_2D] = lnPNL_WW[i::self.len_z_interp_2D] + factor_ww[i]
+      lnPNL_WW[i::self.len_z_interp_2D] = lnPNL_WW[i::self.len_z_interp_2D] + factor_ww[i] + np.log(1.2)
 
 
 
@@ -395,15 +395,15 @@ class _cosmolike_prototype_base(DataSetLikelihood):
 
 
 
-    #test: output Pk to check it's correct
+    # ##test: output Pk to check it's correct
     # df = pd.DataFrame({"lnPNL_MM": lnPNL_MM})
-    # df.to_csv("pk_mm.csv", index=False) 
+    # df.to_csv("pk_mm_test0.csv", index=False) 
 
     # df = pd.DataFrame({"lnPNL_WM": lnPNL_WM})
-    # df.to_csv("pk_wm.csv", index=False) 
+    # df.to_csv("pk_wm_test0.csv", index=False) 
 
     # df = pd.DataFrame({"lnPNL_WW": lnPNL_WW})
-    # df.to_csv("pk_ww.csv", index=False) 
+    # df.to_csv("pk_ww_test0.csv", index=False) 
     
     ###KZ end
 
@@ -441,15 +441,15 @@ class _cosmolike_prototype_base(DataSetLikelihood):
       self.do_cache_lnPNL_WW = np.copy(lnPNL_WW)
 
       ci.init_linear_power_spectrum(log10k = log10k_interp_2D,
-        z = self.z_interp_2D, lnP = lnPL_MM)
+        z = self.z_interp_2D, lnP_MM = lnPL_MM)
 
       ci.init_non_linear_power_spectrum(log10k = log10k_interp_2D,
-        z = self.z_interp_2D, lnP = lnPNL_MM)
+        z = self.z_interp_2D, lnP_MM = lnPNL_MM)
 
       ci.init_non_linear_power_spectrum_weyl_matter(log10k = log10k_interp_2D,
-        z = self.z_interp_2D, lnP = lnPNL_WM)      
+        z = self.z_interp_2D, lnP_WM = lnPNL_WM)      
       ci.init_non_linear_power_spectrum_weyl_weyl(log10k = log10k_interp_2D,
-        z = self.z_interp_2D, lnP = lnPNL_WW)
+        z = self.z_interp_2D, lnP_WW = lnPNL_WW)
 
       ##KZ ebd
 
