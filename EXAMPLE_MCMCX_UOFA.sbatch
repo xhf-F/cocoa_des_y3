@@ -6,13 +6,9 @@
 #SBATCH --ntasks-per-node=4
 #SBATCH --ntasks-per-socket=2
 #SBATCH --cpus-per-task=10
-#SBATCH --time=100:00:00
+#SBATCH --time=60:00:00
 #SBATCH --partition=standard
 #SBATCH --account=cosmolike
-
-####XXX_SBATCH --partition=high_priority
-####XXX_SBATCH --qos=user_qos_timeifler
-####XXX_SBATCH --account=timeifler
 
 # Clear the environment from any previously loaded modules
 module purge > /dev/null 2>&1

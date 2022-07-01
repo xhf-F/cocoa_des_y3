@@ -55,8 +55,9 @@ params:
     latex: H_0
   omegabh2:
     prior:
-      min: 0.01
-      max: 0.04
+      dist: norm
+      loc: 0.02208 
+      scale: 0.00052
     ref:
       dist: norm
       loc: 0.022383
