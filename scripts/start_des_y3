@@ -9,9 +9,9 @@ fi
 # ----------------------------------------------------------------------------
 # ----------------------------------------------------------------------------
 
-addvar LD_LIBRARY_PATH $ROOTDIR/projects/cocoa_des_y3/interface
+addvar LD_LIBRARY_PATH $ROOTDIR/projects/des_y3/interface
 
-addvar PYTHONPATH $ROOTDIR/projects/cocoa_des_y3/interface
+addvar PYTHONPATH $ROOTDIR/projects/des_y3/interface
 
 if [ -n "${COSMOLIKE_DEBUG_MODE}" ]; then
     export SPDLOG_LEVEL=debug
