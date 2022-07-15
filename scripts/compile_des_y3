@@ -21,7 +21,7 @@ fi
 # ----------------------------------------------------------------------------
 # ----------------------------------------------------------------------------
 
-cd $ROOTDIR/projects/des_y3/interface
+cd $ROOTDIR/projects/cocoa_des_y3/interface
 
 make -f MakefileCosmolike clean
 
